@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Новый владелец</title>
+</head>
+<body>
+  <h1>Создать владельца-пользователя</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+  </form>
+  <p><a href="{% url 'owners_list' %}">Назад к списку</a></p>
+</body>
+</html>

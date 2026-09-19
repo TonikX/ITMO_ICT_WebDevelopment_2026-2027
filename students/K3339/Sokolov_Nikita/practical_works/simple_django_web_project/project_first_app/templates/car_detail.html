@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ car }}</title>
+</head>
+<body>
+  <h1>{{ car.brand }} {{ car.model }}</h1>
+  <p>Номер: {{ car.license_plate }}</p>
+  <p>Цвет: {{ car.color }}</p>
+  <p>
+    <a href="{% url 'car_update' car.pk %}">Редактировать</a> |
+    <a href="{% url 'car_delete' car.pk %}">Удалить</a> |
+    <a href="{% url 'car_list' %}">К списку</a>
+  </p>
+</body>
+</html>
