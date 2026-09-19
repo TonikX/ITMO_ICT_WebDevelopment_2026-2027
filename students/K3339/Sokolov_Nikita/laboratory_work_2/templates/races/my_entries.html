@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Мои заявки{% endblock %}
+{% block content %}
+<h1 class="mb-4">Мои заявки</h1>
+{% if entries %}
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr><th>Гонка</th><th>ФИО</th><th>Команда</th><th>Класс</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for e in entries %}
+          <tr>
+            <td><a href="{% url 'race_detail' e.race_id %}">{{ e.race.title }}</a></td>
+            <td>{{ e.full_name }}</td>
+            <td>{{ e.team_name }}</td>
+            <td>{{ e.racer_class }}</td>
+            <td>
+              <a href="{% url 'entry_edit' e.pk %}">изм.</a>
+              <form method="post" action="{% url 'entry_delete' e.pk %}" class="d-inline" onsubmit="return confirm('Удалить?');">
+                {% csrf_token %}
+                <button class="btn btn-link btn-sm text-danger p-0" type="submit">уд.</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <p class="text-muted">Заявок нет. <a href="{% url 'race_list' %}">Выберите гонку</a>.</p>
+{% endif %}
+{% endblock %}

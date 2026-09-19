@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}{{ race.title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+  <div>
+    <h1 class="mb-1">{{ race.title }}</h1>
+    <p class="text-muted mb-0">{{ race.date }} · {{ race.location }}</p>
+  </div>
+  <div class="d-flex gap-2 flex-wrap">
+    {% if user.is_authenticated and not my_entry %}
+      <a href="{% url 'entry_create' race.pk %}" class="btn btn-accent">Зарегистрироваться</a>
+    {% endif %}
+    {% if user.is_staff %}
+      <a href="{% url 'result_create' race.pk %}" class="btn btn-outline-warning">+ Результат</a>
+      <a href="{% url 'race_edit' race.pk %}" class="btn btn-outline-light">Изменить</a>
+      <form method="post" action="{% url 'race_delete' race.pk %}" onsubmit="return confirm('Удалить гонку?');">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit">Удалить</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+{% if race.description %}
+  <p class="mb-4">{{ race.description }}</p>
+{% endif %}
+
+{% if my_entry %}
+  <div class="alert alert-secondary mb-4">
+    Вы зарегистрированы как <strong>{{ my_entry.full_name }}</strong> ({{ my_entry.team_name }}).
+    <a href="{% url 'entry_edit' my_entry.pk %}">редактировать</a>
+    <form method="post" action="{% url 'entry_delete' my_entry.pk %}" class="d-inline" onsubmit="return confirm('Удалить заявку?');">
+      {% csrf_token %}
+      <button class="btn btn-link btn-sm text-danger p-0 align-baseline" type="submit">удалить</button>
+    </form>
+  </div>
+{% endif %}
+
+<h2 class="h4 mb-3">Заезды и результаты</h2>
+<div class="table-responsive mb-5">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Место</th>
+        <th>ФИО</th>
+        <th>Команда</th>
+        <th>Автомобиль</th>
+        <th>Опыт</th>
+        <th>Класс</th>
+        <th>Время</th>
+        {% if user.is_staff %}<th></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td>{% if entry.result %}{{ entry.result.place }}{% else %}—{% endif %}</td>
+          <td>{{ entry.full_name }}</td>
+          <td>{{ entry.team_name }}</td>
+          <td>{{ entry.car_description|truncatechars:40 }}</td>
+          <td>{{ entry.experience }}</td>
+          <td>{{ entry.racer_class }}</td>
+          <td>{% if entry.result %}{{ entry.result.finish_time }}{% else %}—{% endif %}</td>
+          {% if user.is_staff %}
+            <td class="text-nowrap">
+              {% if entry.result %}
+                <a href="{% url 'result_edit' entry.result.pk %}">изм.</a>
+                <form method="post" action="{% url 'result_delete' entry.result.pk %}" class="d-inline">
+                  {% csrf_token %}
+                  <button class="btn btn-link btn-sm text-danger p-0" type="submit">уд.</button>
+                </form>
+              {% else %}
+                <a href="{% url 'result_create' race.pk %}">+ рез.</a>
+              {% endif %}
+            </td>
+          {% endif %}
+        </tr>
+      {% empty %}
+        <tr><td colspan="8" class="text-muted">Пока нет участников</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="h4 mb-3">Комментарии</h2>
+{% if user.is_authenticated %}
+  <a href="{% url 'comment_create' race.pk %}" class="btn btn-sm btn-accent mb-3">Добавить комментарий</a>
+{% else %}
+  <p class="text-muted"><a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.</p>
+{% endif %}
+
+{% for c in comments %}
+  <div class="card mb-2">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <strong>{{ c.author.username }}</strong>
+        <span class="text-muted">рейтинг {{ c.rating }}/10 · {{ c.get_comment_type_display }}</span>
+      </div>
+      <p class="mb-1 mt-2">{{ c.text }}</p>
+      <small class="text-muted">дата заезда: {{ c.race_date }} · {{ c.created_at|date:"d.m.Y H:i" }}</small>
+    </div>
+  </div>
+{% empty %}
+  <p class="text-muted">Комментариев пока нет.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Гонки — Racing Board{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <div>
+    <h1 class="mb-1">Табло автогонок</h1>
+    <p class="text-muted mb-0">Участники, результаты и отзывы</p>
+  </div>
+  {% if user.is_staff %}
+    <a href="{% url 'race_create' %}" class="btn btn-accent">Создать гонку</a>
+  {% endif %}
+</div>
+
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-8">
+    <input type="search" name="q" value="{{ q }}" class="form-control" placeholder="Поиск по названию, месту, описанию">
+  </div>
+  <div class="col-md-4 d-flex gap-2">
+    <button class="btn btn-accent" type="submit">Найти</button>
+    {% if q %}<a class="btn btn-outline-light" href="{% url 'race_list' %}">Сброс</a>{% endif %}
+  </div>
+</form>
+
+{% if page.object_list %}
+  <div class="list-group mb-4">
+    {% for race in page %}
+      <a href="{% url 'race_detail' race.pk %}" class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+          <strong>{{ race.title }}</strong>
+          <span class="text-muted">{{ race.date }}</span>
+        </div>
+        <small class="text-muted">{{ race.location }} · заявок: {{ race.entries.count }}</small>
+      </a>
+    {% endfor %}
+  </div>
+  {% if page.paginator.num_pages > 1 %}
+  <nav>
+    <ul class="pagination">
+      {% if page.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}{% if q %}&q={{ q }}{% endif %}">←</a></li>
+      {% endif %}
+      <li class="page-item active"><span class="page-link">{{ page.number }} / {{ page.paginator.num_pages }}</span></li>
+      {% if page.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}{% if q %}&q={{ q }}{% endif %}">→</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+{% else %}
+  <p class="text-muted">Гонок не найдено.</p>
+{% endif %}
+{% endblock %}

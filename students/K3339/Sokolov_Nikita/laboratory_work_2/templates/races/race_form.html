@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1 class="mb-4">{{ title }}</h1>
+<form method="post" class="col-lg-6">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label">Название</label>
+    <input type="text" name="title" class="form-control" value="{{ race.title|default:'' }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Место проведения</label>
+    <input type="text" name="location" class="form-control" value="{{ race.location|default:'' }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Дата</label>
+    <input type="date" name="date" class="form-control" value="{% if race %}{{ race.date|date:'Y-m-d' }}{% endif %}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Описание</label>
+    <textarea name="description" class="form-control" rows="4">{{ race.description|default:'' }}</textarea>
+  </div>
+  <button class="btn btn-accent" type="submit">Сохранить</button>
+  <a href="{% url 'race_list' %}" class="btn btn-outline-light">Отмена</a>
+</form>
+{% endblock %}
