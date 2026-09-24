@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Владельцы</h1>
+<a href="{% url 'owner_create' %}">Добавить владельца</a>
+| <a href="{% url 'owner_register' %}">Зарегистрироваться</a>
+<ul>
+{% for owner in owners %}
+    <li>
+        <a href="{% url 'owner_detail' owner.pk %}">{{ owner.last_name }} {{ owner.first_name }}</a>
+        ({{ owner.birth_date }}) —
+        паспорт: {{ owner.passport_number }},
+        адрес: {{ owner.home_address }},
+        национальность: {{ owner.nationality }}
+    </li>
+{% empty %}
+    <li>Владельцев пока нет.</li>
+{% endfor %}
+</ul>
+<a href="{% url 'car_list' %}">К автомобилям</a>
+</body>
+</html>

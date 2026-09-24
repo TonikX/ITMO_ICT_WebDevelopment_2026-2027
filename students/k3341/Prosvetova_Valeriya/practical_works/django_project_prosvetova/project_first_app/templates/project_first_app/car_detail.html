@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>{{ object.brand }} {{ object.model }}</h1>
+<p>Гос. номер: {{ object.plate_number }}</p>
+<p>Цвет: {{ object.color }}</p>
+<a href="{% url 'car_update' object.pk %}">Изменить</a>
+| <a href="{% url 'car_delete' object.pk %}">Удалить</a>
+<br>
+<a href="{% url 'car_list' %}">К списку автомобилей</a>
+</body>
+</html>

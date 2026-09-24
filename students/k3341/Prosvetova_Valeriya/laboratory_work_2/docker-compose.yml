@@ -1,0 +1,16 @@
+services:
+  conferences_postgres:
+    image: postgres:latest
+    container_name: conferences_postgres
+    environment:
+      POSTGRES_DB: conferences_db
+      POSTGRES_USER: conferences_user
+      POSTGRES_PASSWORD: conferences_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5439:5432"
+    volumes:
+      - conferences_pgdata:/var/lib/postgresql/data
+
+volumes:
+  conferences_pgdata:
