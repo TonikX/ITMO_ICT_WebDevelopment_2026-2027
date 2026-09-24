@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Конференции{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Конференции</h1>
+    {% if user.is_staff %}
+        <a href="{% url 'conference_create' %}" class="btn btn-success">Добавить конференцию</a>
+    {% endif %}
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-3">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Поиск по названию">
+    </div>
+    <div class="col-md-3">
+        <select name="topic" class="form-select">
+            <option value="">Все тематики</option>
+            {% for topic in topics %}
+                <option value="{{ topic.id }}" {% if selected_topic == topic.id|stringformat:'s' %}selected{% endif %}>{{ topic.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="date_from" value="{{ date_from }}" class="form-control">
+    </div>
+    <div class="col-md-2">
+        <input type="date" name="date_to" value="{{ date_to }}" class="form-control">
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Применить</button>
+    </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for conference in object_list %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ conference.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ conference.venue_name }} · {{ conference.start_date }} — {{ conference.end_date }}</h6>
+                    <p class="card-text">{{ conference.description|truncatewords:25 }}</p>
+                    {% for topic in conference.topics.all %}
+                        <span class="badge bg-secondary">{{ topic.name }}</span>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'conference_detail' conference.pk %}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p>Конференций не найдено.</p>
+    {% endfor %}
+</div>
+
+<div class="mt-4">
+    {% include 'conferences/_pagination.html' %}
+</div>
+{% endblock %}

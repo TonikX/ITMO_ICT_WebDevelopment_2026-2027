@@ -1,0 +1,41 @@
+<mxfile host="Electron" agent="mkdocs-report">
+  <diagram name="ER" id="er-conferences">
+    <mxGraphModel dx="969" dy="847" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="topic" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontFamily=Courier New;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Topic&lt;/b&gt;&lt;hr size=1&gt;id (PK)&lt;br&gt;name" vertex="1">
+          <mxGeometry height="80" width="180" x="80" y="375" as="geometry" />
+        </mxCell>
+        <mxCell id="conference" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontFamily=Courier New;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Conference&lt;/b&gt;&lt;hr size=1&gt;id (PK)&lt;br&gt;title&lt;br&gt;venue_name&lt;br&gt;venue_description&lt;br&gt;start_date&lt;br&gt;end_date&lt;br&gt;description&lt;br&gt;participation_terms" vertex="1">
+          <mxGeometry height="200" width="220" x="340" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="registration" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontFamily=Courier New;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Registration&lt;/b&gt;&lt;hr size=1&gt;id (PK)&lt;br&gt;conference_id (FK)&lt;br&gt;user_id (FK)&lt;br&gt;talk_title&lt;br&gt;created_at&lt;br&gt;recommended_for_publication&lt;br&gt;&lt;i&gt;(nullable, только admin)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="150" width="260" x="340" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="review" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontFamily=Courier New;fontSize=12;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Review&lt;/b&gt;&lt;hr size=1&gt;id (PK)&lt;br&gt;conference_id (FK)&lt;br&gt;author_id (FK)&lt;br&gt;rating (1..10)&lt;br&gt;text&lt;br&gt;created_at" vertex="1">
+          <mxGeometry height="130" width="220" x="680" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="conference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="topic">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="140" />
+              <mxPoint x="280" y="200" />
+              <mxPoint x="210" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="conference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" target="registration">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="conference" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;" target="review">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="840" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
