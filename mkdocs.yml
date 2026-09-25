@@ -1,0 +1,22 @@
+site_name: Веб-программирование. Sokolov Nikita. K3339
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчёт: lr2/report.md
+  - ЛР3:
+      - Отчёт: lr3/report.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - tables

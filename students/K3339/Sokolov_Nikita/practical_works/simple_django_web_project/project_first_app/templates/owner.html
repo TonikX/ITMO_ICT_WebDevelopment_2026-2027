@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Владелец {{ owner.id }}</title>
+</head>
+<body>
+  <h1>Владелец автомобиля (пользователь)</h1>
+  <p>ID: {{ owner.id }}</p>
+  <p>Username: {{ owner.username }}</p>
+  <p>Имя: {{ owner.first_name }}</p>
+  <p>Фамилия: {{ owner.last_name }}</p>
+  <p>Дата рождения: {{ owner.birth_date }}</p>
+  <p>Паспорт: {{ owner.passport_number }}</p>
+  <p>Адрес: {{ owner.home_address }}</p>
+  <p>Национальность: {{ owner.nationality }}</p>
+  <p><a href="{% url 'owners_list' %}">К списку владельцев</a></p>
+</body>
+</html>
