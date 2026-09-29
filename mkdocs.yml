@@ -1,0 +1,8 @@
+site_name: Веб-программирование. Govorov Pavel. K3340
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
