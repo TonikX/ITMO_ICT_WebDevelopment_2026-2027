@@ -1,0 +1,10 @@
+site_name: Web-Programming Course
+
+docs_dir: student/K3341/Muldiyarov_Arseniy/laboratory_work_1
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Лабораторная работа 1: report.md
