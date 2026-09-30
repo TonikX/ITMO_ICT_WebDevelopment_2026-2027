@@ -1,0 +1,11 @@
+site_name: Лабораторные работы — Степанова Екатерина
+theme:
+  name: material
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.details
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа №1: laboratory_work_1/report.md
