@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+</head>
+<body>
+    <h1>Электронный журнал оценок 🎓</h1>
+
+    <h3>Добавить дисциплину и оценку:</h3>
+    <form method="POST" action="/">
+        <label>Дисциплина:</label><br>
+        <input type="text" name="subject" required><br><br>
+
+        <label>Оценка (1-5):</label><br>
+        <input type="number" name="grade" min="1" max="5" required><br><br>
+
+        <input type="submit" value="Сохранить запись">
+    </form>
+
+    <h3>Список всех оценок:</h3>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>Дисциплина</th>
+            <th>Оценка</th>
+        </tr>
+        {{ grades_table }}
+    </table>
+</body>
+</html>

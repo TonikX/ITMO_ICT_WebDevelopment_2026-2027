@@ -1,0 +1,25 @@
+site_name: Отчеты по веб-разработке | Заботкина Марина
+site_author: Заботкина Марина (К3339)
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Темная тема
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+  features:
+    - content.code.copy
+
+nav:
+  - Главная: reports.md
+  - Лабораторная работа №1: lr1.md
