@@ -1,0 +1,18 @@
+site_name: Веб-программирование — Бандурин Егор, K3339
+site_description: Отчёты по лабораторным работам по веб-программированию
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа №1: lr1/report.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path:
+        - .
