@@ -1,0 +1,15 @@
+site_name: Веб-программирование. Мезенцев Богдан. К3339
+
+theme:
+  name: material
+  language: ru
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
