@@ -1,0 +1,4 @@
+site_name: ЛР №1 — Сокеты
+docs_dir: docs
+nav:
+  - Отчёт: index.md
