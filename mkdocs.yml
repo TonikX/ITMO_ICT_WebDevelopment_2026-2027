@@ -1,0 +1,14 @@
+site_name: Веб-программирование. Миронов Иван. К3339
+
+theme:
+  name: material
+  language: ru
+
+markdown_extensions:
+  - pymdownx.details
+  - pymdownx.superfences
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
