@@ -1,0 +1,12 @@
+<html>
+<h1>Журнал оценок</h1>
+<table>
+  <tr><th>Предмет</th><th>Оценки</th></tr>
+  {{rows}}
+</table>
+<form action="/grades" method="post">
+  <label>Предмет: <input name="subject" required></label>
+  <label>Оценка: <input name="grade" type="number" min="1" max="5" required></label>
+  <button>Добавить</button>
+</form>
+</html>

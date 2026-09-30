@@ -1,0 +1,11 @@
+site_name: "Веб-программирование. Гриценко Ярослав. K3341"
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+markdown_extensions:
+  - fenced_code
+  - tables
