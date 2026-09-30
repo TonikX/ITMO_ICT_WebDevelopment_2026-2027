@@ -1,0 +1,16 @@
+site_name: Веб-программирование. Егоров Данил. k3342
+
+theme:
+  name: material
+  language: ru
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      check_paths: true
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
