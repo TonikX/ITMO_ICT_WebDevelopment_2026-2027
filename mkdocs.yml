@@ -1,0 +1,9 @@
+site_name: Веб-программирование. Прудий Ярослав. К3342
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа №1: lr1/report.md
