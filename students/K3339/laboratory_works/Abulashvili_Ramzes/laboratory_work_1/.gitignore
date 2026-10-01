@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+site/
+.idea/
+.vscode/
+task5/grades.json
+task5/grades.tmp
