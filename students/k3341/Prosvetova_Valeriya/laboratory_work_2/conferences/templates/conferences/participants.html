@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Участники{% endblock %}
+{% block content %}
+<h1 class="mb-4">Все участники по конференциям</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Конференция</th>
+            <th>Участник</th>
+            <th>Доклад</th>
+            <th>Дата регистрации</th>
+            <th>Рекомендован к публикации</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for registration in object_list %}
+            <tr>
+                <td><a href="{% url 'conference_detail' registration.conference_id %}">{{ registration.conference }}</a></td>
+                <td>{{ registration.user.username }}</td>
+                <td>{{ registration.talk_title }}</td>
+                <td>{{ registration.created_at|date:'d.m.Y' }}</td>
+                <td>
+                    {% if user.is_staff %}
+                        <form method="post" action="{% url 'registration_set_recommendation' registration.pk %}">
+                            {% csrf_token %}
+                            <select name="recommended_for_publication" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="" {% if registration.recommended_for_publication is None %}selected{% endif %}>—</option>
+                                <option value="yes" {% if registration.recommended_for_publication %}selected{% endif %}>Да</option>
+                                <option value="no" {% if registration.recommended_for_publication == False %}selected{% endif %}>Нет</option>
+                            </select>
+                        </form>
+                    {% elif registration.recommended_for_publication is None %}
+                        —
+                    {% elif registration.recommended_for_publication %}
+                        Да
+                    {% else %}
+                        Нет
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Пока нет ни одной регистрации.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include 'conferences/_pagination.html' %}
+{% endblock %}

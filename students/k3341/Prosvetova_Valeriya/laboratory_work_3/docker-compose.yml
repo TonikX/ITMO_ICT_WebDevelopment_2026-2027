@@ -1,0 +1,16 @@
+services:
+  newspapers_postgres:
+    image: postgres:latest
+    container_name: newspapers_postgres
+    environment:
+      POSTGRES_DB: newspapers_db
+      POSTGRES_USER: newspapers_user
+      POSTGRES_PASSWORD: newspapers_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5440:5432"
+    volumes:
+      - newspapers_pgdata:/var/lib/postgresql/data
+
+volumes:
+  newspapers_pgdata:

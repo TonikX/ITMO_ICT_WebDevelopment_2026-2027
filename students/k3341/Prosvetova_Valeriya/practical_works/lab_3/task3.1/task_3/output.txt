@@ -1,0 +1,54 @@
+1. DriverLicense.objects.aggregate(oldest=Min('issue_date'))
+{'oldest': datetime.date(2001, 4, 10)} 
+
+2. Ownership.objects.filter(car__model='Camry').aggregate(latest=Max('start_date'))
+{'latest': datetime.date(2020, 1, 15)} 
+
+3. CarOwner.objects.annotate(car_count=Count('cars', distinct=True))
+   admin      Просветова Валерия: 0
+   ivanov     Иванов Иван: 3
+   petrov     Петров Пётр: 3
+   sidorova   Сидорова Анна: 0
+   kuznetsov  Кузнецов Олег: 0
+   smirnova   Смирнова Мария: 0
+   qwerty     Test Test: 0
+   rgedfgv    Алферов Влад: 0
+   sasha      Лесков Александр: 0
+   sokolov_o  Соколов Олег: 2
+   volkova    Волкова Елена: 2
+   morozov    Морозов Дмитрий: 3
+   lebedeva   Лебедева Наталья: 1
+   pavlov     Павлов Сергей: 3
+   orlova     Орлова Ирина: 1
+   zaitsev    Зайцев Алексей: 1
+
+4. Car.objects.values('brand').annotate(n=Count('id')).order_by('brand')
+   Audi: 1
+   BMW: 2
+   Hyundai: 1
+   Kia: 2
+   Lada: 1
+   Mercedes-Benz: 1
+   Nissan: 1
+   Renault: 1
+   Skoda: 2
+   Toyota: 3
+   Volkswagen: 1
+
+5. CarOwner.objects.order_by(F('licenses__issue_date').asc(nulls_last=True)).distinct()
+   Морозов Дмитрий — 2001-04-10
+   Павлов Сергей — 2003-08-25
+   Соколов Олег — 2005-06-20
+   Орлова Ирина — 2007-10-01
+   Волкова Елена — 2010-09-15
+   Лебедева Наталья — 2014-02-18
+   Зайцев Алексей — 2018-07-12
+   Просветова Валерия — нет удостоверения
+   Иванов Иван — нет удостоверения
+   Петров Пётр — нет удостоверения
+   Сидорова Анна — нет удостоверения
+   Кузнецов Олег — нет удостоверения
+   Смирнова Мария — нет удостоверения
+   Test Test — нет удостоверения
+   Алферов Влад — нет удостоверения
+   Лесков Александр — нет удостоверения
