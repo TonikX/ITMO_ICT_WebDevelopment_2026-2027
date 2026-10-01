@@ -1,0 +1,16 @@
+site_name: Веб-программирование. Журбина Марина. К3339
+site_url: https://ZhurbinaMarina.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Обзор: lr1/report.md
+      - Задание 1. UDP: lr1/task1.md
+      - Задание 2. TCP: lr1/task2.md
+      - Задание 3. HTTP: lr1/task3.md
+      - Задание 4. Чат: lr1/task4.md
+      - Задание 5. Веб-сервер: lr1/task5.md
