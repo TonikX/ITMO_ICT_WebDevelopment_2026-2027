@@ -15,11 +15,9 @@ params = input("Введите параметры через пробел: ").st
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((HOST, PORT))
 
-# Формируем запрос
 request = f"{variant} {params}"
 client_socket.send(request.encode('utf-8'))
 
-# Получаем результат
 response = client_socket.recv(1024).decode('utf-8')
 print(f"\nРезультат от сервера: {response}")
 

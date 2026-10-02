@@ -29,12 +29,10 @@ def main():
         print("Сервер недоступен.")
         return
 
-    # Запускаем поток для чтения входных данных
     receive_thread = threading.Thread(target=receive_messages, args=(client,))
     receive_thread.daemon = True
     receive_thread.start()
 
-    # Главный цикл для отправки сообщений
     while True:
         try:
             message = input("> ")

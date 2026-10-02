@@ -446,17 +446,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#client-clientpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Client (client.py)
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -549,17 +538,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#client-clientpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Client (client.py)
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -586,32 +564,69 @@
 </ul>
 <hr />
 <h2 id="server-serverpy">Server (<code>server.py</code>)</h2>
-<pre><code class="language-python">import threading
-import socket
+<pre><code class="language-python">import socket
+import threading
 
-class Server:
-    def __init__(self):
-        self.clients = {}
-        self.server_socket = None
-        self.host = 'localhost'
-        self.port = 8080
+HOST = '127.0.0.1'
+PORT = 12345
 
-    def listen(self):
-        ...
-</code></pre>
-<h2 id="client-clientpy">Client (<code>client.py</code>)</h2>
-<pre><code class="language-python">import threading
-import socket
+clients = {}  # {socket: nickname}
 
-class Client:
-    def __init__(self, name):
-        self.name = name
-        self.host = 'localhost'
-        self.port = 8080
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def broadcast(message, sender_socket=None):
+    &quot;&quot;&quot;Рассылка сообщения всем клиентам, кроме отправителя.&quot;&quot;&quot;
+    for client in list(clients.keys()):
+        if client != sender_socket:
+            try:
+                client.send(message.encode('utf-8'))
+            except:
+                remove_client(client)
 
-    def connect_to_chat(self):
-        ...
+def remove_client(client_socket):
+    &quot;&quot;&quot;Удаление отключенного клиента.&quot;&quot;&quot;
+    if client_socket in clients:
+        nickname = clients[client_socket]
+        del clients[client_socket]
+        client_socket.close()
+        print(f&quot;[{nickname}] отключился.&quot;)
+        broadcast(f&quot;--- {nickname} покинул чат ---&quot;)
+
+def handle_client(client_socket):
+    &quot;&quot;&quot;Обработка отдельного клиента в своем потоке.&quot;&quot;&quot;
+    try:
+        client_socket.send(&quot;NICK_REQUEST&quot;.encode('utf-8'))
+        nickname = client_socket.recv(1024).decode('utf-8').strip()
+
+        clients[client_socket] = nickname
+        print(f&quot;Пользователь [{nickname}] подключился.&quot;)
+        broadcast(f&quot;--- {nickname} вошёл в чат ---&quot;, client_socket)
+
+        client_socket.send(&quot;Добро пожаловать в чат! Для выхода введите /exit\n&quot;.encode('utf-8'))
+
+        while True:
+            msg = client_socket.recv(1024).decode('utf-8')
+            if not msg or msg.strip() == '/exit':
+                break
+            broadcast(f&quot;{nickname}: {msg}&quot;, client_socket)
+    except ConnectionResetError:
+        pass
+    finally:
+        remove_client(client_socket)
+
+def main():
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server.bind((HOST, PORT))
+    server.listen()
+    print(f&quot;Чат-сервер запущен на {HOST}:{PORT}...&quot;)
+
+    while True:
+        client_socket, _ = server.accept()
+        thread = threading.Thread(target=handle_client, args=(client_socket,))
+        thread.daemon = True
+        thread.start()
+
+if __name__ == &quot;__main__&quot;:
+    main()
 </code></pre>
 
 

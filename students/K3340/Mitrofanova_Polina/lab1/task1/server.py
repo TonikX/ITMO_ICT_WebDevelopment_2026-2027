@@ -8,11 +8,9 @@ server_socket.bind((HOST, PORT))
 
 print(f"UDP-сервер запущен на {HOST}:{PORT}...")
 
-# Ожидаем сообщение от клиента
 data, client_address = server_socket.recvfrom(1024)
 print(f"Получено от клиента ({client_address}): {data.decode('utf-8')}")
 
-# Отправляем ответ клиенту
 response = "Hello, client"
 server_socket.sendto(response.encode('utf-8'), client_address)
 
