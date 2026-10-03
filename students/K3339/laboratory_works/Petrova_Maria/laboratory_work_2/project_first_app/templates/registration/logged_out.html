@@ -1,0 +1,13 @@
+{% extends 'project_first_app/base.html' %}
+
+{% block title %}
+Выход
+{% endblock %}
+
+{% block content %}
+<p>Вы вышли из аккаунта.</p>
+
+<a href="{{ url('room_list') }}">
+    На главную
+</a>
+{% endblock %}

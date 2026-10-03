@@ -1,0 +1,58 @@
+{% extends 'project_first_app/base.html' %}
+
+{% block title %}
+Мои бронирования
+{% endblock %}
+
+{% block content %}
+
+<h1 class="mb-4">Мои бронирования</h1>
+
+{% for reservation in reservations %}
+
+    <div class="card mb-3">
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Номер {{ reservation.room.number }}
+            </h5>
+
+            <p>
+                <strong>Отель:</strong>
+                {{ reservation.room.hotel.name }}
+            </p>
+
+            <p>
+                <strong>Заезд:</strong>
+                {{ reservation.check_in|localize }}
+            </p>
+
+            <p>
+                <strong>Выезд:</strong>
+                {{ reservation.check_out|localize }}
+            </p>
+
+            <a
+                href="{{ url('edit_reservation', args=[reservation.id]) }}"
+                class="btn btn-warning"
+            >
+                Редактировать
+            </a>
+
+            <a
+                href="{{ url('delete_reservation', args=[reservation.id]) }}"
+                class="btn btn-danger"
+            >
+                Удалить
+            </a>
+
+        </div>
+    </div>
+
+{% else %}
+
+    <p>У вас пока нет бронирований.</p>
+
+{% endfor %}
+
+{% endblock %}

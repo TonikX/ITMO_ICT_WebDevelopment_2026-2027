@@ -1,0 +1,51 @@
+{% extends 'project_first_app/base.html' %}
+
+{% block title %}
+{% if is_edit %}
+Редактирование бронирования
+{% else %}
+Бронирование
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+
+{% if is_edit %}
+    <h1>Редактирование бронирования</h1>
+{% else %}
+    <h1>Бронирование номера {{ room.number }}</h1>
+{% endif %}
+
+<p>
+    <strong>Отель:</strong>
+    {{ room.hotel.name }}
+</p>
+
+<form method="post">
+
+    {{ csrf_input }}
+
+    {{ form.as_p() }}
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        {% if is_edit %}
+            Сохранить изменения
+        {% else %}
+            Забронировать
+        {% endif %}
+    </button>
+
+    <a
+        href="{{ url('my_reservations') }}"
+        class="btn btn-secondary"
+    >
+        Отмена
+    </a>
+
+</form>
+
+{% endblock %}
