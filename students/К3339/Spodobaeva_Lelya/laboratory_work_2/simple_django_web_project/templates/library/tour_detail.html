@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tour.name }}{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>{{ tour.name }}</h1>
+    <p><strong>Турагентство:</strong> {{ tour.agency }}</p>
+    <p><strong>Страна:</strong> {{ tour.country }}</p>
+    <p><strong>Период:</strong> {{ tour.start_date }} - {{ tour.end_date }}</p>
+    <p><strong>Стоимость:</strong> {{ tour.price }}</p>
+    <p><strong>Условия оплаты:</strong> {{ tour.payment_terms }}</p>
+    <p>{{ tour.description }}</p>
+
+    <div class="actions">
+        <a class="button secondary" href="{% url 'tour_list' %}">К списку</a>
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'reserve_tour' tour.id %}">Забронировать</a>
+            <a class="button secondary" href="{% url 'add_review' tour.id %}">Оставить отзыв</a>
+        {% else %}
+            <a class="button" href="{% url 'register' %}">Зарегистрироваться</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="panel" style="margin-top: 20px;">
+    <h2>Отзывы</h2>
+
+    {% for review in tour.reviews.all %}
+        <p>
+            <strong>{{ review.user.username }}</strong>,
+            {{ review.tour_start_date }} - {{ review.tour_end_date }},
+            рейтинг {{ review.rating }}/10
+        </p>
+        <p>{{ review.text }}</p>
+        <hr>
+    {% empty %}
+        <p>Отзывов пока нет.</p>
+    {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+site_name: Веб-программирование. Леля Сподобаева. К3339
+site_url: https://lalalalalalalalalalalalalata-del.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчёт: lr2/report.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences

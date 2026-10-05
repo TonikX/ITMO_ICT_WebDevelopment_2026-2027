@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Туры{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Список туров</h1>
+
+    <form class="search" method="get">
+        <input type="text" name="q" value="{{ query }}" placeholder="Поиск по названию, агентству или стране">
+        <select name="country">
+            <option value="">Все страны</option>
+            {% for item in countries %}
+                <option value="{{ item }}" {% if item == country %}selected{% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+        <button class="button" type="submit">Найти</button>
+        <a class="button secondary" href="{% url 'tour_list' %}">Сбросить</a>
+    </form>
+
+    {% if page_obj %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Тур</th>
+                    <th>Страна</th>
+                    <th>Период</th>
+                    <th>Стоимость</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tour in page_obj %}
+                    <tr>
+                        <td>{{ tour.name }}</td>
+                        <td>{{ tour.country }}</td>
+                        <td>{{ tour.start_date }} - {{ tour.end_date }}</td>
+                        <td>{{ tour.price }}</td>
+                        <td><a href="{% url 'tour_detail' tour.id %}">Открыть</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</p>
+
+        <div class="actions">
+            {% if page_obj.has_previous %}
+                <a class="button secondary" href="?q={{ query }}&country={{ country }}&page={{ page_obj.previous_page_number }}">Назад</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a class="button secondary" href="?q={{ query }}&country={{ country }}&page={{ page_obj.next_page_number }}">Вперёд</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Туры пока не добавлены. Их можно добавить через Django-admin.</p>
+    {% endif %}
+</section>
+{% endblock %}

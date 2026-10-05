@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Мои бронирования{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Мои бронирования</h1>
+
+    {% if reservations %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Тур</th>
+                    <th>Туристов</th>
+                    <th>Статус</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.tour.name }}</td>
+                        <td>{{ reservation.tourists_count }}</td>
+                        <td>
+                            {% if reservation.is_confirmed %}
+                                подтверждено
+                            {% else %}
+                                ожидает подтверждения
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'edit_reservation' reservation.id %}">Редактировать</a>
+                            |
+                            <a href="{% url 'delete_reservation' reservation.id %}">Удалить</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>У вас пока нет бронирований.</p>
+    {% endif %}
+</section>
+{% endblock %}
