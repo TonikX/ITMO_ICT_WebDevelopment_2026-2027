@@ -1,0 +1,81 @@
+:root {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #14231c;
+  background: #eef5f1;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #0b6e4f;
+  color: #fff;
+}
+
+.header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.header a {
+  color: #d8f3dc;
+  text-decoration: none;
+}
+
+.header a.router-link-active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #d7e3dc;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  background: #0b6e4f;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+input,
+select {
+  border: 1px solid #c5d4cc;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.warrior-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e6eee9;
+}
