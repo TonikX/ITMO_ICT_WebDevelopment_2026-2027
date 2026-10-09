@@ -1,0 +1,22 @@
+.reservation-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+}
+
+.reservation-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .reservation-card {
+    grid-template-columns: 1fr;
+  }
+
+  .reservation-actions {
+    flex-wrap: wrap;
+  }
+}

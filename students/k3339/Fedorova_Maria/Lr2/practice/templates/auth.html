@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{% if active_tab == 'register' %}Регистрация{% else %}Вход{% endif %}{% endblock %}
+
+{% block content %}
+  <div class="modal-card">
+    <h1>{% if active_tab == 'register' %}Регистрация{% else %}Вход{% endif %}</h1>
+
+    <div class="auth-tabs">
+      <a
+        class="auth-tab {% if active_tab == 'login' %}is-active{% endif %}"
+        href="?tab=login"
+      >Вход</a>
+      <a
+        class="auth-tab {% if active_tab == 'register' %}is-active{% endif %}"
+        href="?tab=register"
+      >Регистрация</a>
+    </div>
+
+    <div class="auth-panels">
+      <section class="auth-panel {% if active_tab != 'login' %}is-hidden{% endif %}">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="login">
+          {{ login_form.as_p }}
+          <button type="submit">Войти</button>
+        </form>
+      </section>
+
+      <section class="auth-panel {% if active_tab != 'register' %}is-hidden{% endif %}">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="register">
+          {{ register_form.as_p }}
+          <button type="submit">Создать аккаунт</button>
+        </form>
+      </section>
+    </div>
+  </div>
+{% endblock %}

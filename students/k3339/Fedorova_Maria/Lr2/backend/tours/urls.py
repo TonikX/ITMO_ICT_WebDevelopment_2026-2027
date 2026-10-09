@@ -1,0 +1,79 @@
+from django.urls import path
+from rest_framework.authtoken.views import obtain_auth_token
+
+from .views import (
+    AdminReservationConfirmView,
+    AdminReservationListView,
+    CurrentUserView,
+    RegisterView,
+    ReservationDetailView,
+    ReservationListCreateView,
+    ReviewDetailView,
+    ReviewListCreateView,
+    SoldToursByCountryView,
+    TourDetailView,
+    TourListView,
+)
+
+urlpatterns = [
+    path(
+        "tours/",
+        TourListView.as_view(),
+        name="tour-list",
+    ),
+    path(
+        "tours/<int:pk>/",
+        TourDetailView.as_view(),
+        name="tour-detail",
+    ),
+    path(
+        "register/",
+        RegisterView.as_view(),
+        name="register",
+    ),
+    path(
+        "login/",
+        obtain_auth_token,
+        name="login",
+    ),
+    path(
+        "me/",
+        CurrentUserView.as_view(),
+        name="current-user",
+    ),
+    path(
+        "reservations/",
+        ReservationListCreateView.as_view(),
+        name="reservation-list-create",
+    ),
+    path(
+        "reservations/<int:pk>/",
+        ReservationDetailView.as_view(),
+        name="reservation-detail",
+    ),
+    path(
+        "reviews/",
+        ReviewListCreateView.as_view(),
+        name="review-list-create",
+    ),
+    path(
+        "reviews/<int:pk>/",
+        ReviewDetailView.as_view(),
+        name="review-detail",
+    ),
+    path(
+        "admin/reservations/",
+        AdminReservationListView.as_view(),
+        name="admin-reservations",
+    ),
+    path(
+        "admin/reservations/<int:pk>/confirm/",
+        AdminReservationConfirmView.as_view(),
+        name="admin-reservation-confirm",
+    ),
+    path(
+        "admin/stats/sold-by-country/",
+        SoldToursByCountryView.as_view(),
+        name="sold-tours-by-country",
+    ),
+]

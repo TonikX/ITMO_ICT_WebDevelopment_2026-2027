@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Car {{ car.id }}{% endblock %}
+
+{% block content %}
+  <h1>{{ car.brand }} {{ car.model }}</h1>
+  <p><strong>Госномер:</strong> {{ car.state_number }}</p>
+  <p><strong>Цвет:</strong> {{ car.color }}</p>
+
+  <h2>Владельцы</h2>
+  <ul>
+    {% for ownership in car.ownerships.all %}
+      <li>
+        <a href="{% url 'owner_detail' ownership.owner.id %}">{{ ownership.owner }}</a>
+        ({{ ownership.start_date }}{% if ownership.end_date %} — {{ ownership.end_date }}{% endif %})
+      </li>
+    {% empty %}
+      <li>Владельцев нет</li>
+    {% endfor %}
+  </ul>
+
+  <p class="actions">
+    {% if user.is_staff %}
+      <a href="{% url 'car_update' car.pk %}">Редактировать</a> |
+      <a href="{% url 'car_delete' car.pk %}">Удалить</a> |
+    {% endif %}
+    <a href="{% url 'car_list' %}">К списку</a>
+  </p>
+{% endblock %}

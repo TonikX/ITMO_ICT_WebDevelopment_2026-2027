@@ -1,0 +1,8 @@
+site_name: Лабораторная работа №2
+site_url: https://fedorova-m.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+
+nav:
+  - Отчёт: README.md
+
+theme:
+  name: mkdocs
