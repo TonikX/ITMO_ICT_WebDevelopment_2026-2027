@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Таблица участников — Научные конференции</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Navigation */
+        nav {
+            background: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin: 0 6px;
+        }
+        nav a:hover { text-decoration: underline; }
+        nav .user-info {
+            float: right;
+            color: #555;
+        }
+
+        /* Tiêu đề */
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 12px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 35px;
+            padding-left: 14px;
+            border-left: 5px solid #3498db;
+            font-size: 20px;
+        }
+
+        /* Thông tin conference */
+        .conference-info {
+            color: #666;
+            font-size: 14px;
+            margin: 6px 0 16px 0;
+            padding-left: 20px;
+        }
+        .conference-info .label {
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* Bảng */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 14px;
+            text-align: left;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+        th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #eef5fb;
+        }
+        td.num {
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            width: 50px;
+        }
+
+        /* Badge trạng thái */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .status-pending  { background: #fef9e7; color: #b7950b; }
+        .status-approved { background: #eafaf1; color: #1e8449; }
+        .status-rejected { background: #fdedec; color: #c0392b; }
+
+        /* Badge recommended */
+        .recommended-yes {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .recommended-no {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Trường hợp trống */
+        .empty-block {
+            background: #f9f9f9;
+            border-left: 4px solid #ccc;
+            padding: 20px;
+            border-radius: 4px;
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Footer */
+        .footer-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ecf0f1;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .footer-link:hover {
+            background: #d5dbdb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         NAVIGATION — Menu điều hướng chính
+         ============================================================ -->
+    <nav>
+        <a href="{% url 'conference_list' %}"><strong>🏠 Главная</strong></a> |
+        <a href="{% url 'participants_table' %}">📊 Участники</a> |
+        {% if user.is_authenticated %}
+            <span class="user-info">
+                👤 <strong>{{ user.username }}</strong> |
+                <a href="{% url 'logout' %}">Выйти</a>
+            </span>
+        {% else %}
+            <span class="user-info">
+                <a href="{% url 'login' %}">Войти</a> |
+                <a href="{% url 'register' %}">Регистрация</a>
+            </span>
+        {% endif %}
+    </nav>
+
+    <!-- ============================================================
+         TIÊU ĐỀ CHÍNH
+         ============================================================ -->
+    <h1>📊 Таблица участников по конференциям</h1>
+
+    <!-- ============================================================
+         DANH SÁCH CONFERENCE + BẢNG NGƯỜI THAM GIA
+         ============================================================ -->
+    {% if conferences %}
+        {% for c in conferences %}
+            <h2>📌 {{ c.title }}</h2>
+
+            <p class="conference-info">
+                <span class="label">📅 Период:</span>
+                {{ c.start_date|date:"d.m.Y" }} — {{ c.end_date|date:"d.m.Y" }}
+                &nbsp;|&nbsp;
+                <span class="label">📍 Место:</span> {{ c.venue }}
+                &nbsp;|&nbsp;
+                <span class="label">👥 Всего заявок:</span> {{ c.registrations.count }}
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Автор</th>
+                        <th>Название отчета</th>
+                        <th>Статус</th>
+                        <th>Рекомендован к публикации</th>
+                        <th>Дата регистрации</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in c.registrations.all %}
+                        <tr>
+                            <td class="num">{{ forloop.counter }}</td>
+                            <td>
+                                {{ r.author.get_full_name|default:r.author.username }}
+                            </td>
+                            <td>{{ r.report_title }}</td>
+                            <td>
+                                <span class="status-badge status-{{ r.status }}">
+                                    {{ r.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if r.recommended %}
+                                    <span class="recommended-yes">✅ Да</span>
+                                {% else %}
+                                    <span class="recommended-no">❌ Нет</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ r.created_at|date:"d.m.Y H:i" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px; color: #999; font-style: italic;">
+                                Никто ещё не зарегистрировался на эту конференцию.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <div class="empty-block">
+            Пока нет ни одной конференции.
+            {% if user.is_authenticated %}
+                <br><br>
+                <a href="{% url 'conference_create' %}">Создайте первую конференцию</a>.
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <a href="{% url 'conference_list' %}" class="footer-link">
+        ← К списку конференций
+    </a>
+
+</body>
+</html>

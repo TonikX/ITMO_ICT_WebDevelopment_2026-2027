@@ -1,0 +1,58 @@
+site_name: Laboratory Work 2 — Django Web Framework
+site_description: Вариант 5 — Список научных конференций
+site_author: Tran Thi Lien
+site_url: https://example.com/lab2/
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - scheme: default
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Переключить на тёмную тему
+    - scheme: slate
+      primary: blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Переключить на светлую тему
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.integrate
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Главная: index.md
+  - Практическая работа 2.1: lab2_1.md
+  - Практическая работа 2.2: lab2_2.md
+  - Практическая работа 2.3: lab2_3.md
+  - Вариант 5 — Конференции: variant5.md
+  - Вывод: conclusion.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/

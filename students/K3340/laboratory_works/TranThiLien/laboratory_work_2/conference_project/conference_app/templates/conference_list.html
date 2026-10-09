@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список научных конференций</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 20px auto;
+            padding: 0 20px;
+            color: #333;
+        }
+        nav {
+            background: #f0f0f0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        nav a {
+            color: #0066cc;
+            text-decoration: none;
+            margin: 0 6px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        nav .user-info {
+            float: right;
+            color: #555;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .btn-create {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .btn-create:hover {
+            background: #229954;
+        }
+        .conference-list {
+            list-style: none;
+            padding: 0;
+        }
+        .conference-item {
+            background: #f9f9f9;
+            border-left: 4px solid #3498db;
+            padding: 16px 20px;
+            margin-bottom: 14px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .conference-item:hover {
+            background: #eef5fb;
+        }
+        .conference-item h3 {
+            margin: 0 0 8px 0;
+        }
+        .conference-item h3 a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        .conference-item h3 a:hover {
+            text-decoration: underline;
+        }
+        .meta {
+            font-size: 14px;
+            color: #666;
+            margin: 4px 0;
+        }
+        .meta strong {
+            color: #444;
+        }
+        .topics {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #2471a3;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 4px;
+        }
+        .empty {
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+         NAVIGATION — Menu điều hướng chính
+         ============================================================ -->
+    <nav>
+        <a href="{% url 'conference_list' %}"><strong>🏠 Главная</strong></a> |
+        <a href="{% url 'participants_table' %}">📊 Участники</a> |
+        {% if user.is_authenticated %}
+            <span class="user-info">
+                👤 <strong>{{ user.username }}</strong> |
+                <a href="{% url 'logout' %}">Выйти</a>
+            </span>
+        {% else %}
+            <span class="user-info">
+                <a href="{% url 'login' %}">Войти</a> |
+                <a href="{% url 'register' %}">Регистрация</a>
+            </span>
+        {% endif %}
+    </nav>
+
+    <!-- ============================================================
+         TIÊU ĐỀ + NÚT TẠO HỘI NGHỊ
+         ============================================================ -->
+    <h1>Список научных конференций</h1>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'conference_create' %}" class="btn-create">
+            + Создать конференцию
+        </a>
+    {% endif %}
+
+    <!-- ============================================================
+         DANH SÁCH HỘI NGHỊ
+         ============================================================ -->
+    <ul class="conference-list">
+        {% for c in conferences %}
+            <li class="conference-item">
+                <h3>
+                    <a href="{% url 'conference_detail' c.id %}">
+                        {{ c.title }}
+                    </a>
+                </h3>
+
+                <p class="meta">
+                    <strong>📅 Период:</strong>
+                    {{ c.start_date|date:"d.m.Y" }} → {{ c.end_date|date:"d.m.Y" }}
+                </p>
+
+                <p class="meta">
+                    <strong>📍 Место проведения:</strong> {{ c.venue }}
+                </p>
+
+                {% if c.topics.all %}
+                    <p class="meta">
+                        <strong>🏷️ Тематики:</strong>
+                        {% for topic in c.topics.all %}
+                            <span class="topics">{{ topic.name }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+
+                {% if c.description %}
+                    <p class="meta">
+                        {{ c.description|truncatewords:25 }}
+                    </p>
+                {% endif %}
+
+                <p class="meta">
+                    <strong>👥 Зарегистрировано:</strong>
+                    {{ c.registrations.count }}
+                    |
+                    <strong>⭐ Отзывов:</strong>
+                    {{ c.reviews.count }}
+                </p>
+            </li>
+        {% empty %}
+            <li class="empty">
+                Пока нет ни одной конференции.
+                {% if user.is_authenticated %}
+                    <br>
+                    <a href="{% url 'conference_create' %}">Создайте первую конференцию</a>.
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
