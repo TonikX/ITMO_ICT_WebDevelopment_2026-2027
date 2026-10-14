@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои регистрации{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Мои регистрации</h1>
+
+    {% if registrations %}
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Гонка</th>
+                            <th>Дата</th>
+                            <th>Машина</th>
+                            <th>Время</th>
+                            <th>Результат</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'race_detail' reg.race.id %}">
+                                        {{ reg.race.name }}
+                                    </a>
+                                </td>
+                                <td>{{ reg.race.date }}</td>
+                                <td>{{ reg.car_description|truncatewords:5 }}</td>
+                                <td>{{ reg.race_time|default:"—" }}</td>
+                                <td>{{ reg.result|default:"—" }}</td>
+                                <td>
+                                    <a href="{% url 'registration_edit' reg.id %}" class="btn btn-sm btn-outline-primary">Изменить</a>
+                                    <a href="{% url 'registration_delete' reg.id %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">
+            У вас пока нет регистраций. <a href="{% url 'race_list' %}">Посмотреть гонки</a>
+        </div>
+    {% endif %}
+{% endblock %}

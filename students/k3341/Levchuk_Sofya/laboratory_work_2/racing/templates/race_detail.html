@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ race.name }}{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h1>{{ race.name }}</h1>
+            <p class="text-muted mb-0">
+                {{ race.location }} &nbsp;|&nbsp; {{ race.date }}
+            </p>
+        </div>
+        <a href="{% url 'race_list' %}" class="btn btn-outline-secondary">← К списку</a>
+    </div>
+
+    {% if user.is_staff %}
+        <div class="mb-3">
+            <a href="{% url 'race_edit' race.id %}" class="btn btn-outline-primary btn-sm">Редактировать гонку</a>
+            <a href="{% url 'race_delete' race.id %}" class="btn btn-outline-danger btn-sm">Удалить гонку</a>
+        </div>
+    {% endif %}
+
+    {% if race.description %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="mb-0">{{ race.description }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <p>
+            <a href="{% url 'registration_create' race.id %}" class="btn btn-primary">
+                + Зарегистрироваться на гонку
+            </a>
+        </p>
+    {% else %}
+        <p>
+            <a href="{% url 'login' %}">Войдите</a>, чтобы зарегистрироваться на гонку.
+        </p>
+    {% endif %}
+
+    <h2>Участники</h2>
+
+    {% if registrations %}
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-striped table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Участник</th>
+                            <th>Команда</th>
+                            <th>Опыт</th>
+                            <th>Класс</th>
+                            <th>Автомобиль</th>
+                            <th>Время</th>
+                            <th>Результат</th>
+                            {% if user.is_staff %}<th></th>{% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reg in registrations %}
+                            <tr>
+                                <td>
+                                    <strong>{{ reg.user.first_name }} {{ reg.user.last_name }}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ reg.user.username }}</small>
+
+                                    {% if reg.user.bio %}
+                                        <br>
+                                        <small class="text-muted fst-italic">
+                                            {{ reg.user.bio|truncatewords:10 }}
+                                        </small>
+                                        <br>
+                                        <a class="small" data-bs-toggle="collapse" href="#bio-{{ reg.id }}" role="button">
+                                            Показать био полностью
+                                        </a>
+                                        <div class="collapse mt-1" id="bio-{{ reg.id }}">
+                                            <small class="text-muted">{{ reg.user.bio }}</small>
+                                        </div>
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ reg.user.team|default:"—" }}</td>
+
+                                <td>{{ reg.user.experience }} лет</td>
+
+                                <td>
+                                    <span class="badge bg-secondary">{{ reg.user.driver_class|default:"—" }}</span>
+                                </td>
+
+                                <td>
+                                    {% if reg.car_description %}
+                                        <small>{{ reg.car_description|truncatewords:10 }}</small>
+                                        <br>
+                                        <a class="small" data-bs-toggle="collapse" href="#car-{{ reg.id }}" role="button">
+                                            Показать автомобиль
+                                        </a>
+                                        <div class="collapse mt-1" id="car-{{ reg.id }}">
+                                            <small>{{ reg.car_description }}</small>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">—</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if reg.race_time %}{{ reg.race_time }}
+                                    {% else %}<span class="text-muted">—</span>{% endif %}
+                                </td>
+
+                                <td>
+                                    {% if reg.result %}<strong>{{ reg.result }}</strong>
+                                    {% else %}<span class="text-muted">—</span>{% endif %}
+                                </td>
+
+                                {% if user.is_staff %}
+                                    <td>
+                                        <a href="{% url 'registration_set_result' reg.id %}" class="btn btn-sm btn-outline-primary">Результат</a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">
+            Пока никто не зарегистрирован.
+        </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <p class="mt-3">
+            <a href="{% url 'comment_create' race.id %}" class="btn btn-outline-primary">
+                + Оставить комментарий
+            </a>
+        </p>
+    {% else %}
+        <p class="mt-3">
+            <a href="{% url 'login' %}">Войдите</a>, чтобы оставить комментарий.
+        </p>
+    {% endif %}
+
+    <h2 class="mt-4">Комментарии</h2>
+
+    {% if comments %}
+        <div class="list-group">
+            {% for comment in comments %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>{{ comment.author.username }}</strong>
+                            {% if comment.author.first_name %}
+                                ({{ comment.author.first_name }} {{ comment.author.last_name }})
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                    <p class="mb-1 mt-2">{{ comment.text }}</p>
+                    <div class="text-muted small">
+                        <span class="badge bg-secondary">{{ comment.get_comment_type_display }}</span>
+                        <span class="ms-2">Рейтинг: {{ comment.rating }}/10</span>
+                        <span class="ms-2">Дата заезда: {{ comment.race.date }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">Комментариев пока нет.</div>
+    {% endif %}
+{% endblock %}
