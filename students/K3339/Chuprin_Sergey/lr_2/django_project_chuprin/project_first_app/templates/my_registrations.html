@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои заявки{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Мои заявки</h1>
+    <a href="{% url 'conferences' %}" class="btn btn-outline-primary">Найти конференцию</a>
+</div>
+
+{% if registrations %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Конференция</th>
+                <th>Доклад</th>
+                <th>Тематики</th>
+                <th>Подана</th>
+                <th>Статус</th>
+                <th class="text-end">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for registration in registrations %}
+            <tr>
+                <td>
+                    <a href="{% url 'conference_detail' registration.conference.id %}">
+                        {{ registration.conference.name }}
+                    </a>
+                    <div class="small text-muted">
+                        {{ registration.conference.start_date|date:"d.m.Y" }}
+                    </div>
+                </td>
+                <td>
+                    <strong>{{ registration.name }}</strong>
+                    <div class="small text-muted">{{ registration.description|truncatechars:80 }}</div>
+                </td>
+                <td>
+                    {% for topic in registration.topics.all %}
+                        <span class="badge bg-secondary">{{ topic.name }}</span>
+                    {% endfor %}
+                </td>
+                <td class="text-nowrap">{{ registration.registration_date|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {% if registration.status == 'approved' %}
+                        <span class="badge text-bg-success">Принята</span>
+                    {% elif registration.status == 'rejected' %}
+                        <span class="badge text-bg-danger">Отклонена</span>
+                    {% else %}
+                        <span class="badge text-bg-warning">На рассмотрении</span>
+                    {% endif %}
+
+                    {% if registration.status == 'approved' %}
+                        <div class="mt-1">
+                            {% if registration.is_recommended is None %}
+                                <span class="small text-muted">Результат выступления ещё не определён</span>
+                            {% elif registration.is_recommended %}
+                                <span class="badge text-bg-success">Рекомендован к публикации</span>
+                            {% else %}
+                                <span class="badge text-bg-secondary">Не рекомендован к публикации</span>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if registration.performance_time %}
+                        <div class="small text-muted mt-1">
+                            Выступление: {{ registration.performance_time|date:"d.m.Y H:i" }}
+                        </div>
+                    {% endif %}
+                </td>
+                <td class="text-end text-nowrap">
+                    <a href="{% url 'registration_edit' registration.id %}"
+                       class="btn btn-sm btn-outline-primary">Изменить</a>
+                    <form method="post" action="{% url 'registration_delete' registration.id %}"
+                          class="d-inline"
+                          onsubmit="return confirm('Удалить заявку «{{ registration.name|escapejs }}»?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <p class="mb-3">Вы пока не подали ни одной заявки.</p>
+    <a href="{% url 'conferences' %}" class="btn btn-primary">Посмотреть конференции</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Конференции{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Научные конференции</h1>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-5">
+            <label for="q" class="form-label small text-muted mb-1">Поиск</label>
+            <input type="search" id="q" name="q" class="form-control"
+                   placeholder="Название или описание конференции"
+                   value="{{ request.GET.q }}">
+        </div>
+        <div class="col-6 col-lg-3">
+            <label for="topic" class="form-label small text-muted mb-1">Тематика</label>
+            <select id="topic" name="topic" class="form-select">
+                <option value="">Все тематики</option>
+                {% for topic in topics %}
+                    <option value="{{ topic.id }}"
+                        {% if topic.id|stringformat:"s" == request.GET.topic %}selected{% endif %}>
+                        {{ topic.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6 col-lg-2">
+            <label for="period" class="form-label small text-muted mb-1">Когда</label>
+            <select id="period" name="period" class="form-select">
+                <option value="">Все</option>
+                <option value="upcoming" {% if request.GET.period == 'upcoming' %}selected{% endif %}>Предстоящие</option>
+                <option value="past" {% if request.GET.period == 'past' %}selected{% endif %}>Прошедшие</option>
+            </select>
+        </div>
+        <div class="col-12 col-lg-2 d-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-grow-1">Найти</button>
+            {% if querystring %}
+                <a href="{% url 'conferences' %}" class="btn btn-outline-secondary" title="Сбросить фильтры">&times;</a>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+{% if querystring %}
+    <p class="text-muted">Найдено конференций: {{ conferences.paginator.count }}</p>
+{% endif %}
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for conference in conferences %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ conference.name }}</h5>
+                    <p class="card-subtitle text-muted mb-2">
+                        {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}<br>
+                        {{ conference.place }}
+                    </p>
+                    <div class="mb-2">
+                        {% for topic in conference.topics.all %}
+                            <span class="badge bg-secondary">{{ topic.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="card-text">{{ conference.description|truncatechars:150 }}</p>
+                    <a href="{% url 'conference_detail' conference.id %}" class="btn btn-primary mt-auto">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5 text-muted">
+                {% if querystring %}
+                    <p class="mb-3">По вашему запросу ничего не найдено.</p>
+                    <a href="{% url 'conferences' %}" class="btn btn-outline-primary">Сбросить фильтры</a>
+                {% else %}
+                    <p class="mb-0">Конференций пока нет.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% if conferences.paginator.num_pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if conferences.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ conferences.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">&laquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+
+        {% for num in conferences.paginator.page_range %}
+            {% if num == conferences.number %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if querystring %}&{{ querystring }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if conferences.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ conferences.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">&raquo;</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
