@@ -1,0 +1,9 @@
+.venv/
+venv/
+.idea/
+__pycache__/
+*.py[cod]
+site/
+grades.json
+*.sqlite3
+.env

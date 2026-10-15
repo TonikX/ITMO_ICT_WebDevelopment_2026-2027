@@ -1,0 +1,8 @@
+site_name: Веб-программирование. Афанасьев Дмитрий. к3340
+docs_dir: students/k3340/laboratory_works/Afanasyev_Dmitry/laboratory_work_1/docs
+nav:
+  - Главная: index.md
+  - ЛР1: lr1/report.md
+theme:
+  name: material
+  language: ru
