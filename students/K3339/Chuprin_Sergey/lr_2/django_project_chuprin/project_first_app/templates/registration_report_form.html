@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_edit %} Редактирование заявки {% else %} Подача заявки {% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'conferences' %}">Конференции</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'conference_detail' conference.id %}">{{ conference.name }}</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    {% if is_edit %} Редактирование заявки {% else %}Подача заявки{% endif %}
+                </li>
+            </ol>
+        </nav>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-1">
+                    {% if is_edit %} Редактирование заявки {% else %}Заявка на выступление{% endif %}
+                </h1>
+                <p class="text-muted mb-4">
+                    {{ conference.name }},
+                    {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}
+                </p>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="form-label d-block">{{ form.topics.label }}</span>
+                        {% for checkbox in form.topics %}
+                            <div class="form-check">
+                                {{ checkbox.tag }}
+                                <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                                    {{ checkbox.choice_label }}
+                                </label>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted small">У конференции не указаны тематики.</p>
+                        {% endfor %}
+                        {% for error in form.topics.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {% if is_edit %}Сохранить изменения{% else %}Отправить заявку{% endif %}
+                        </button>
+                        <a href="{% if is_edit %}{% url 'registrations' %}{% else %}{% url 'conference_detail' conference.id %}{% endif %}"
+                           class="btn btn-outline-secondary">Отмена</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

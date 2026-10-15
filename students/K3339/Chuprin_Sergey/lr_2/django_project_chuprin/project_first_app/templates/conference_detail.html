@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ conference.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ conference.name }}</h1>
+<p class="text-muted">
+    {{ conference.start_date }} — {{ conference.end_date }},
+    {{ conference.place }}
+</p>
+
+<p>
+    {% for topic in conference.topics.all %}
+        <span class="badge bg-secondary">{{ topic.name }}</span>
+    {% endfor %}
+</p>
+
+<h4>О конференции</h4>
+<p>{{ conference.description }}</p>
+
+<h4>Место проведения</h4>
+<p>{{ conference.place_description }}</p>
+
+<h4>Условия участия</h4>
+<p>{{ conference.conditions_of_participation }}</p>
+
+<div class="my-4">
+    {% if user.is_authenticated %}
+        <a href="{% url 'registration_create' conference.id %}" class="btn btn-primary">Подать заявку на выступление</a>
+    {% else %}
+        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary">Войдите, чтобы подать заявку</a>
+    {% endif %}
+
+    <a href="{% url 'participants' conference.id %}" class="btn btn-outline-primary">Участники</a>
+</div>
+
+
+<hr class="my-5">
+
+<section id="feedback">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Отзывы</h3>
+    </div>
+
+    {% for feedback in feedbacks %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <strong>{{ feedback.user.username }}</strong>
+                        <span class="text-muted small ms-2">{{ feedback.date }}</span>
+                    </div>
+                    <span class="badge text-bg-primary fs-6">{{ feedback.rating }}/10</span>
+                </div>
+                <p class="mt-2 mb-0">{{ feedback.text }}</p>
+
+                {% if user.is_staff %}
+                    <form method="post" action="{% url 'feedback_delete' feedback.id %}"
+                          class="mt-2 text-end"
+                          onsubmit="return confirm('Удалить отзыв пользователя {{ feedback.user.username|escapejs }}?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">Отзывов пока нет. Будьте первым!</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <div class="card shadow-sm mt-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Оставить отзыв</h5>
+                <form method="post" action="{% url 'feedback_create' conference.id %}" novalidate>
+                    {% csrf_token %}
+
+                    <div class="mb-3" style="max-width: 200px;">
+                        <label for="{{ feedback_form.rating.id_for_label }}" class="form-label">
+                            {{ feedback_form.rating.label }}
+                        </label>
+                        {{ feedback_form.rating }}
+                        {% for error in feedback_form.rating.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ feedback_form.text.id_for_label }}" class="form-label">
+                            {{ feedback_form.text.label }}
+                        </label>
+                        {{ feedback_form.text }}
+                        {% for error in feedback_form.text.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-light border mt-4">
+            <a href="{% url 'login' %}">Войдите</a>, чтобы оставить отзыв.
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}
