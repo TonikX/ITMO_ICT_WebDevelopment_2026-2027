@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Удалить отзыв{% endblock %}
+{% block content %}
+<h1>Удалить отзыв?</h1>
+<p>Отзыв {{ review.author.username }} на конференции «{{ review.conference }}»: {{ review.text|truncatewords:20 }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a href="{% url 'conference_detail' review.conference_id %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

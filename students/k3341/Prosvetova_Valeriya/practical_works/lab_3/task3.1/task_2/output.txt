@@ -1,0 +1,18 @@
+1. related_name: Ownership.owner/car -> 'ownerships', DriverLicense.owner -> 'licenses' (models.py + миграция 0002)
+
+2. Car.objects.filter(brand='Toyota')
+<QuerySet [<Car: Toyota Corolla (А111АА777)>, <Car: Toyota Camry (Р101РР197)>, <Car: Toyota RAV4 (Т202ТТ197)>]> 
+
+3. CarOwner.objects.filter(first_name='Олег')
+<QuerySet [<CarOwner: Кузнецов Олег>, <CarOwner: Соколов Олег>]> 
+
+4. owner = CarOwner.objects.filter(licenses__isnull=False).order_by('?').first()
+   Зайцев Алексей, id = 17
+   DriverLicense.objects.get(owner_id=owner.id)
+   7701100007 (Зайцев Алексей)
+
+5. CarOwner.objects.filter(cars__color='красный').distinct()
+<QuerySet [<CarOwner: Петров Пётр>, <CarOwner: Соколов Олег>, <CarOwner: Волкова Елена>, <CarOwner: Морозов Дмитрий>, <CarOwner: Лебедева Наталья>]> 
+
+6. CarOwner.objects.filter(ownerships__start_date__year=2010).distinct()
+<QuerySet [<CarOwner: Соколов Олег>]>

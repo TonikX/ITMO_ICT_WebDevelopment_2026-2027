@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}{{ conference.title }}{% endblock %}
+{% block content %}
+<a href="{% url 'conference_list' %}">&larr; К списку конференций</a>
+<h1 class="mt-2">{{ conference.title }}</h1>
+<p class="text-muted">{{ conference.venue_name }} · {{ conference.start_date }} — {{ conference.end_date }}</p>
+{% for topic in conference.topics.all %}
+    <span class="badge bg-secondary">{{ topic.name }}</span>
+{% endfor %}
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h5>Описание</h5>
+        <p>{{ conference.description }}</p>
+        <h5>О месте проведения</h5>
+        <p>{{ conference.venue_description }}</p>
+        <h5>Условия участия</h5>
+        <p>{{ conference.participation_terms }}</p>
+    </div>
+
+    <div class="col-md-6">
+        <h5>Регистрация автора для выступления</h5>
+        {% if user.is_authenticated %}
+            {% if user_registration %}
+                <div class="alert alert-info">
+                    Вы зарегистрированы с докладом «{{ user_registration.talk_title }}».
+                    <a href="{% url 'registration_update' user_registration.pk %}">Изменить</a>
+                    · <a href="{% url 'registration_delete' user_registration.pk %}">Удалить</a>
+                </div>
+            {% else %}
+                <form method="post" action="{% url 'registration_create' conference.pk %}">
+                    {% csrf_token %}
+                    {{ registration_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}">Войдите</a>, чтобы зарегистрироваться на выступление.</p>
+        {% endif %}
+
+        <h5 class="mt-4">Зарегистрированные докладчики</h5>
+        <ul class="list-group mb-4">
+            {% for registration in registrations %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ registration.user.username }} — {{ registration.talk_title }}</span>
+                    {% if user.is_staff and registration.user != user %}
+                        <a class="btn btn-sm btn-outline-danger" href="{% url 'registration_delete' registration.pk %}">Удалить</a>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li class="list-group-item">Пока никто не зарегистрирован.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<h5>Отзывы</h5>
+{% if user.is_authenticated %}
+    <form method="post" action="{% url 'review_create' conference.pk %}" class="mb-3">
+        {% csrf_token %}
+        {{ review_form.as_p }}
+        <button type="submit" class="btn btn-primary">Оставить отзыв</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить отзыв.</p>
+{% endif %}
+
+<ul class="list-group">
+    {% for review in reviews %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div>
+                <strong>{{ review.author.username }}</strong> — {{ review.rating }}/10
+                <p class="mb-0">{{ review.text }}</p>
+                <small class="text-muted">{{ review.created_at }}</small>
+            </div>
+            {% if review.author == user or user.is_staff %}
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'review_delete' review.pk %}">Удалить</a>
+            {% endif %}
+        </li>
+    {% empty %}
+        <li class="list-group-item">Отзывов пока нет.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
