@@ -1,0 +1,19 @@
+site_name: Web-программирование — Чуприн Сергей, K3339
+repo_url: https://github.com/Cubigator/ITMO_ICT_WebDevelopment_2026-2027
+theme: readthedocs
+
+markdown_extensions:
+  - tables
+  - fenced_code
+  - toc:
+      permalink: true
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа №1:
+      - Описание: lr_1/index.md
+      - Задание 1 - UDP: lr_1/task1.md
+      - Задание 2 - Вычисления через TCP: lr_1/task2.md
+      - Задание 3 - Раздача HTML-страницы: lr_1/task3.md
+      - Задание 4 - Многопользовательский чат: lr_1/task4.md
+      - Задание 5 - Веб-сервер (GET/POST): lr_1/task5.md
