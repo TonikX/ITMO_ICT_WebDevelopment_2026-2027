@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Оценки</title>
+</head>
+<body>
+    <h1>Оценки по дисциплинам</h1>
+    <form method="post">
+        <input name="subject" placeholder="Дисциплина">
+        <input name="grade" placeholder="Оценка">
+        <button>Добавить</button>
+    </form>
+    <table>
+        <tr><th>Дисциплина</th><th>Оценки</th></tr>
+        {{rows}}
+    </table>
+</body>
+</html>
