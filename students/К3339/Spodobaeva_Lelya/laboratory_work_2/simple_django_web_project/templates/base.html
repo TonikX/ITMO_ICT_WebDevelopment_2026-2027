@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Туры туристической фирмы{% endblock %}</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2933;
+            background: #f5f7fb;
+        }
+
+        header {
+            background: #263238;
+            color: white;
+            padding: 16px 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #d7dde5;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+
+        .button {
+            display: inline-block;
+            border: 0;
+            border-radius: 6px;
+            background: #1976d2;
+            color: white;
+            padding: 9px 14px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button.secondary {
+            background: #546e7a;
+        }
+
+        .button.danger {
+            background: #c62828;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #bcc7d4;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #d7dde5;
+            text-align: left;
+        }
+
+        .search {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .search input {
+            flex: 1;
+        }
+
+        .search select {
+            max-width: 220px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="{% url 'tour_list' %}">Туры</a>
+            <a href="{% url 'sold_by_country' %}">Проданные туры</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_reservations' %}">Мои бронирования</a>
+                {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'admin_reservations' %}">Управление бронями</a>
+                    <a href="/admin/">Django-admin</a>
+                {% endif %}
+                <a href="{% url 'logout' %}">Выход</a>
+            {% else %}
+                <a href="{% url 'login' %}">Вход</a>
+                <a href="{% url 'register' %}">Регистрация</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Проданные туры по странам{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Проданные туры по странам</h1>
+    <p>В таблице учитываются только бронирования, подтверждённые администратором.</p>
+
+    {% if rows %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Страна</th>
+                    <th>Бронирований</th>
+                    <th>Туристов</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td>{{ row.tour__country }}</td>
+                        <td>{{ row.reservations_count }}</td>
+                        <td>{{ row.tourists_count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Подтверждённых бронирований пока нет.</p>
+    {% endif %}
+</section>
+{% endblock %}

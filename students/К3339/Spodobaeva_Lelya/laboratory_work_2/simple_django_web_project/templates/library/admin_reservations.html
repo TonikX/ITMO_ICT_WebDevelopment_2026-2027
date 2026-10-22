@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Управление бронированиями{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Управление бронированиями</h1>
+    <p>Эта страница доступна только администратору или сотруднику.</p>
+
+    {% if reservations %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Тур</th>
+                    <th>Пользователь</th>
+                    <th>Туристов</th>
+                    <th>Статус</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{{ reservation.tour.name }}</td>
+                        <td>{{ reservation.user.username }}</td>
+                        <td>{{ reservation.tourists_count }}</td>
+                        <td>
+                            {% if reservation.is_confirmed %}
+                                подтверждено
+                            {% else %}
+                                ожидает подтверждения
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not reservation.is_confirmed %}
+                                <form method="post" action="{% url 'confirm_reservation' reservation.id %}">
+                                    {% csrf_token %}
+                                    <button class="button" type="submit">Подтвердить</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Бронирований пока нет.</p>
+    {% endif %}
+</section>
+{% endblock %}
