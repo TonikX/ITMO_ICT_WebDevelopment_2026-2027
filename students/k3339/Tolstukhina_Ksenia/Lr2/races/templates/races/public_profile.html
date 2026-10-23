@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.first_name }} {{ profile_user.last_name }}{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="card bg-body-tertiary border-secondary"><div class="card-body">
+      <h4>{{ profile_user.first_name }} {{ profile_user.last_name|default:profile_user.username }}</h4>
+      <p class="text-secondary">@{{ profile_user.username }}</p>
+      <p class="mb-1"><strong>Команда:</strong> {{ profile_user.team|default:"—" }}</p>
+      <p class="mb-1"><strong>Класс:</strong> {{ profile_user.get_racer_class_display|default:"—" }}</p>
+      <p class="mb-1"><strong>Опыт:</strong> {{ profile_user.driving_experience }} лет</p>
+    </div></div>
+  </div>
+  <div class="col-lg-8">
+    <h5>Результаты</h5>
+    <div class="table-responsive mb-4">
+      <table class="table table-hover">
+        <thead><tr><th>Гонка</th><th>Авто</th><th>Время</th></tr></thead>
+        <tbody>
+        {% for r in results %}
+          <tr><td>{{ r.race.name }}</td><td>{{ r.auto.make }} {{ r.auto.model }}</td><td><strong>{{ r.duration }}</strong></td></tr>
+        {% empty %}
+          <tr><td colspan="3" class="text-secondary text-center">Нет результатов</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h5>Регистрации</h5>
+    <ul class="list-group mb-4">
+      {% for r in registrations %}
+      <li class="list-group-item bg-body-tertiary border-secondary d-flex justify-content-between">
+        <a href="{% url 'races:race_detail' r.race.pk %}">{{ r.race.name }}</a>
+        <small class="text-secondary">{{ r.race.date|date:"d.m.Y" }}</small>
+      </li>
+      {% empty %}
+      <li class="list-group-item bg-body-tertiary border-secondary text-secondary">Нет регистраций</li>
+      {% endfor %}
+    </ul>
+
+    <h5>Комментарии</h5>
+    {% for c in comments %}
+      <div class="card bg-body-tertiary border-secondary mb-2"><div class="card-body py-2">
+        <small class="text-secondary">{{ c.race.name }} · {{ c.created_at|date:"d.m.Y" }}</small>
+        <p class="mb-0">{{ c.text }}</p>
+      </div></div>
+    {% empty %}
+      <p class="text-secondary">Нет комментариев</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

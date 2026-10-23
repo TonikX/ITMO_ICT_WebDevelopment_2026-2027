@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Участники{% endblock %}
+{% block content %}
+<h1 class="mb-4">Участники</h1>
+<div class="row g-3">
+  {% for u in page_obj %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card bg-body-tertiary border-secondary"><div class="card-body">
+      <h5 class="mb-1"><a href="{% url 'races:public_profile' u.pk %}">{{ u.first_name }} {{ u.last_name|default:u.username }}</a></h5>
+      <p class="text-secondary small mb-2">{{ u.team|default:"—" }}</p>
+      <span class="badge bg-info text-dark">{{ u.get_racer_class_display|default:"—" }}</span>
+      <span class="badge bg-secondary">{{ u.driving_experience }} лет</span>
+    </div></div>
+  </div>
+  {% empty %}
+    <p class="text-secondary">Участников нет.</p>
+  {% endfor %}
+</div>
+{% include "races/_pagination.html" %}
+{% endblock %}

@@ -1,0 +1,8 @@
+site_name: Лабораторная работа №2
+
+theme: readthedocs
+
+nav:
+  - Главная: index.md
+  - Модель данных: models.md
+  - Серверная часть: backend.md
