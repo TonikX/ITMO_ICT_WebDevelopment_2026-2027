@@ -1,0 +1,39 @@
+{% extends 'board/base.html' %}
+{% block title %}{{ homework.subject.name }} homework{% endblock %}
+
+{% block content %}
+    <a href="{% url 'homework_list' %}">&larr; Back to list</a>
+
+    <h1>{{ homework.subject.name }}</h1>
+    <p><strong>Teacher:</strong> {{ homework.teacher_name }}</p>
+    <p><strong>Given:</strong> {{ homework.date_given }} &nbsp; <strong>Deadline:</strong> {{ homework.deadline }}</p>
+    {% if homework.penalty_info %}
+        <p class="text-danger"><strong>Penalty:</strong> {{ homework.penalty_info }}</p>
+    {% endif %}
+    <hr>
+    <p>{{ homework.text }}</p>
+    <hr>
+
+    {% if submission %}
+        <div class="alert alert-success">
+            <h5>Your submission</h5>
+            <p>{{ submission.text }}</p>
+            <p><small>Submitted {{ submission.submitted_at }}</small></p>
+            <p>
+                <strong>Grade:</strong>
+                {% if submission.grade %}
+                    {{ submission.grade }}
+                {% else %}
+                    <span class="text-muted">not graded yet</span>
+                {% endif %}
+            </p>
+        </div>
+    {% else %}
+        <h5>Submit your answer</h5>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    {% endif %}
+{% endblock %}
