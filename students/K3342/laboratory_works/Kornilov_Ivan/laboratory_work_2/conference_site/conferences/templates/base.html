@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Конференции{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'conferences/style.css' %}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{% url 'conference_list' %}">Научные конференции</a>
+    <nav>
+      <a href="{% url 'conference_list' %}">Конференции</a>
+      <a href="{% url 'participants' %}">Участники</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'my_talks' %}">Мои доклады</a>
+        <span class="who">{{ user.get_full_name|default:user.username }}{% if user.is_staff %} · оргкомитет{% endif %}</span>
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">Выйти</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Войти</a>
+        <a href="{% url 'register' %}">Регистрация</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

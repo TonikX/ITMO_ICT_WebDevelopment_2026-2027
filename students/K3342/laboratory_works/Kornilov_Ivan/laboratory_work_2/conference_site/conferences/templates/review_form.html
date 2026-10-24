@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Отзыв{% endblock %}
+{% block content %}
+<h1>Отзыв о конференции</h1>
+<p class="meta">{{ conference.title }}</p>
+<p>В отзыв будут записаны даты конференции: {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}, оценка от 1 до 10 и ваше имя.</p>
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Опубликовать</button>
+</form>
+{% endblock %}

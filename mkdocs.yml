@@ -1,0 +1,16 @@
+site_name: Веб-программирование. Корнилов Иван
+site_description: Отчёты по курсу веб-программирования
+
+docs_dir: students/K3342/laboratory_works/Kornilov_Ivan/laboratory_work_1
+
+exclude_docs: |
+  *.py
+  README.md
+  **/task_*/**
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Лабораторная работа 1: report1.md

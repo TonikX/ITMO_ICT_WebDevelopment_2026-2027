@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Конференции{% endblock %}
+{% block content %}
+<h1>Список конференций</h1>
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Название, место, тематика">
+  <select name="topic">
+    <option value="">Все тематики</option>
+    {% for topic in topics %}
+      <option value="{{ topic.id }}" {% if request.GET.topic == topic.id|stringformat:"s" %}selected{% endif %}>{{ topic.name }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Найти</button>
+</form>
+<div class="cards">
+  {% for conference in conferences %}
+    <article class="card">
+      <h2><a href="{% url 'conference_detail' conference.pk %}">{{ conference.title }}</a></h2>
+      <p class="meta">{{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}</p>
+      <p>{{ conference.venue_name }}</p>
+      <ul class="tags">
+        {% for topic in conference.topics.all %}
+          <li>{{ topic.name }}</li>
+        {% endfor %}
+      </ul>
+    </article>
+  {% empty %}
+    <p>Конференции не найдены.</p>
+  {% endfor %}
+</div>
+{% include "pagination.html" %}
+{% endblock %}

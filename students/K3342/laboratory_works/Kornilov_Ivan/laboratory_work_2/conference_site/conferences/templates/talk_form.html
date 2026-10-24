@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Доклад{% endblock %}
+{% block content %}
+<h1>{% if talk %}Изменить заявку{% else %}Заявка на выступление{% endif %}</h1>
+<p class="meta">{{ conference.title }}</p>
+<form method="post" class="form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

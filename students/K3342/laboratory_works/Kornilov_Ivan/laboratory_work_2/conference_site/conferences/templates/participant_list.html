@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Участники{% endblock %}
+{% block content %}
+<h1>Участники по конференциям</h1>
+{% if user.is_staff %}
+  <p class="note">Вы входите как сотрудник оргкомитета и можете указать, рекомендован ли доклад к публикации. Обычный участник видит таблицу без этих кнопок.</p>
+{% endif %}
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Фамилия, доклад, конференция">
+  <select name="conference">
+    <option value="">Все конференции</option>
+    {% for conference in conferences %}
+      <option value="{{ conference.id }}" {% if request.GET.conference == conference.id|stringformat:"s" %}selected{% endif %}>{{ conference.title }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Найти</button>
+</form>
+<table>
+  <thead>
+    <tr>
+      <th>Конференция</th>
+      <th>Участник</th>
+      <th>Доклад</th>
+      <th>Результат</th>
+      {% if user.is_staff %}<th>Решение</th>{% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for talk in talks %}
+      <tr>
+        <td>{{ talk.conference.title }}</td>
+        <td>{{ talk.user.get_full_name|default:talk.user.username }}</td>
+        <td>{{ talk.talk_title }}</td>
+        <td>{{ talk.publication_label }}</td>
+        {% if user.is_staff %}
+          <td>
+            <form method="post" action="{% url 'set_publication' talk.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button type="submit" name="decision" value="yes">Рекомендовать</button>
+              <button type="submit" name="decision" value="no">Отклонить</button>
+            </form>
+          </td>
+        {% endif %}
+      </tr>
+    {% empty %}
+      <tr><td colspan="{% if user.is_staff %}5{% else %}4{% endif %}">Участников нет.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% include "pagination.html" %}
+{% endblock %}

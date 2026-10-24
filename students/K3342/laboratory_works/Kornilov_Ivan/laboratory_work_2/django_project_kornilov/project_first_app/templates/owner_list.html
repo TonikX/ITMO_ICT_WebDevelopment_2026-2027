@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Владельцы{% endblock %}
+{% block content %}
+  <h1>Владельцы</h1>
+  <p><a href="{% url 'owner_create' %}">Добавить владельца</a></p>
+  <table>
+    <thead>
+      <tr>
+        <th>ФИО</th>
+        <th>Паспорт</th>
+        <th>Адрес</th>
+        <th>Национальность</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for owner in owners %}
+        <tr>
+          <td><a href="{% url 'owner_detail' owner.pk %}">{{ owner.last_name }} {{ owner.first_name }}</a></td>
+          <td>{{ owner.passport_number|default:"—" }}</td>
+          <td>{{ owner.address|default:"—" }}</td>
+          <td>{{ owner.nationality|default:"—" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="4">Владельцев пока нет.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

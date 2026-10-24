@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Автовладельцы{% endblock %}
+{% block content %}
+  <h1>Учёт автовладельцев</h1>
+  <p class="lead">Практические работы 2.1–2.3: владельцы, автомобили, периоды владения и водительские удостоверения.</p>
+  <div class="grid">
+    <a class="card" href="{% url 'owner_list' %}">Список владельцев</a>
+    <a class="card" href="{% url 'owner_create' %}">Добавить владельца</a>
+    <a class="card" href="{% url 'car_list' %}">Список автомобилей</a>
+    <a class="card" href="{% url 'car_create' %}">Добавить автомобиль</a>
+  </div>
+{% endblock %}

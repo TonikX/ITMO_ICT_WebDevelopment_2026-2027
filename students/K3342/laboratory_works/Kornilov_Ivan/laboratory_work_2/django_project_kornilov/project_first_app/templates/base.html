@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Автовладельцы{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'project_first_app/style.css' %}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{% url 'home' %}">Автовладельцы</a>
+    <nav>
+      <a href="{% url 'owner_list' %}">Владельцы</a>
+      <a href="{% url 'car_list' %}">Автомобили</a>
+      <a href="{% url 'owner_create' %}">Новый владелец</a>
+      <a href="{% url 'car_create' %}">Новый автомобиль</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ car }}{% endblock %}
+{% block content %}
+  <h1>{{ car.brand }} {{ car.model_name }}</h1>
+  <dl class="facts">
+    <dt>Гос. номер</dt><dd>{{ car.license_plate }}</dd>
+    <dt>Цвет</dt><dd>{{ car.color|default:"—" }}</dd>
+  </dl>
+  <p>
+    <a href="{% url 'car_update' car.pk %}">Изменить</a>
+    <a href="{% url 'car_delete' car.pk %}">Удалить</a>
+  </p>
+  <h2>История владения</h2>
+  <table>
+    <thead>
+      <tr><th>Владелец</th><th>Начало</th><th>Окончание</th></tr>
+    </thead>
+    <tbody>
+      {% for item in car.ownerships.all %}
+        <tr>
+          <td>
+            {% if item.owner %}
+              <a href="{% url 'owner_detail' item.owner.pk %}">{{ item.owner }}</a>
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ item.start_date }}</td>
+          <td>{{ item.end_date|default:"владеет сейчас" }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3">Записей нет.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

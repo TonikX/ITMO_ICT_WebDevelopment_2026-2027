@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Мои доклады{% endblock %}
+{% block content %}
+<h1>Мои доклады</h1>
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Название доклада или конференции">
+  <button type="submit">Найти</button>
+</form>
+<table>
+  <thead>
+    <tr>
+      <th>Доклад</th>
+      <th>Конференция</th>
+      <th>Результат</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for talk in talks %}
+      <tr>
+        <td>{{ talk.talk_title }}</td>
+        <td>{{ talk.conference.title }}</td>
+        <td>{{ talk.publication_label }}</td>
+        <td>
+          <a href="{% url 'talk_edit' talk.pk %}">Изменить</a>
+          <a href="{% url 'talk_delete' talk.pk %}">Удалить</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Заявок нет.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% include "pagination.html" %}
+{% endblock %}
