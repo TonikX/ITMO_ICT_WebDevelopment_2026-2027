@@ -1,0 +1,40 @@
+services:
+  app:
+    container_name: homework_board_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-homeworks_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres123}
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=5432
+      - DJANGO_DEBUG=True
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: homework_board_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-homeworks_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres123}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
