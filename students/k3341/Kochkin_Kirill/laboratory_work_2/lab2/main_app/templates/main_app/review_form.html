@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Отзыв — {{ tour.title }}</title>
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+    <style>
+        .review-page { max-width: 650px; }
+        .review-page h2 { margin: 12px 0; overflow-wrap: anywhere; }
+        .review-page textarea { width: 100%; min-height: 170px; margin: 0; resize: vertical; font-family: inherit; }
+        .review-page input, .review-page select { width: 100%; margin: 0; }
+        .review-page .secondary-link { display: block; text-align: center; margin-top: 12px; }
+        .review-navbar { flex-wrap: wrap; gap: 16px; }
+        .review-navbar .nav-links, .review-navbar .nav-user { flex-wrap: wrap; gap: 16px; }
+    </style>
+</head>
+<body>
+<header class="navbar review-navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">Туры</a>
+        <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+        {% if user.is_staff %}
+            <a href="{% url 'sales_by_country' %}">Статистика продаж</a>
+        {% endif %}
+    </div>
+    <div class="nav-user">
+        <span class="user-badge">{{ user.username }}</span>
+        <a href="{% url 'logout' %}">Выйти</a>
+    </div>
+</header>
+<main class="auth-card review-page">
+    <p class="tour-country">{{ tour.country }}</p>
+    <h1>Оставить отзыв</h1>
+    <h2>{{ tour.title }}</h2>
+    <p>Поделитесь впечатлениями о поездке и поставьте оценку туру.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="auth-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="auth-help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit">Отправить отзыв</button>
+        <a class="secondary-link" href="{% url 'tour_detail' tour.id %}">Вернуться к туру</a>
+    </form>
+</main>
+</body>
+</html>

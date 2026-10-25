@@ -1,0 +1,11 @@
+<h1>Список владельцев</h1>
+
+{% for owner in dataset %}
+    <p>
+        {{ owner.username }}
+        {{ owner.first_name }}
+        {{ owner.last_name }}
+    </p>
+{% empty %}
+    <p>Пользователей пока нет.</p>
+{% endfor %}

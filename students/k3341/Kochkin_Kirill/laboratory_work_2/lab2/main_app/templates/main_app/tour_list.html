@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Туры</title>
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+</head>
+<body>
+<header class="navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">Туры</a>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_bookings' %}">
+                Мои бронирования
+            </a>
+        {% endif %}
+
+        {% if user.is_staff %}
+            <a href="{% url 'sales_by_country' %}">
+                Статистика продаж
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="nav-user">
+        {% if user.is_authenticated %}
+            <span class="user-badge">
+                {{ user.username }}
+            </span>
+
+            <a href="{% url 'logout' %}">
+                Выйти
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}">
+                Войти
+            </a>
+
+            <a href="{% url 'register' %}">
+                Регистрация
+            </a>
+        {% endif %}
+    </div>
+</header>
+
+<form method="get">
+    <input
+        type="text"
+        name="q"
+        placeholder="Поиск по стране..."
+        value="{{ query }}"
+    >
+
+    <select name="availability">
+        <option value=""
+                {% if availability == '' %}selected{% endif %}>
+            Все туры
+        </option>
+
+        <option value="available"
+                {% if availability == 'available' %}selected{% endif %}>
+            Есть свободные места
+        </option>
+
+        <option value="full"
+                {% if availability == 'full' %}selected{% endif %}>
+            Мест нет
+        </option>
+    </select>
+
+    <button type="submit">
+        Найти
+    </button>
+
+    <a href="{% url 'tour_list' %}">
+        Сбросить
+    </a>
+</form>
+
+<h1>Список туров</h1>
+
+{% for tour in tours %}
+    <div>
+        <h2>
+            <a href="{% url 'tour_detail' tour.id %}">
+                {{ tour.title }}
+            </a>
+        </h2>
+
+        <p><b>Турагентство:</b> {{ tour.agency }}</p>
+        <p><b>Страна:</b> {{ tour.country }}</p>
+        <p><b>Описание:</b> {{ tour.description }}</p>
+        <p>
+            <b>Период:</b>
+            {{ tour.start_date }} — {{ tour.end_date }}
+        </p>
+        <p><b>Условия оплаты:</b> {{ tour.payment_terms }}</p>
+
+        <hr>
+    </div>
+
+{% empty %}
+    <p>Туров пока нет.</p>
+{% endfor %}
+
+{% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&availability={{ availability }}">
+        Назад
+    </a>
+{% endif %}
+
+<span>
+    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+</span>
+
+{% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&availability={{ availability }}">
+        Далее
+    </a>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Бронирование тура</title>
+
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">Туры</a>
+        <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+
+        {% if user.is_staff %}
+            <a href="{% url 'sales_by_country' %}">
+                Статистика продаж
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="nav-user">
+        <span class="user-badge">
+            {{ user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}">
+            Выйти
+        </a>
+    </div>
+</header>
+
+
+<div class="form-page">
+
+    <h1>Бронирование тура</h1>
+
+    <h2>{{ tour.title }}</h2>
+
+    <p>
+        Свободно мест:
+        <strong>{{ tour.available_places }}</strong>
+    </p>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Забронировать
+        </button>
+    </form>
+
+</div>
+
+</body>
+</html>

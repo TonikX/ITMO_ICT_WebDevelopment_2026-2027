@@ -1,0 +1,8 @@
+<h1>Автомобиль</h1>
+
+<p>Марка: {{ object.brand }}</p>
+<p>Модель: {{ object.model }}</p>
+<p>Гос. номер: {{ object.state_number }}</p>
+<p>Цвет: {{ object.color }}</p>
+
+<a href="{% url 'car_list' %}">Назад</a>

@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Регистрация — Туры</title>
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+</head>
+<body>
+<header class="navbar auth-navbar">
+    <div class="nav-links"><a href="{% url 'tour_list' %}">Туры</a></div>
+    <div class="nav-user">
+        <a href="{% url 'login' %}">Войти</a>
+        <a href="{% url 'register' %}" aria-current="page">Регистрация</a>
+    </div>
+</header>
+<main class="auth-card">
+    <h1>Регистрация</h1>
+    <p>Создайте аккаунт, чтобы бронировать туры и управлять поездками.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="auth-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="auth-help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <p class="auth-footer">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+    <p class="auth-footer"><a href="{% url 'tour_list' %}">← К списку туров</a></p>
+</main>
+</body>
+</html>

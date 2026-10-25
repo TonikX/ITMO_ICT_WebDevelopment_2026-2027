@@ -1,0 +1,19 @@
+<h1>Список автомобилей</h1>
+
+{% for car in object_list %}
+    <p>
+        {{ car.brand }} {{ car.model }}
+        — {{ car.state_number }}
+
+        <a href="{% url 'car_detail' car.id %}">
+            Подробнее
+        </a>
+
+        <a href="{% url 'car_update' car.id %}">
+            Редактировать
+        </a>
+        <a href="{% url 'car_delete' car.id %}">Удалить</a>
+    </p>
+{% empty %}
+    <p>Автомобилей пока нет.</p>
+{% endfor %}

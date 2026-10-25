@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика продаж</title>
+
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">
+            Туры
+        </a>
+
+        <a href="{% url 'my_bookings' %}">
+            Мои бронирования
+        </a>
+
+        <a href="{% url 'sales_by_country' %}">
+            Статистика продаж
+        </a>
+    </div>
+
+    <div class="nav-user">
+        <span class="user-badge">
+            {{ user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}">
+            Выйти
+        </a>
+    </div>
+</header>
+
+
+<div class="stats-header">
+    <h1>Статистика продаж</h1>
+
+    <p>
+        Подтверждённые бронирования по странам
+    </p>
+</div>
+
+
+<div class="stats-card">
+
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Страна</th>
+                <th>Бронирований</th>
+                <th>Туристов</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for sale in sales %}
+            <tr>
+                <td>{{ sale.tour__country }}</td>
+                <td>{{ sale.bookings_count }}</td>
+                <td>{{ sale.people_count }}</td>
+            </tr>
+
+        {% empty %}
+            <tr>
+                <td colspan="3">
+                    Подтверждённых бронирований пока нет.
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

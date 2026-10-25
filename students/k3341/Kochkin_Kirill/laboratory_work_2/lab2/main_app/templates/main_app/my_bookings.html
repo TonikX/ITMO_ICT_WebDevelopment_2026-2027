@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои бронирования</title>
+
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">
+            Туры
+        </a>
+
+        <a href="{% url 'my_bookings' %}">
+            Мои бронирования
+        </a>
+
+        {% if user.is_staff %}
+            <a href="{% url 'sales_by_country' %}">
+                Статистика продаж
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="nav-user">
+        <span class="user-badge">
+            {{ user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}">
+            Выйти
+        </a>
+    </div>
+</header>
+
+
+<h1>Мои бронирования</h1>
+
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="message">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="bookings-list">
+
+    {% for booking in bookings %}
+
+        <div class="booking-card">
+
+            <div class="booking-header">
+                <div>
+                    <h2>{{ booking.tour.title }}</h2>
+
+                    <p class="booking-country">
+                        {{ booking.tour.country }}
+                    </p>
+                </div>
+
+                <span class="booking-status">
+                    {{ booking.get_status_display }}
+                </span>
+            </div>
+
+
+            <div class="booking-info">
+
+                <div>
+                    <span>ФИО</span>
+                    <strong>{{ booking.full_name }}</strong>
+                </div>
+
+                <div>
+                    <span>Телефон</span>
+                    <strong>{{ booking.phone }}</strong>
+                </div>
+
+                <div>
+                    <span>Email</span>
+                    <strong>{{ booking.email }}</strong>
+                </div>
+
+                <div>
+                    <span>Количество человек</span>
+                    <strong>{{ booking.people_count }}</strong>
+                </div>
+
+            </div>
+
+
+            <p class="booking-date">
+                Создано: {{ booking.created_at }}
+            </p>
+
+
+            <div class="booking-actions">
+
+                <a
+                    class="secondary-link"
+                    href="{% url 'edit_booking' booking.id %}"
+                >
+                    Изменить
+                </a>
+
+                <a
+                    class="delete-link"
+                    href="{% url 'delete_booking' booking.id %}"
+                >
+                    Удалить
+                </a>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-bookings">
+            <h2>Бронирований пока нет</h2>
+
+            <p>
+                Выберите подходящий тур и забронируйте его.
+            </p>
+
+            <a
+                class="primary-link"
+                href="{% url 'tour_list' %}"
+            >
+                Посмотреть туры
+            </a>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

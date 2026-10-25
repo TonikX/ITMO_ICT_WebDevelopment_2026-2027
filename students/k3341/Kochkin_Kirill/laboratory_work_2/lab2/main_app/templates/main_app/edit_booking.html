@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Изменить бронирование — {{ booking.tour.title }}</title>
+    <link rel="stylesheet" href="{% static 'main_app/style.css' %}">
+    <style>
+        .edit-booking-card { max-width: 650px; }
+        .edit-booking-card h1 { font-size: clamp(28px, 5vw, 38px); }
+        .edit-booking-card h2 { overflow-wrap: anywhere; }
+        .edit-booking-card .secondary-link { display: block; text-align: center; margin-top: 12px; }
+        .booking-navbar, .booking-navbar .nav-links, .booking-navbar .nav-user { flex-wrap: wrap; gap: 16px; }
+        .booking-error { color: #fda4af; border-color: rgba(251, 113, 133, .3); background: rgba(251, 113, 133, .08); }
+    </style>
+</head>
+<body>
+<header class="navbar booking-navbar">
+    <div class="nav-links">
+        <a href="{% url 'tour_list' %}">Туры</a>
+        <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+        {% if user.is_staff %}
+            <a href="{% url 'sales_by_country' %}">Статистика продаж</a>
+        {% endif %}
+    </div>
+    <div class="nav-user">
+        <span class="user-badge">{{ user.username }}</span>
+        <a href="{% url 'logout' %}">Выйти</a>
+    </div>
+</header>
+<main class="auth-card edit-booking-card">
+    <p class="tour-country">{{ booking.tour.country }}</p>
+    <h1>Изменить бронирование</h1>
+    <h2>{{ booking.tour.title }}</h2>
+    <p>Обновите контактные данные или количество участников поездки.</p>
+    <div class="message">Доступно мест для этой брони: <strong>{{ available_for_edit }}</strong></div>
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            <div class="message booking-error" role="alert">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="auth-field">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <div class="auth-help" id="{{ field.auto_id }}_helptext">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {{ field.errors }}
+            </div>
+        {% endfor %}
+        <button type="submit">Сохранить изменения</button>
+        <a class="secondary-link" href="{% url 'my_bookings' %}">Отмена — к бронированиям</a>
+    </form>
+</main>
+</body>
+</html>
