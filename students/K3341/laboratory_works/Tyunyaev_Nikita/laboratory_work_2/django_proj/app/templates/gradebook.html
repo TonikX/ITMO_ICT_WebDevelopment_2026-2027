@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Классный журнал оценок{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Сводная ведомость оценок</h1>
+        <p class="text-muted mb-0">Таблица результатов и оценок всех учеников класса по домашним заданиям</p>
+    </div>
+
+    <!-- Фильтр по предмету -->
+    <form method="get" class="d-flex align-items-center gap-2">
+        <label for="gradebookSubject" class="small fw-semibold text-muted text-nowrap">Дисциплина:</label>
+        <select id="gradebookSubject" name="subject" class="form-select form-select-sm" onchange="this.form.submit()">
+            <option value="">Все дисциплины</option>
+            {% for disc in disciplines %}
+                <option value="{{ disc.id }}" {% if selected_subject_id == disc.id|stringformat:"s" %}selected{% endif %}>
+                    {{ disc.name }}
+                </option>
+            {% endfor %}
+        </select>
+        {% if selected_subject_id %}
+            <a href="{% url 'gradebook' %}" class="btn btn-sm btn-outline-secondary" title="Сбросить фильтр"><i class="bi bi-x-lg"></i></a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-gradebook align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th style="min-width: 220px;" class="text-start ps-3">Ученик (Класс / Группа)</th>
+                        {% for hw in homeworks %}
+                        <th style="min-width: 140px;" title="{{ hw.title }} (Срок: {{ hw.due_date }})">
+                            <span class="d-block text-truncate" style="max-width: 140px;">{{ hw.title }}</span>
+                            <span class="badge bg-secondary-subtle text-white font-monospace small" style="font-size: 0.7rem;">
+                                {{ hw.subject.name|truncatechars:15 }}
+                            </span>
+                        </th>
+                        {% empty %}
+                        <th>Заданий не найдено</th>
+                        {% endfor %}
+                        <th style="min-width: 110px;">Средний балл</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in grade_matrix %}
+                    <tr>
+                        <td class="student-name ps-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                                    {{ row.student.first_name|first|default:row.student.username|first|upper }}
+                                </div>
+                                <div>
+                                    <span class="d-block text-dark fw-semibold">
+                                        {{ row.student.get_full_name|default:row.student.username }}
+                                    </span>
+                                    <span class="small text-muted font-monospace">{{ row.student.class_group|default:"K3341" }}</span>
+                                </div>
+                            </div>
+                        </td>
+
+                        {% for cell in row.grades %}
+                        <td>
+                            {% if cell.submission %}
+                                {% if cell.submission.grade %}
+                                    <span class="badge badge-grade-{{ cell.submission.grade }} px-3 py-2 fs-6">
+                                        {{ cell.submission.grade }}
+                                    </span>
+                                    {% if cell.submission.is_late %}
+                                        <small class="d-block text-danger" style="font-size: 0.65rem;">просрочено</small>
+                                    {% endif %}
+                                {% elif cell.submission.status == 'submitted' %}
+                                    <span class="badge bg-info-subtle text-info border px-2 py-1" title="Сдано, ожидает проверки">
+                                        <i class="bi bi-hourglass-split me-1"></i>Проверка
+                                    </span>
+                                {% elif cell.submission.status == 'returned' %}
+                                    <span class="badge bg-warning-subtle text-warning border px-2 py-1">Доработка</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-muted small">&mdash;</span>
+                            {% endif %}
+                        </td>
+                        {% empty %}
+                        <td class="text-muted small">Нет заданий</td>
+                        {% endfor %}
+
+                        <td>
+                            {% if row.avg_grade %}
+                                <span class="badge bg-dark px-3 py-2 fs-6 fw-bold text-info">
+                                    {{ row.avg_grade }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted small">&mdash;</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="100" class="text-center py-4 text-muted">
+                            Ученики в системе пока не зарегистрированы.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card bg-white p-3 border shadow-sm">
+    <div class="row text-center text-md-start align-items-center g-3">
+        <div class="col-md-4">
+            <span class="text-muted small d-block">Всего учеников:</span>
+            <strong class="fs-5">{{ grade_matrix|length }}</strong>
+        </div>
+        <div class="col-md-4">
+            <span class="text-muted small d-block">Всего заданий в таблице:</span>
+            <strong class="fs-5">{{ homeworks|length }}</strong>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <span class="badge badge-grade-5 me-1">5 — Отлично</span>
+            <span class="badge badge-grade-4 me-1">4 — Хорошо</span>
+            <span class="badge badge-grade-3 me-1">3 — Удовл.</span>
+            <span class="badge badge-grade-2">2 — Неуд.</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

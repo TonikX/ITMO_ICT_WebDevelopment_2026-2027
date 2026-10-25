@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Список домашних заданий{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="h3 fw-bold mb-1">Доска домашних заданий</h1>
+        <p class="text-muted mb-0">Актуальные задания по всем учебным дисциплинам и сроки сдачи</p>
+    </div>
+    {% if user.is_authenticated and user.is_teacher_user %}
+    <a href="{% url 'homework_create' %}" class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm">
+        <i class="bi bi-plus-lg"></i>
+        <span>Выдать новое ДЗ</span>
+    </a>
+    {% endif %}
+</div>
+
+<!-- Панель поиска и фильтрации -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label for="qInput" class="form-label small text-muted text-uppercase fw-semibold">Поиск по тексту или теме</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light"><i class="bi bi-search text-muted"></i></span>
+                    <input type="text" class="form-control" id="qInput" name="q" value="{{ current_q }}" placeholder="Например: сокеты, Django, SQL...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="subjectSelect" class="form-label small text-muted text-uppercase fw-semibold">Предмет</label>
+                <select class="form-select" id="subjectSelect" name="subject">
+                    <option value="">Все предметы</option>
+                    {% for disc in disciplines %}
+                        <option value="{{ disc.id }}" {% if current_subject == disc.id|stringformat:"s" %}selected{% endif %}>
+                            {{ disc.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="statusSelect" class="form-label small text-muted text-uppercase fw-semibold">Статус срока</label>
+                <select class="form-select" id="statusSelect" name="status">
+                    <option value="">Все</option>
+                    <option value="active" {% if current_status == 'active' %}selected{% endif %}>Активные</option>
+                    <option value="expired" {% if current_status == 'expired' %}selected{% endif %}>Истёкшие</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-funnel me-1"></i>Фильтр
+                </button>
+                {% if current_q or current_subject or current_status %}
+                <a href="{% url 'homework_list' %}" class="btn btn-outline-secondary" title="Сбросить фильтры">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Список карточек домашних заданий -->
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4">
+    {% for hw in homeworks %}
+    <div class="col">
+        <div class="card h-100 card-hover position-relative">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                    <span class="badge badge-discipline rounded-pill px-3 py-2 text-truncate" style="max-width: 180px;">
+                        <i class="bi bi-book me-1"></i>{{ hw.subject.name }}
+                    </span>
+                    {% if hw.is_past_due %}
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                            <i class="bi bi-exclamation-triangle me-1"></i>Срок истёк
+                        </span>
+                    {% else %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">
+                            <i class="bi bi-clock me-1"></i>Осталось {{ hw.days_remaining }} дн.
+                        </span>
+                    {% endif %}
+                </div>
+
+                <h5 class="card-title fw-bold mb-2 text-dark">{{ hw.title }}</h5>
+
+                <p class="card-text text-secondary small flex-grow-1">
+                    {{ hw.description|truncatewords:20 }}
+                </p>
+
+                <!-- Блок со штрафами -->
+                <div class="p-2 mb-3 bg-light rounded-3 small border-start border-3 border-warning">
+                    <strong class="text-warning-emphasis"><i class="bi bi-shield-exclamation me-1"></i>Штрафы:</strong>
+                    <span class="text-muted">{{ hw.penalty_info|truncatechars:70 }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center text-muted small mb-3 border-top pt-2">
+                    <span><i class="bi bi-calendar-event me-1"></i>Выдано: {{ hw.issue_date|date:"d.m.Y" }}</span>
+                    <span><i class="bi bi-calendar-check me-1"></i>Срок: <strong>{{ hw.due_date|date:"d.m.Y" }}</strong></span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Статус для текущего студента -->
+                    {% if user.is_authenticated and not user.is_teacher_user %}
+                        {% with sub=user_submissions|dictsort:hw.id %}
+                        {% endwith %}
+                        {# Проверяем статус сдачи #}
+                        {% if user_submissions %}
+                            {% for sub_hw_id, sub_data in user_submissions.items %}
+                                {% if sub_hw_id == hw.id %}
+                                    {% if sub_data.grade %}
+                                        <span class="badge badge-grade-{{ sub_data.grade }} px-2 py-1">Оценка: {{ sub_data.grade }}</span>
+                                    {% elif sub_data.status == 'submitted' %}
+                                        <span class="badge bg-info-subtle text-info border px-2 py-1">На проверке</span>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <span class="small text-muted"><i class="bi bi-person me-1"></i>{{ hw.teacher.get_full_name|default:hw.teacher.username }}</span>
+                    {% endif %}
+
+                    <a href="{% url 'homework_detail' hw.pk %}" class="btn btn-sm btn-outline-primary ms-auto">
+                        Подробнее <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="text-center py-5 bg-white rounded-4 shadow-sm">
+            <i class="bi bi-clipboard-x text-muted display-4 mb-3 d-block"></i>
+            <h4 class="text-secondary fw-semibold">Домашних заданий не найдено</h4>
+            <p class="text-muted">Попробуйте изменить параметры поиска или фильтрации.</p>
+            {% if current_q or current_subject or current_status %}
+                <a href="{% url 'homework_list' %}" class="btn btn-outline-primary mt-2">Сбросить фильтры</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Пагинация страниц -->
+{% if is_paginated %}
+<nav aria-label="Пагинация" class="d-flex justify-content-center mt-4">
+    <ul class="pagination shadow-sm">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">
+                <i class="bi bi-chevron-left"></i> Назад
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link"><i class="bi bi-chevron-left"></i> Назад</span></li>
+        {% endif %}
+
+        {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_subject %}&subject={{ current_subject }}{% endif %}{% if current_status %}&status={{ current_status }}{% endif %}">
+                Вперёд <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><span class="page-link">Вперёд <i class="bi bi-chevron-right"></i></span></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
