@@ -1,0 +1,42 @@
+site_name: Веб-программирование. Левахин Лев. К3340
+site_url: https://leonardoWer.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+repo_url: https://github.com/leonardoWer/ITMO_ICT_WebDevelopment_2026-2027
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lab1/report.md
+  - ЛР2:
+      - Отчёт: lab2/report.md
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Тёмная тема
+    - scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+  features:
+    - navigation.instant
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - tables
+  - toc:
+      permalink: true

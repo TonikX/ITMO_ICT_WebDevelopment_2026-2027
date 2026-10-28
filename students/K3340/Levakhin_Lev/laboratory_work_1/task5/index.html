@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f5f7fb;
+            color: #2d3142;
+            max-width: 780px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 { margin-bottom: 8px; }
+        h2 { margin-top: 0; }
+
+        .form-card, .journal {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 6px 24px rgba(45,49,66,.07);
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 14px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 6px;
+            border: 1px solid #d6dae6;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: #667eea;
+            color: #fff;
+            border: 0;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        button:hover { background: #5568d3; }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #eef0f6;
+        }
+
+        th { background: #f8f9fd; font-weight: 600; }
+
+        .empty { color: #8a90a6; font-style: italic; }
+
+        .badge {
+            display: inline-block;
+            background: #eef1ff;
+            color: #4457c4;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin: 2px;
+            font-weight: 600;
+        }
+
+        a { color: #667eea; }
+    </style>
+</head>
+<body>
+    <h1>Журнал оценок</h1>
+
+    {{FORM}}
+
+    <section class="journal">
+        <h2>Все оценки</h2>
+        {{ROWS}}
+        <p style="margin-top:16px">
+            <a href="/grades">Только журнал (без формы)</a>
+        </p>
+    </section>
+</body>
+</html>

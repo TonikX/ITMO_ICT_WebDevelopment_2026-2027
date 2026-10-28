@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITMO · Лаба 1 · Сокеты</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 12s ease infinite;
+            color: #fff;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 24px;
+            padding: 48px 40px;
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #fff, #ffe6f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.85;
+            margin-bottom: 32px;
+        }
+
+        .emoji {
+            font-size: 4rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-14px); }
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.95);
+            color: #764ba2;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.04);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        #message {
+            margin-top: 24px;
+            min-height: 28px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        #message.show {
+            opacity: 1;
+        }
+
+        .footer {
+            margin-top: 32px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="emoji">🛰️</div>
+        <h1>Hello from socket!</h1>
+        <p class="subtitle">Эта страница отдана моим собственным HTTP-сервером на сокетах</p>
+
+        <button onclick="sayHello()">Нажми меня</button>
+        <div id="message"></div>
+
+        <div class="footer">ITMO · Web Development · Лабораторная работа №1</div>
+    </div>
+
+    <script>
+        const messages = [
+            "🐍 Python + socket = ❤️",
+            "📡 TCP handshake прошёл успешно",
+            "🎉 Ты только что прошёл задание 3!",
+            "🚀 Осталось совсем немного до чата",
+            "🧠 HTTP — это просто текст",
+            "✨ Красиво, правда?"
+        ];
+
+        function sayHello() {
+            const el = document.getElementById('message');
+            const random = messages[Math.floor(Math.random() * messages.length)];
+            el.textContent = random;
+            el.classList.remove('show');
+            // небольшая задержка, чтобы анимация сработала заново
+            void el.offsetWidth;
+            el.classList.add('show');
+        }
+    </script>
+</body>
+</html>
