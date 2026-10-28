@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ team.city }} {{ team.name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap');
+        body { font-family: 'Oswald', sans-serif; }
+    </style>
+</head>
+<body class="bg-neutral-900 text-white min-h-screen">
+
+    <!-- Хедер -->
+    <nav class="bg-neutral-950 border-b-2 border-red-600 p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'basketball:match_list' %}" class="text-3xl font-bold tracking-widest uppercase italic">NBA <span class="text-red-600">Запад</span></a>
+
+            <div class="flex items-center space-x-6 text-sm uppercase tracking-wider">
+                <a href="{% url 'basketball:match_list' %}" class="text-gray-400 hover:text-white transition">Матчи</a>
+                <a href="{% url 'basketball:team_list' %}" class="text-white border-b-2 border-red-600 pb-1">Команды</a>
+
+                {% if user.is_authenticated %}
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-300">{{ user.username }}</span>
+                    <form action="{% url 'basketball:logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-500 hover:text-white transition">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'basketball:login' %}" class="text-red-500 hover:text-white transition">Войти</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Информация о команде -->
+    <main class="container mx-auto px-4 max-w-4xl">
+        <div class="flex items-center gap-6 border-b border-neutral-800 pb-8 mb-8">
+            <div class="w-24 h-24 bg-neutral-800 rounded-full flex items-center justify-center text-3xl font-bold text-neutral-600 border-4 border-red-600">
+                {{ team.name|first }}
+            </div>
+            <div>
+                <h1 class="text-5xl font-bold uppercase tracking-wider">{{ team.name }}</h1>
+                <p class="text-xl text-gray-400 tracking-widest uppercase mt-2">{{ team.city }}</p>
+            </div>
+        </div>
+
+        <p class="text-gray-300 mb-10 text-lg leading-relaxed">{{ team.description }}</p>
+
+        <h2 class="text-2xl uppercase tracking-wider mb-6 border-l-4 border-red-600 pl-3">Ростер</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for player in team.players.all %}
+                <div class="bg-neutral-900 border border-neutral-800 p-4 flex justify-between items-center hover:bg-neutral-800 transition">
+                    <div>
+                        <h3 class="text-lg font-bold uppercase">{{ player.full_name }}</h3>
+                        <span class="text-sm text-gray-500 uppercase">{{ player.get_position_display }}</span>
+                    </div>
+                    <div class="text-3xl font-bold text-red-600 italic">
+                        #{{ player.number }}
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-gray-500">В команде нет игроков</p>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>
