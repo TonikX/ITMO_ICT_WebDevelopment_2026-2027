@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<section class="panel"><h1>{{ object }}</h1><p>Цвет: {{ object.color }}</p>{% if user.is_staff %}<div class="actions"><a href="{% url 'car_edit' object.pk %}">Изменить</a><a href="{% url 'car_delete' object.pk %}">Удалить</a></div>{% endif %}</section>{% endblock %}

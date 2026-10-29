@@ -1,0 +1,5 @@
+{% extends 'form.html' %}{% block title %}Вход{% endblock %}{% block content %}
+<section class="panel formpanel"><h1>Вход</h1><p class="muted">Войдите, чтобы управлять своими бронированиями.</p>
+<form method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ next }}">{{ form.non_field_errors() }}
+{% for field in form %}<label class="field">{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}<button>Войти</button></form>
+<p>Нет аккаунта? <a href="{{ url('register') }}">Зарегистрироваться</a></p></section>{% endblock %}

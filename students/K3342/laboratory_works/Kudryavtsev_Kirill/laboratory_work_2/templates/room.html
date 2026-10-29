@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block title %}{{ room.hotel.name }} · №{{ room.number }}{% endblock %}
+{% block content %}<a class="back" href="{{ url('room_list') }}">← Все номера</a>
+<div class="detailgrid"><section class="panel"><div class="eyebrow">{{ room.hotel.city }} · №{{ room.number }}</div><h1>{{ room.hotel.name }}</h1><p class="lead">{{ room.hotel.description }}</p>
+<dl><dt>Адрес</dt><dd>{{ room.hotel.address }}</dd><dt>Владелец отеля</dt><dd>{{ room.hotel.owner }}</dd><dt>Тип номера</dt><dd>{{ room.get_room_type_display() }}</dd><dt>Вместимость</dt><dd>Гостей: {{ room.capacity }}</dd><dt>Удобства</dt><dd>{{ room.amenities }}</dd></dl></section>
+<aside class="panel bookingbox"><div class="eyebrow">Стоимость проживания</div><h2>{{ '%.0f'|format(room.price) }} ₽ <small>/ ночь</small></h2><p>Укажите даты заезда и выезда на следующем шаге.</p>
+<a class="button" href="{{ url('booking_create', args=[room.pk]) }}">Забронировать</a>{% if not request.user.is_authenticated %}<p class="muted">Для бронирования нужен аккаунт.</p>{% endif %}</aside></div>
+<div class="sectionhead"><h2>Отзывы гостей</h2><span>{{ page.paginator.count }} отзывов</span></div>
+{% for review in page %}<article class="panel review"><div class="sectionhead"><strong>{{ review.user.get_full_name() or review.user.username }}</strong><span class="badge">{{ review.rating }}/10</span></div><p>{{ review.text }}</p><small class="muted">Проживание: {{ review.arrival.strftime('%d.%m.%Y') }} — {{ review.departure.strftime('%d.%m.%Y') }}</small></article>
+{% else %}<div class="panel empty">Пока нет отзывов. После выселения отзыв можно оставить из «Моих бронирований».</div>{% endfor %}
+{% include 'pagination.html' %}{% endblock %}

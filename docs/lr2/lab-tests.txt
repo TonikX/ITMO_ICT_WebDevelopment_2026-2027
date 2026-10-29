@@ -1,0 +1,44 @@
+Creating test database for alias 'default' ('test_web_lab2')...
+Operations to perform:
+  Synchronize unmigrated apps: messages, staticfiles
+  Apply all migrations: admin, auth, contenttypes, hotels, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying hotels.0001_initial... OK
+  Applying sessions.0001_initial... OK
+System check identified no issues (0 silenced).
+test_booking_create_edit_delete_and_permissions (hotels.tests.HotelTests) ... ok
+test_booking_validation_and_adjacent_dates (hotels.tests.HotelTests) ... ok
+test_checkin_outside_dates_and_double_transition (hotels.tests.HotelTests) ... ok
+test_csrf_for_mutations (hotels.tests.HotelTests) ... ok
+test_guests_last_month_overlap_and_staff_only (hotels.tests.HotelTests) ... ok
+test_registration_login_and_post_logout (hotels.tests.HotelTests) ... ok
+test_reviews_ownership_rating_dates_duplicate_and_html (hotels.tests.HotelTests) ... ok
+test_search_pagination_available_dates_and_bad_input (hotels.tests.HotelTests) ... ok
+test_staff_transitions_in_browser_and_admin (hotels.tests.HotelTests) ... ok
+test_two_clients_cannot_reserve_same_room (hotels.tests.ConcurrentBookingTests) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.312s
+
+OK
+Destroying test database for alias 'default' ('test_web_lab2')...

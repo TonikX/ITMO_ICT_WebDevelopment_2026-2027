@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="hero"><div class="eyebrow">Поездка начинается здесь</div><h1>Найдите свой номер</h1><p>Выберите отель, сравните условия и забронируйте удобные даты.</p></section>
+<form class="filters panel" method="get">{{ form.non_field_errors() }}
+<div class="filtergrid">{% for field in form %}<label>{{ field.label }}{{ field }}{{ field.errors }}</label>{% endfor %}</div>
+<div class="actions"><button>Найти номера</button><a href="{{ url('room_list') }}">Сбросить</a></div></form>
+<div class="sectionhead"><h2>Номера</h2><span>{{ page.paginator.count }} найдено</span></div>
+<div class="cards">{% for room in page %}<article class="card"><div class="cardtop"><span>{{ room.hotel.city }}</span><span class="roomno">№ {{ room.number }}</span></div>
+<div class="cardbody"><div class="eyebrow">{{ room.get_room_type_display() }}</div><h3><a href="{{ url('room_detail', args=[room.pk]) }}">{{ room.hotel.name }}</a></h3>
+<p class="muted">{{ room.hotel.address }}</p><p>Гостей: {{ room.capacity }} · {{ room.amenities }}</p>
+<div class="cardbottom"><div><strong>{{ '%.0f'|format(room.price) }} ₽</strong><span class="muted"> / ночь</span></div><a class="button small" href="{{ url('room_detail', args=[room.pk]) }}">Подробнее →</a></div></div></article>
+{% else %}<div class="panel empty"><h3>Номеров не найдено</h3><p>Измените даты или условия поиска.</p></div>{% endfor %}</div>
+{% include 'pagination.html' %}
+{% endblock %}

@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Автомобили</h1><div class="cards">{% for car in cars %}<article class="panel"><h2><a href="{% url 'car_detail' car.pk %}">{{ car.brand }} {{ car.model }}</a></h2><p>{{ car.plate }} · {{ car.color }}</p></article>{% empty %}<p>Автомобилей пока нет.</p>{% endfor %}</div>{% endblock %}

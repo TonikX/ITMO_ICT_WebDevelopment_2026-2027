@@ -1,0 +1,11 @@
+from django.contrib.messages import get_messages
+from django.templatetags.static import static
+from django.urls import reverse
+from jinja2 import Environment
+from django.utils.timezone import localtime
+
+
+def environment(**options):
+    env = Environment(**options)
+    env.globals.update(static=static, url=reverse, get_messages=get_messages, localtime=localtime)
+    return env
