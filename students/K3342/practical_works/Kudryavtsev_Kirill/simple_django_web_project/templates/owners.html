@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Владельцы автомобилей</h1><div class="cards">{% for owner in owners %}<article class="panel"><h2><a href="{% url 'owner_detail' owner.pk %}">{{ owner }}</a></h2><p>{{ owner.birth_date|date:'d.m.Y' }}</p><p>{{ owner.nationality }}</p></article>{% empty %}<p>Владельцев пока нет.</p>{% endfor %}</div>{% endblock %}

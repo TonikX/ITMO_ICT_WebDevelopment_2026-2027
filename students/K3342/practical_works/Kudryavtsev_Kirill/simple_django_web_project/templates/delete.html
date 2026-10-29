@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<section class="panel formpanel"><h1>Удалить автомобиль?</h1><p>{{ object }}</p><form method="post">{% csrf_token %}<button>Удалить</button><a href="{% url 'car_list' %}">Отмена</a></form></section>{% endblock %}

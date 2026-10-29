@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block title %}Мои бронирования{% endblock %}{% block content %}
+<div class="sectionhead"><h1>Мои бронирования</h1><a href="{{ url('room_list') }}">Выбрать номер →</a></div>
+{% for b in page %}<article class="panel reservation"><div class="sectionhead"><h2><a href="{{ url('room_detail', args=[b.room_id]) }}">{{ b.room.hotel.name }} · №{{ b.room.number }}</a></h2><span class="badge {{ b.status }}">{{ b.get_status_display() }}</span></div>
+<p>{{ b.arrival.strftime('%d.%m.%Y') }} — {{ b.departure.strftime('%d.%m.%Y') }} · Гостей: {{ b.guests }} · <strong>{{ '%.0f'|format(b.total) }} ₽</strong></p>
+<div class="actions">{% if b.status == 'booked' %}<a href="{{ url('booking_edit', args=[b.pk]) }}">Изменить даты</a><a class="danger" href="{{ url('booking_delete', args=[b.pk]) }}">Удалить</a>
+{% elif b.status == 'out' and not b.review %}<a href="{{ url('review_create', args=[b.pk]) }}">Оставить отзыв</a>{% elif b.review %}<span class="muted">Отзыв опубликован</span>{% endif %}</div></article>
+{% else %}<div class="panel empty"><h2>Здесь появятся ваши бронирования</h2><p>Выберите подходящий номер в каталоге.</p></div>{% endfor %}
+{% include 'pagination.html' %}{% endblock %}

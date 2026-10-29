@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block title %}{{ title }}{% endblock %}{% block content %}
+<section class="panel formpanel"><h1>{{ title }}</h1>{% if room %}<p class="muted">Вместимость: {{ room.capacity }} · {{ '%.0f'|format(room.price) }} ₽ за ночь</p>{% endif %}
+<form method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">{{ form.non_field_errors() }}
+{% for field in form %}<label class="field">{{ field.label }}{{ field }}{{ field.errors }}{% if field.help_text %}<small class="help">{{ field.help_text|safe }}</small>{% endif %}</label>{% endfor %}
+<div class="actions"><button>{{ button }}</button><a href="{{ url('room_list') }}">Отмена</a></div></form></section>{% endblock %}
