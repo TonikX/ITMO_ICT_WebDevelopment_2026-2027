@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Конференции</h1>
+
+    <form method="get" class="row g-2 mb-4">
+        <div class="col-md-6">
+            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control"
+                   placeholder="Поиск по названию, описанию или месту">
+        </div>
+        <div class="col-md-4">
+            <select name="topic" class="form-select">
+                <option value="">Все тематики</option>
+                {% for topic in topics %}
+                    <option value="{{ topic.id }}" {% if request.GET.topic == topic.id|stringformat:"d" %}selected{% endif %}>
+                        {{ topic.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary">Найти</button>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+        {% for conference in conference_list %}
+            <div class="col-md-6">
+                <div class="card h-100 conference-card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ conference.name }}</h5>
+                        <p class="text-muted mb-2">
+                            {{ conference.start_date|date:"d.m.Y" }} - {{ conference.end_date|date:"d.m.Y" }},
+                            {{ conference.venue }}
+                        </p>
+                        <p class="card-text">{{ conference.description|truncatewords:25 }}</p>
+                        {% for topic in conference.topics.all %}
+                            <span class="badge text-bg-secondary">{{ topic.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer bg-white">
+                        <a href="{% url 'conference_detail' conference.pk %}" class="btn btn-outline-primary btn-sm">Подробнее</a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'admin:conferences_conference_change' conference.pk %}" class="btn btn-outline-secondary btn-sm">Изменить</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">Ничего не найдено.</p>
+        {% endfor %}
+    </div>
+
+    {% if user.is_staff %}
+        <a href="{% url 'admin:conferences_conference_add' %}" class="btn btn-success mb-3">Добавить конференцию</a>
+    {% endif %}
+
+    {% include 'pagination.html' %}
+{% endblock %}

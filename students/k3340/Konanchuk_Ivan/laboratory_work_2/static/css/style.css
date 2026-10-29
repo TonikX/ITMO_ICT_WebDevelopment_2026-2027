@@ -1,0 +1,31 @@
+.form-box input:not([type="checkbox"]),
+.form-box textarea,
+.form-box select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.375rem;
+    background-color: #fff;
+}
+
+.form-box textarea {
+    min-height: 120px;
+}
+
+.form-box .form-text ul {
+    margin-bottom: 0;
+    padding-left: 1.2rem;
+}
+
+.conference-card {
+    transition: box-shadow 0.2s;
+}
+
+.conference-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.text-pre {
+    white-space: pre-line;
+}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ conference.name }}{% endblock %}
+
+{% block content %}
+    <h1>{{ conference.name }}</h1>
+    <p class="text-muted">
+        {{ conference.start_date|date:"d.m.Y" }} - {{ conference.end_date|date:"d.m.Y" }}, {{ conference.venue }}
+    </p>
+    <p>
+        {% for topic in conference.topics.all %}
+            <span class="badge text-bg-secondary">{{ topic.name }}</span>
+        {% endfor %}
+    </p>
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5>О конференции</h5>
+                    <p class="text-pre">{{ conference.description }}</p>
+                    <h5>Место проведения</h5>
+                    <p class="text-pre">{{ conference.venue_description }}</p>
+                    <h5>Условия участия</h5>
+                    <p class="text-pre mb-0">{{ conference.conditions }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <p>Докладов: {{ conference.participations.count }}</p>
+                    <p>Средний рейтинг: {% if avg_rating %}{{ avg_rating|floatformat:1 }} из 10{% else %}нет отзывов{% endif %}</p>
+                    {% if user.is_authenticated %}
+                        {% if my_participation %}
+                            <p>Ваш доклад: «{{ my_participation.talk_title }}»</p>
+                            <p>Результат: {{ my_participation.get_result_display }}</p>
+                            <a href="{% url 'participation_update' my_participation.pk %}" class="btn btn-outline-primary btn-sm">Изменить регистрацию</a>
+                        {% else %}
+                            <a href="{% url 'participation_create' conference.pk %}" class="btn btn-primary">Зарегистрироваться с докладом</a>
+                        {% endif %}
+                    {% else %}
+                        <p class="mb-0"><a href="{% url 'login' %}">Войдите</a>, чтобы зарегистрироваться с докладом.</p>
+                    {% endif %}
+                    <hr>
+                    <a href="{% url 'participant_list' %}?conference={{ conference.pk }}">Участники конференции</a>
+                    {% if user.is_staff %}
+                        <hr>
+                        <a href="{% url 'admin:conferences_conference_change' conference.pk %}" class="btn btn-outline-secondary btn-sm">Изменить в админ-панели</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Отзывы</h3>
+        {% if user.is_authenticated %}
+            <a href="{% url 'review_create' conference.pk %}" class="btn btn-outline-primary btn-sm">Написать отзыв</a>
+        {% endif %}
+    </div>
+    {% for review in reviews %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ review.user }}{% if review.user.organization %}, {{ review.user.organization }}{% endif %}</strong>
+                    <span class="badge text-bg-primary">{{ review.rating }}/10</span>
+                </div>
+                <small class="text-muted">
+                    Конференция {{ conference.start_date|date:"d.m.Y" }} - {{ conference.end_date|date:"d.m.Y" }},
+                    отзыв от {{ review.created_at|date:"d.m.Y H:i" }}
+                </small>
+                <p class="mt-2 mb-0 text-pre">{{ review.text }}</p>
+                {% if user.is_staff or review.user == user %}
+                    <a href="{% url 'review_delete' review.pk %}" class="btn btn-link btn-sm text-danger px-0">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">Отзывов пока нет.</p>
+    {% endfor %}
+{% endblock %}

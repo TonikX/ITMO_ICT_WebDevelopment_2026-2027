@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h4">Удалить отзыв?</h2>
+            <p>Отзыв пользователя {{ object.user }} о конференции «{{ object.conference.name }}».</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Удалить</button>
+                <a href="{% url 'conference_detail' object.conference.pk %}" class="btn btn-link">Отмена</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
