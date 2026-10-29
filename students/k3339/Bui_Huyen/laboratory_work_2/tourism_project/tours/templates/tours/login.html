@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | Nordway</title>
+    <link rel="stylesheet" href="{% static 'tours/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'tours/css/auth.css' %}">
+</head>
+<body class="auth-page">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% url 'home' %}" aria-label="Nordway — главная">
+                <span class="brand__icon" aria-hidden="true">N</span>
+                <span>Nordway</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a href="{% url 'home' %}">Туры</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'country_statistics' %}">Статистика</a>
+                        <a href="{% url 'admin:index' %}">Администрирование</a>
+                    {% endif %}
+                    <span>Здравствуйте, {{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a class="is-active" href="{% url 'login' %}">Войти</a>
+                    <a class="nav-cta" href="{% url 'register' %}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="auth-main">
+        <section class="auth-card" aria-labelledby="auth-title">
+            <p class="eyebrow auth-eyebrow">Рады снова видеть вас</p>
+            <h1 id="auth-title" class="auth-title">Вход в аккаунт</h1>
+            <p class="auth-description">Войдите, чтобы управлять бронированиями и планировать новые путешествия.</p>
+
+            {% if form.errors %}
+                <div class="auth-error" role="alert">Неверное имя пользователя или пароль. Проверьте данные и попробуйте ещё раз.</div>
+            {% endif %}
+
+            <form class="auth-form" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary auth-submit" type="submit">Войти</button>
+            </form>
+
+            <p class="auth-switch">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>
+            <a class="auth-back-link" href="{% url 'home' %}">← Вернуться к турам</a>
+        </section>
+    </main>
+</body>
+</html>

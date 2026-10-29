@@ -1,0 +1,241 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordway — туристические маршруты</title>
+    <link rel="stylesheet" href="{% static 'tours/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% url 'home' %}" aria-label="Nordway — главная">
+                <span class="brand__icon" aria-hidden="true">N</span>
+                <span>Nordway</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a class="is-active" href="{% url 'home' %}">Туры</a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+
+                    {% if user.is_staff %}
+                        <a href="{% url 'country_statistics' %}">Статистика</a>
+                        <a href="{% url 'admin:index' %}">Администрирование</a>
+                    {% endif %}
+
+                    <span>Здравствуйте, {{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                    <a class="nav-cta" href="{% url 'register' %}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero__inner">
+            <div class="hero__content">
+                <p class="eyebrow">Путешествуйте осмысленно</p>
+                <h1 class="hero__title">Найдите путешествие, которое останется с вами.</h1>
+                <p class="hero__description">
+                    Небольшие группы, продуманные маршруты и места,
+                    в которые хочется возвращаться.
+                </p>
+
+                <form class="search-panel" method="get" action="{% url 'home' %}">
+                    <div class="field">
+                        <label for="search">Куда</label>
+                        <input
+                            type="search"
+                            id="search"
+                            name="q"
+                            value="{{ search_query }}"
+                            placeholder="Название тура"
+                        >
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Найти тур</button>
+                </form>
+            </div>
+
+            <div class="hero__image-wrap">
+                {% if tours.0.main_image %}
+                    <img
+                        class="hero__image"
+                        src="{{ tours.0.main_image.url }}"
+                        alt="{{ tours.0.title }}"
+                    >
+                {% else %}
+                    <div class="hero__image hero__image-placeholder tour-card__image-placeholder">
+                        Откройте для себя новые направления
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+
+    <section class="filter-bar" aria-label="Фильтры туров">
+        <div class="filter-bar__inner">
+
+            <form class="filter-form" method="get" action="{% url 'home' %}">
+                <!-- Giữ lại từ khóa tìm kiếm -->
+                <input
+                    type="hidden"
+                    name="q"
+                    value="{{ search_query }}"
+                >
+
+                <div class="field filter-form__field">
+                    <label for="country">Страна</label>
+                    <select id="country" name="country">
+                        <option value="">Все страны</option>
+
+                        {% for country in countries %}
+                            <option
+                                value="{{ country.id }}"
+                                {% if selected_country|stringformat:"s" == country.id|stringformat:"s" %}selected{% endif %}
+                            >
+                                {{ country.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="field filter-form__field">
+                    <label for="sort">Сортировка</label>
+                    <select id="sort" name="sort">
+                        <option
+                            value="date"
+                            {% if selected_sort == "date" %}selected{% endif %}
+                        >
+                            По дате начала
+                        </option>
+
+                        <option
+                            value="price_asc"
+                            {% if selected_sort == "price_asc" %}selected{% endif %}
+                        >
+                            Сначала дешевле
+                        </option>
+
+                        <option
+                            value="price_desc"
+                            {% if selected_sort == "price_desc" %}selected{% endif %}
+                        >
+                            Сначала дороже
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-form__actions">
+                    <button class="btn btn-primary" type="submit">
+                        Применить
+                    </button>
+
+                    <a class="btn btn-outline"
+                    href="{% url 'home' %}">
+                        Сбросить фильтры
+                    </a>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+
+    <main class="tour-section">
+        <div class="section-inner">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Выбрано для вас</p>
+                    <h2>Ближайшие путешествия</h2>
+                    <p class="tour-results-count">Найдено туров: {{ tours.paginator.count }}</p>
+                </div>
+                <a class="section-link" href="{% url 'home' %}">Смотреть все</a>
+            </div>
+
+            <div class="tour-grid">
+                {% for tour in tours %}
+                    <article class="tour-card">
+                        {% if tour.main_image %}
+                            <a class="tour-card__image-link" href="{% url 'tour_detail' tour.pk %}">
+                                <img
+                                    class="tour-card__image"
+                                    src="{{ tour.main_image.url }}"
+                                    alt="{{ tour.title }}"
+                                    loading="lazy"
+                                >
+                            </a>
+                        {% else %}
+                            <div class="tour-card__image-link">
+                                <div class="tour-card__image tour-card__image-placeholder">
+                                    Изображение скоро появится
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="tour-card__body">
+                            <div class="tour-card__meta">
+                                <span>{{ tour.country.name }}</span>
+                                <span>{{ tour.start_date|date:"d.m" }} – {{ tour.end_date|date:"d.m" }}</span>
+                            </div>
+
+                            <h3 class="tour-card__title">
+                                <a href="{% url 'tour_detail' tour.pk %}">{{ tour.title }}</a>
+                            </h3>
+
+                            <p class="tour-card__description">
+                                {{ tour.description|truncatewords:12 }}
+                            </p>
+
+                            <div class="tour-card__footer">
+                                <div>
+                                    <span class="tour-card__price-label">Стоимость</span>
+                                    <span class="tour-card__price">${{ tour.price|floatformat:0 }}</span>
+                                </div>
+                                <a class="btn btn-outline" href="{% url 'tour_detail' tour.pk %}">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                {% empty %}
+                    <p>По вашему запросу туры не найдены. Попробуйте изменить фильтры.</p>
+                {% endfor %}
+            </div>
+
+            {% if tours.has_other_pages %}
+                <nav class="pagination" aria-label="Пагинация">
+                    {% if tours.has_previous %}
+                        <a href="?q={{ search_query|urlencode }}&country={{ selected_country }}&sort={{ selected_sort }}&page={{ tours.previous_page_number }}" aria-label="Предыдущая страница">←</a>
+                    {% else %}
+                        <span class="is-disabled" aria-disabled="true">←</span>
+                    {% endif %}
+
+                    {% for page_number in tours.paginator.page_range %}
+                        {% if page_number == tours.number %}
+                            <span class="is-current" aria-current="page">{{ page_number }}</span>
+                        {% else %}
+                            <a href="?q={{ search_query|urlencode }}&country={{ selected_country }}&sort={{ selected_sort }}&page={{ page_number }}">{{ page_number }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if tours.has_next %}
+                        <a href="?q={{ search_query|urlencode }}&country={{ selected_country }}&sort={{ selected_sort }}&page={{ tours.next_page_number }}" aria-label="Следующая страница">→</a>
+                    {% else %}
+                        <span class="is-disabled" aria-disabled="true">→</span>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

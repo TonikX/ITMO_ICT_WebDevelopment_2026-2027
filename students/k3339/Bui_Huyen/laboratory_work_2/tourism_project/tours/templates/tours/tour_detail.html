@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ tour.title }} | Nordway</title>
+    <link rel="stylesheet" href="{% static 'tours/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'tours/css/tour_detail_css_addition.css' %}">
+</head>
+<body class="tour-detail-page">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% url 'home' %}" aria-label="Nordway — главная">
+                <span class="brand__icon" aria-hidden="true">N</span>
+                <span>Nordway</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a href="{% url 'home' %}">Туры</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'country_statistics' %}">Статистика</a>
+                        <a href="{% url 'admin:index' %}">Администрирование</a>
+                    {% endif %}
+                    <span class="site-nav__greeting">Здравствуйте, {{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                    <a class="nav-cta" href="{% url 'register' %}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="tour-detail-layout">
+        <div class="tour-detail-content">
+            <a class="btn btn-outline detail-back-link" href="{% url 'home' %}">
+                <span aria-hidden="true">←</span> Все туры
+            </a>
+
+            <section class="tour-detail-intro">
+                <p class="eyebrow">
+                    {{ tour.country.name }} · {{ tour.start_date|date:"d.m.Y" }} — {{ tour.end_date|date:"d.m.Y" }}
+                </p>
+                <h1 class="tour-detail-title">{{ tour.title }}</h1>
+                <p class="tour-detail-lead">{{ tour.description|truncatewords:24 }}</p>
+            </section>
+
+            <section class="tour-gallery" aria-label="Фотографии тура">
+                {% if tour.main_image %}
+                    <div class="tour-gallery-main">
+                        <img src="{{ tour.main_image.url }}" alt="{{ tour.title }}" fetchpriority="high">
+                    </div>
+                {% else %}
+                    {% with first_image=tour.images.all|first %}
+                        {% if first_image %}
+                            <div class="tour-gallery-main">
+                                <img src="{{ first_image.image.url }}" alt="{{ first_image.caption|default:tour.title }}" fetchpriority="high">
+                            </div>
+                        {% else %}
+                            <div class="tour-detail-image-placeholder">Фотографии тура скоро появятся</div>
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
+
+                {% with gallery_images=tour.images.all %}
+                    {% if gallery_images %}
+                        <div class="tour-gallery-grid">
+                            {% for item in gallery_images %}
+                                <figure class="tour-gallery-item">
+                                    <img src="{{ item.image.url }}" alt="{{ item.caption|default:tour.title }}" loading="lazy">
+                                    {% if item.caption %}<figcaption>{{ item.caption }}</figcaption>{% endif %}
+                                </figure>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            </section>
+
+            <section class="tour-about content-section">
+                <h2>О путешествии</h2>
+                <p>{{ tour.description|linebreaksbr }}</p>
+            </section>
+
+            <section class="tour-facts" aria-label="Информация о туре">
+                <div class="tour-fact-card">
+                    <span class="tour-fact-icon" aria-hidden="true">▦</span>
+                    <span class="tour-fact-label">Даты поездки</span>
+                    <strong>{{ tour.start_date|date:"d.m.Y" }} — {{ tour.end_date|date:"d.m.Y" }}</strong>
+                </div>
+                <div class="tour-fact-card">
+                    <span class="tour-fact-icon" aria-hidden="true">♧</span>
+                    <span class="tour-fact-label">Туроператор</span>
+                    <strong>{{ tour.company.name }}</strong>
+                </div>
+                <div class="tour-fact-card">
+                    <span class="tour-fact-icon" aria-hidden="true">⌖</span>
+                    <span class="tour-fact-label">Направление</span>
+                    <strong>{{ tour.country.name }}</strong>
+                </div>
+            </section>
+
+            <section class="tour-reviews content-section">
+                <h2>Отзывы путешественников</h2>
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+
+                {% for review in reviews %}
+                    <article class="review tour-review-card">
+                        <div class="review-heading">
+                            <div>
+                                <strong>{{ review.user.username }}</strong>
+                                <p class="review-date">{{ review.review_date|date:"d.m.Y" }}</p>
+                            </div>
+                            <span class="review-score" aria-label="Оценка {{ review.score }} из 10">{{ review.score }}/10</span>
+                        </div>
+                        <p>{{ review.content|linebreaksbr }}</p>
+                    </article>
+                {% empty %}
+                    <p class="muted-copy">Пока нет отзывов об этом туре. Будьте первым, кто поделится впечатлениями.</p>
+                {% endfor %}
+
+                {% if user.is_authenticated %}
+                    {% if not has_review %}
+                        <div class="review-form-card">
+                            <h3>Оставить отзыв</h3>
+                            <form method="post" action="{% url 'create_review' tour.pk %}" class="review-form">
+                                {% csrf_token %}
+                                {{ review_form.as_p }}
+                                <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p class="muted-copy">Вы уже оставили отзыв об этом туре.</p>
+                    {% endif %}
+                {% else %}
+                    <p class="muted-copy"><a href="{% url 'login' %}">Войдите в аккаунт</a>, чтобы оставить отзыв.</p>
+                {% endif %}
+            </section>
+        </div>
+
+        <aside class="tour-booking-panel" aria-label="Бронирование тура">
+            <span class="booking-panel-label">Стоимость на человека</span>
+            <p class="tour-detail-price">${{ tour.price|floatformat:2 }}</p>
+            {% if tour.available_places > 0 %}
+                <p class="availability-note">Осталось {{ tour.available_places }} мест</p>
+            {% else %}
+                <p class="availability-note availability-soldout">Свободных мест нет</p>
+            {% endif %}
+
+            <div class="booking-panel-divider"></div>
+            <div class="booking-detail-row"><span>Страна</span><strong>{{ tour.country.name }}</strong></div>
+            <div class="booking-detail-row"><span>Туроператор</span><strong>{{ tour.company.name }}</strong></div>
+            <div class="booking-detail-row"><span>Начало</span><strong>{{ tour.start_date|date:"d.m.Y" }}</strong></div>
+            <div class="booking-detail-row"><span>Окончание</span><strong>{{ tour.end_date|date:"d.m.Y" }}</strong></div>
+            <div class="booking-panel-divider"></div>
+
+            {% if user.is_authenticated %}
+                {% if tour.available_places > 0 %}
+                    <a class="btn btn-primary detail-book-button" href="{% url 'booking_form' tour.pk %}">Забронировать тур</a>
+                {% else %}
+                    <span class="btn btn-primary detail-book-button button-disabled" aria-disabled="true">Нет свободных мест</span>
+                {% endif %}
+                <a class="btn btn-outline detail-secondary-button" href="{% url 'my_bookings' %}">Мои бронирования</a>
+            {% else %}
+                <a class="btn btn-primary detail-book-button" href="{% url 'login' %}">Войти для бронирования</a>
+                <p class="booking-login-note">Нет аккаунта? <a href="{% url 'register' %}">Создать аккаунт</a></p>
+            {% endif %}
+        </aside>
+    </main>
+</body>
+</html>

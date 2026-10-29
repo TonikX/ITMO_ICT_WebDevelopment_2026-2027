@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Статистика по странам | Nordway</title>
+
+    <link rel="stylesheet" href="{% static 'tours/css/style.css' %}">
+</head>
+
+<body class="country-statistics-page">
+
+    <header class="statistics-header">
+        <div class="statistics-header-inner">
+            <a href="{% url 'home' %}" class="statistics-back-link">
+                <span aria-hidden="true">←</span>
+                Все туры
+            </a>
+
+            <a href="{% url 'home' %}" class="statistics-brand">
+                Nordway
+            </a>
+
+            <div class="statistics-header-spacer"></div>
+        </div>
+    </header>
+
+    <main class="statistics-main">
+
+        <section class="statistics-intro">
+            <p class="statistics-eyebrow">АНАЛИТИКА</p>
+
+            <h1>Статистика по странам</h1>
+
+            <p class="statistics-subtitle">
+                Количество бронирований, подтверждённые заявки
+                и выручка по каждому направлению.
+            </p>
+        </section>
+
+        <section class="statistics-panel">
+
+            <div class="statistics-panel-heading">
+                <div>
+                    <h2>Показатели по странам</h2>
+                    <p>Сводная статистика бронирований</p>
+                </div>
+            </div>
+
+            <div class="statistics-table-wrapper">
+                <table class="statistics-table">
+                    <thead>
+                        <tr>
+                            <th>Страна</th>
+                            <th>Количество заявок</th>
+                            <th>Подтверждённые заявки</th>
+                            <th>Выручка (USD)</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for country in countries %}
+                        <tr>
+                            <td class="statistics-country-name">
+                                {{ country.name }}
+                            </td>
+
+                            <td>{{ country.total_bookings }}</td>
+
+                            <td>{{ country.confirmed_bookings }}</td>
+
+                            <td class="statistics-revenue">
+                                ${{ country.revenue|floatformat:2 }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="statistics-empty">
+                                Нет данных для отображения.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="statistics-note">
+                Выручка указана в долларах США (USD).
+            </p>
+
+        </section>
+    </main>
+
+</body>
+</html>

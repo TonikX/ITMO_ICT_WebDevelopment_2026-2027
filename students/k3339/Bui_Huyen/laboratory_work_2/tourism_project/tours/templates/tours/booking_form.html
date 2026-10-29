@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if is_edit %}Редактирование бронирования{% else %}Бронирование тура{% endif %} | Nordway</title>
+    <link rel="stylesheet" href="{% static 'tours/css/style.css' %}">
+    <style>
+        /* На странице бронирования оставляем те же цвета ссылок в шапке, что и на tour_detail. */
+        .booking-page .site-header .brand,
+        .booking-page .site-header .site-nav > a:not(.nav-cta) {
+            color: var(--color-text);
+        }
+        .booking-page .site-header .site-nav > a.nav-cta {
+            color: #fff;
+        }
+        .booking-page .site-header .site-nav form {
+            margin: 0;
+        }
+        .booking-page .site-nav__greeting {
+            color: var(--color-text-muted);
+            font-size: 13px;
+        }
+        @media (max-width: 760px) {
+            .booking-page .site-header__inner {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 12px 0;
+            }
+            .booking-page .site-nav {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                gap: 12px 16px;
+            }
+        }
+    </style>
+</head>
+<body class="booking-page">
+    <header class="site-header">
+        <div class="site-header__inner">
+            <a class="brand" href="{% url 'home' %}" aria-label="Nordway — главная">
+                <span class="brand__icon" aria-hidden="true">N</span>
+                <span>Nordway</span>
+            </a>
+
+            <nav class="site-nav" aria-label="Основная навигация">
+                <a href="{% url 'home' %}">Туры</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_bookings' %}">Мои бронирования</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'country_statistics' %}">Статистика</a>
+                        <a href="{% url 'admin:index' %}">Администрирование</a>
+                    {% endif %}
+                    <span class="site-nav__greeting">Здравствуйте, {{ user.username }}</span>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline" type="submit">Выйти</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                    <a class="nav-cta" href="{% url 'register' %}">Создать аккаунт</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="booking-container">
+        <div class="booking-breadcrumb">
+            <a href="{% url 'home' %}">Туры</a>
+            <span aria-hidden="true">/</span>
+            <a href="{% url 'tour_detail' tour.pk %}">{{ tour.title }}</a>
+            <span aria-hidden="true">/</span>
+            <span>{% if is_edit %}Редактирование бронирования{% else %}Бронирование{% endif %}</span>
+        </div>
+
+        <section class="booking-heading">
+            <p class="booking-eyebrow">Nordway · Ваше путешествие</p>
+            <h1>{% if is_edit %}Редактирование бронирования{% else %}Бронирование тура{% endif %}</h1>
+            <p class="booking-subtitle">Проверьте информацию о туре и заполните данные для бронирования.</p>
+        </section>
+
+        <div class="booking-layout">
+            <section class="booking-tour-card" aria-label="Информация о туре">
+                {% if tour.main_image %}
+                    <img class="booking-tour-card__image" src="{{ tour.main_image.url }}" alt="{{ tour.title }}">
+                {% endif %}
+                <div class="booking-tour-card__body">
+                    <h2>{{ tour.title }}</h2>
+                    {% if tour.description %}
+                        <p class="booking-tour-card__description">{{ tour.description }}</p>
+                    {% endif %}
+                    <div class="booking-info-list">
+                        <div class="booking-info-row">
+                            <span>Страна</span>
+                            <strong>{{ tour.country.name }}</strong>
+                        </div>
+                        {% if tour.start_date %}
+                            <div class="booking-info-row">
+                                <span>Дата начала</span>
+                                <strong>{{ tour.start_date|date:"d.m.Y" }}</strong>
+                            </div>
+                        {% endif %}
+                        {% if tour.end_date %}
+                            <div class="booking-info-row">
+                                <span>Дата окончания</span>
+                                <strong>{{ tour.end_date|date:"d.m.Y" }}</strong>
+                            </div>
+                        {% endif %}
+                        <div class="booking-info-row">
+                            <span>Свободных мест</span>
+                            <strong>{{ tour.available_places }}</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="booking-form-card" aria-label="Форма бронирования">
+                <p class="booking-form-card__label">Стоимость за человека</p>
+                <p class="booking-price">{{ tour.price }} $</p>
+                {% if tour.available_places > 0 %}
+                    <p class="booking-availability">Есть свободные места</p>
+                {% else %}
+                    <p class="booking-availability">Свободных мест нет</p>
+                {% endif %}
+
+                <div class="booking-divider"></div>
+                <h2>{% if is_edit %}Изменить данные{% else %}Данные для бронирования{% endif %}</h2>
+
+                <form method="post" class="booking-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="booking-field">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="booking-field__hint">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="booking-errors">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    {% if form.non_field_errors %}
+                        <div class="booking-errors">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                    <button class="booking-submit" type="submit">
+                        {% if is_edit %}Сохранить изменения{% else %}Отправить заявку{% endif %}
+                    </button>
+                    <a class="booking-cancel" href="{% url 'tour_detail' tour.pk %}">Назад к туру</a>
+                </form>
+            </section>
+        </div>
+    </main>
+</body>
+</html>
