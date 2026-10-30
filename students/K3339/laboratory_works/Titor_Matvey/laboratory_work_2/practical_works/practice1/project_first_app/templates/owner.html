@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Владелец {{ owner.last_name }}{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h1 class="h4 mb-0">Владелец #{{ owner.pk }}</h1>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Имя</span><span>{{ owner.first_name }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Фамилия</span><span>{{ owner.last_name }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Дата рождения</span>
+        <span>{{ owner.birth_date|date:'d.m.Y'|default:'—' }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="text-muted d-block">Автомобили владельца</span>
+        {% for o in ownerships %}
+          <div>
+            <strong>{{ o.car.brand }} {{ o.car.model }}</strong>
+            ({{ o.car.color }}, {{ o.car.state_number }}) — {{ o.start_date|date:'d.m.Y' }}
+            {% if o.end_date %}— {{ o.end_date|date:'d.m.Y' }}{% else %}— по настоящее время{% endif %}
+          </div>
+        {% empty %}
+          <span>нет данных</span>
+        {% endfor %}
+      </li>
+    </ul>
+  </div>
+{% endblock %}

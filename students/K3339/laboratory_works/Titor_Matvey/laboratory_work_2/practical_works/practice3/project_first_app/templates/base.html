@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Автовладельцы{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', system-ui, sans-serif;
+      background: #f6f9fc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .site-nav {
+      background: #2c3e50;
+      box-shadow: 0 2px 14px rgba(44,62,80,.35);
+    }
+    .site-nav .nav-link:hover { color: #18bc9c !important; }
+    .nav-btn-outline {
+      border: 1px solid rgba(255,255,255,.55);
+      color: #fff;
+      border-radius: 2rem;
+      padding-inline: 1rem;
+    }
+    .nav-btn-outline:hover { background: rgba(255,255,255,.14); color: #fff; }
+    main { max-width: 760px; margin: 2rem auto 3rem; padding: 0 1rem; width: 100%; flex: 1; }
+    .card { border: none; border-radius: 1rem; box-shadow: 0 4px 18px rgba(44,62,80,.08); }
+    .btn-primary { border-radius: 2rem; padding-inline: 1.1rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand navbar-dark site-nav">
+    <div class="container" style="max-width:760px">
+      <a class="navbar-brand fw-bold" href="{% url 'people_list' %}">🚗 Автовладельцы</a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'car_list' %}">Автомобили</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+              {% csrf_token %}
+              <button class="btn btn-sm nav-btn-outline mt-1">Выйти ({{ user.username }})</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item mt-1"><a class="btn btn-sm nav-btn-outline" href="{% url 'login' %}">Войти</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  <main>
+    {% if messages %}
+      {% for m in messages %}<div class="alert alert-{{ m.tags }}">{{ m }}</div>{% endfor %}
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

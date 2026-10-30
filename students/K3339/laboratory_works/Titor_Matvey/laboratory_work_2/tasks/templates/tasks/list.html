@@ -1,0 +1,74 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Все задания{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">Список заданий <span class="text-muted small">({{ page.paginator.count }})</span></h1>
+
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-md-5">
+      <select name="discipline" class="form-select">
+        <option value="">любой предмет</option>
+        {% for d in disciplines %}
+          <option value="{{ d }}" {% if d == discipline %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-5">
+      <input type="search" name="find" class="form-control" value="{{ search }}" placeholder="поиск по заданию или преподавателю">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-secondary w-100">Отобрать</button>
+    </div>
+  </form>
+
+  {% if not page %}
+    <div class="alert alert-info page-note">По такому отбору ничего не нашлось.</div>
+  {% else %}
+    <table class="table table-hover task-table bg-white">
+      <thead>
+        <tr>
+          <th>Предмет</th>
+          <th>Задание</th>
+          <th>Преподаватель</th>
+          <th>Выдано</th>
+          <th>Сдать до</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in page %}
+          <tr>
+            <td><span class="badge bg-secondary">{{ t.discipline }}</span></td>
+            <td>{{ t.body|truncatechars:70 }}
+              {% if user.is_authenticated and user.id in done_ids %}
+                <span class="badge bg-success">сдано</span>
+              {% endif %}
+            </td>
+            <td>{{ t.teacher_name }}</td>
+            <td>{{ t.issued_on|date:'d.m.Y' }}</td>
+            <td>{{ t.due_on|date:'d.m.Y' }}</td>
+            <td><a class="btn btn-sm btn-primary" href="{% url 'tasks:task' t.pk %}">открыть</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if page.paginator.num_pages > 1 %}
+      <nav>
+        <ul class="pagination">
+          {% if page.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page.previous_page_number }}&discipline={{ discipline|urlencode }}&find={{ search|urlencode }}">назад</a>
+            </li>
+          {% endif %}
+          <li class="page-item disabled"><span class="page-link">{{ page.number }} / {{ page.paginator.num_pages }}</span></li>
+          {% if page.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page.next_page_number }}&discipline={{ discipline|urlencode }}&find={{ search|urlencode }}">вперёд</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  {% endif %}
+{% endblock %}

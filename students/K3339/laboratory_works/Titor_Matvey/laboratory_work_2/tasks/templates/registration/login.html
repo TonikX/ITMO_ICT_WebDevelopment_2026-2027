@@ -1,0 +1,32 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card border-dark">
+        <div class="card-header">Вход на сайт</div>
+        <div class="card-body">
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger p-2">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label" for="id_username">Логин</label>
+              <input type="text" name="username" id="id_username" class="form-control" autofocus>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="id_password">Пароль</label>
+              <input type="password" name="password" id="id_password" class="form-control">
+            </div>
+            <button class="btn btn-dark w-100">войти</button>
+          </form>
+          <p class="text-center small mt-3">
+            Нет аккаунта? <a href="{% url 'tasks:signup' %}">Зарегистрироваться</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

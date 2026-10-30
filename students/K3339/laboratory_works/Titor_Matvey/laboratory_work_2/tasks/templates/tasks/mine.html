@@ -1,0 +1,46 @@
+{% extends 'tasks/base.html' %}
+{% block title %}Мои работы{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">Мои сданные работы</h1>
+
+  {% if not page %}
+    <div class="alert alert-info page-note">Вы пока ничего не отправляли.</div>
+  {% endif %}
+
+  <div class="list-group mb-3">
+    {% for w in page %}
+      <a href="{% url 'tasks:task' w.task.pk %}" class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+          <div>
+            <span class="badge bg-secondary">{{ w.task.discipline }}</span>
+            {{ w.task.body|truncatechars:60 }}
+          </div>
+          <div>
+            {% if w.score %}
+              <span class="badge bg-info fs-6">{{ w.score }}</span>
+            {% else %}
+              <span class="badge bg-warning text-dark">на проверке</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="small text-muted">отправлено {{ w.sent_at|date:'d.m.Y H:i' }}</div>
+        <div class="small">{{ w.body|truncatechars:80 }}</div>
+      </a>
+    {% endfor %}
+  </div>
+
+  {% if page.paginator.num_pages > 1 %}
+    <nav>
+      <ul class="pagination">
+        {% if page.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">назад</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">{{ page.number }} / {{ page.paginator.num_pages }}</span></li>
+        {% if page.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">вперёд</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

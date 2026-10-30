@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header"><h1 class="h4 mb-0">Вход на сайт</h1></div>
+    <div class="card-body">
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger py-2">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_username" class="form-label">Логин</label>
+          <input type="text" name="username" id="id_username" class="form-control" autofocus>
+        </div>
+        <div class="mb-3">
+          <label for="id_password" class="form-label">Пароль</label>
+          <input type="password" name="password" id="id_password" class="form-control">
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+        <button type="submit" class="btn btn-primary">Войти</button>
+      </form>
+      <p class="text-muted small mt-3 mb-0">
+        Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a>
+      </p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Все владельцы{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0">Все владельцы</h1>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'create_owner' %}">+ Добавить владельца</a>
+    </div>
+    {% if dataset %}
+      <ul class="list-group list-group-flush">
+        {% for data in dataset %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>{{ data.last_name }} {{ data.first_name }}
+              <span class="text-muted">(род. {{ data.birth_date|date:'d.m.Y'|default:'—' }})</span>
+            </span>
+            <a class="badge bg-primary text-decoration-none" href="{% url 'owner' data.pk %}">подробнее</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="card-body text-muted">Владельцев пока нет.</div>
+    {% endif %}
+  </div>
+{% endblock %}

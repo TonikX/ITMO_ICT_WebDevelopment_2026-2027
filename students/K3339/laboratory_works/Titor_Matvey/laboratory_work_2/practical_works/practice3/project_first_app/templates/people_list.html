@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Владельцы (пользователи){% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0">Владельцы автомобилей (пользователи)</h1>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'register' %}">+ Новый пользователь</a>
+    </div>
+    {% if users %}
+      <table class="table table-striped align-middle mb-0">
+        <thead><tr>
+          <th>Имя</th><th>Паспорт</th><th>Домашний адрес</th><th>Национальность</th>
+        </tr></thead>
+        <tbody>
+          {% for u in users %}
+            <tr>
+              <td><a href="{% url 'owner' u.pk %}">{{ u.last_name|default:u.username }} {{ u.first_name }}</a></td>
+              <td>{{ u.passport_number|default:'—' }}</td>
+              <td>{{ u.home_address|default:'—' }}</td>
+              <td>{{ u.nationality|default:'—' }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">Пользователей пока нет.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="card-body text-muted">Пользователей пока нет. <a href="{% url 'register' %}">Создайте первого</a>.</div>
+    {% endif %}
+  </div>
+{% endblock %}

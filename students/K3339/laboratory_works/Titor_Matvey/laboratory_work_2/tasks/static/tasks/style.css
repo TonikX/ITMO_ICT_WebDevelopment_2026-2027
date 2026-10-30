@@ -1,0 +1,46 @@
+.top-strip {
+    background: #333;
+    color: #fff;
+    border-bottom: 4px solid #fdb813;
+}
+
+.site-title {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.site-title:hover { color: #fdb813; }
+
+.chip {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 2px solid #fff;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    color: #fff;
+    text-decoration: none;
+    background: transparent;
+    font-size: 0.9rem;
+}
+
+.chip:hover { color: #fdb813; border-color: #fdb813; }
+
+.chip-dark { background: #fdb813; color: #333; border-color: #333; font-weight: 600; }
+.chip-dark:hover { color: #333; }
+
+.chip-plain { border-style: dashed; color: #ddd; }
+
+.chip-out { cursor: pointer; }
+
+.foot-strip {
+    background: #333;
+    color: #bbb;
+    border-top: 4px solid #fdb813;
+}
+
+.task-table tbody tr:hover { background: #fff9e6; }
+
+.task-table td { vertical-align: middle; }
+
+.page-note { border: 2px dashed #999; }

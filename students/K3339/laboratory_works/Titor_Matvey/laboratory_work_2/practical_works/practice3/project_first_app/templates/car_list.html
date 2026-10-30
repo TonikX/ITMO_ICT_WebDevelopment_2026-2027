@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Автомобили{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header"><h1 class="h4 mb-0">Автомобили</h1></div>
+    {% if object_list %}
+      <ul class="list-group list-group-flush">
+        {% for obj in object_list %}
+          <li class="list-group-item">
+            {{ obj.brand }} {{ obj.model }}
+            <span class="text-muted">({{ obj.color }}, {{ obj.state_number }})</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="card-body text-muted">Автомобилей пока нет.</div>
+    {% endif %}
+  </div>
+{% endblock %}

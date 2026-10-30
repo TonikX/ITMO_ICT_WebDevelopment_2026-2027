@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Автовладельцы{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', system-ui, sans-serif;
+      background: #f6f9fc;
+      min-height: 100vh;
+    }
+    .page-head {
+      background: #2c3e50;
+      color: #fff;
+      padding: 1.6rem 0;
+      margin-bottom: 2rem;
+    }
+    .page-head h1 { font-size: 1.35rem; font-weight: 700; margin: 0; }
+    .page-head .accent { color: #18bc9c; }
+    main { max-width: 760px; margin: 0 auto 3rem; padding: 0 1rem; }
+    .card { border: none; border-radius: 1rem; box-shadow: 0 4px 18px rgba(44,62,80,.08); }
+    .btn-primary { border-radius: 2rem; padding-inline: 1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="page-head">
+    <main><h1>🚗 <span class="accent">Автовладельцы</span></h1></main>
+  </div>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

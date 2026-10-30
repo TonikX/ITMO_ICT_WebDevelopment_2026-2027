@@ -1,0 +1,101 @@
+{% extends 'tasks/base.html' %}
+{% block title %}{{ task.discipline }}{% endblock %}
+
+{% block content %}
+  <p class="small">
+    <a href="{% url 'tasks:list' %}">← все задания</a>
+  </p>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card border-primary">
+        <div class="card-header bg-primary text-white">Задание #{{ task.pk }}</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Предмет</dt>
+            <dd class="col-sm-8">{{ task.discipline }}</dd>
+            <dt class="col-sm-4">Преподаватель</dt>
+            <dd class="col-sm-8">{{ task.teacher_name }}</dd>
+            <dt class="col-sm-4">Выдано</dt>
+            <dd class="col-sm-8">{{ task.issued_on|date:'d.m.Y' }}</dd>
+            <dt class="col-sm-4">Сдать до</dt>
+            <dd class="col-sm-8">{{ task.due_on|date:'d.m.Y' }}</dd>
+          </dl>
+          <hr>
+          <p class="mb-1"><strong>Что нужно сделать:</strong></p>
+          <p>{{ task.body|linebreaksbr }}</p>
+          {% if task.penalty %}
+            <div class="alert alert-warning page-note p-2 mb-0">⚠ {{ task.penalty }}</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      {% if show_all %}
+        <div class="card border-secondary">
+          <div class="card-header">Работы класса</div>
+          <div class="card-body p-0">
+            <table class="table table-sm mb-0">
+              <thead>
+                <tr><th>Ученик</th><th>Решение</th><th>Отправлено</th><th>Отметка</th></tr>
+              </thead>
+              <tbody>
+                {% for w in works %}
+                  <tr>
+                    <td>{{ w.student.username }}</td>
+                    <td>{{ w.body|truncatechars:40 }}</td>
+                    <td>{{ w.sent_at|date:'d.m H:i' }}</td>
+                    <td>{% if w.score %}<span class="badge bg-info">{{ w.score }}</span>{% else %}—{% endif %}</td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="4" class="text-center text-muted">Пока никто не сдал</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer small">
+            Отметки выставляются в <a href="/admin/tasks/work/">панели администратора</a>.
+          </div>
+        </div>
+      {% else %}
+        <div class="card border-success">
+          <div class="card-header bg-success text-white">Моя работа</div>
+          <div class="card-body">
+            {% if not user.is_authenticated %}
+              <p class="mb-0">Войдите, чтобы отправить решение.</p>
+            {% else %}
+              {% if my_work %}
+                {% if too_late %}
+                  <div class="alert alert-danger page-note p-2">Отправлено позже срока</div>
+                {% endif %}
+                <p class="small text-muted">Отправлено: {{ my_work.sent_at|date:'d.m.Y H:i' }}</p>
+                {% if my_work.score %}
+                  <div class="alert alert-info">Отметка: <strong>{{ my_work.score }}</strong>
+                    (выставлена {{ my_work.scored_at|date:'d.m.Y' }})</div>
+                  <p class="mb-0">{{ my_work.body|linebreaksbr }}</p>
+                {% else %}
+                  <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="button" value="resend">
+                    <textarea name="body" class="form-control mb-2" rows="6">{{ my_work.body }}</textarea>
+                    <button class="btn btn-primary">переписать решение</button>
+                    <button class="btn btn-danger" name="button" value="drop" formnovalidate>удалить</button>
+                  </form>
+                {% endif %}
+              {% else %}
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="button" value="send">
+                  <textarea name="body" class="form-control mb-2" rows="6"
+                            placeholder="Введите решение задания..."></textarea>
+                  <button class="btn btn-success">отправить на проверку</button>
+                </form>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
