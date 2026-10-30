@@ -1,0 +1,21 @@
+{% extends 'homework/base.html' %}
+{% block title %}Оценить работу · Доска домашних заданий{% endblock %}
+{% block content %}
+<h1>Оценить работу</h1>
+<p><strong>Ученик:</strong> {{ submission.student.get_full_name() or submission.student.username }}</p>
+<p><strong>Дисциплина:</strong> {{ submission.homework.subject.subject_name }}</p>
+<p><strong>Группа:</strong> {{ submission.homework.study_group.group_name }}</p>
+<h2>Текст задания</h2>
+<p class="multiline">{{ submission.homework.description }}</p>
+<h2>Ответ ученика</h2>
+<p class="multiline">{{ submission.answer_text }}</p>
+<p>Дата отправки: {{ submitted_at_local.strftime('%d.%m.%Y, %H:%M') }}</p>
+<p><strong>Статус:</strong> {{ submission_status }}</p>
+<p><strong>Текущая оценка:</strong> {% if submission.grade is none %}Не проверено{% else %}{{ submission.grade }}{% endif %}</p>
+<form method="post" class="account-form">
+    {{ csrf_input }}
+    {{ form.as_p() }}
+    <button class="button" type="submit">Сохранить оценку</button>
+</form>
+<p><a href="{{ url('homework:teacher_submissions', args=[submission.homework_id]) }}">Назад к ответам</a></p>
+{% endblock %}

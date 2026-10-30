@@ -1,0 +1,26 @@
+{% extends 'homework/base.html' %}
+{% block title %}Ответы учеников · Доска домашних заданий{% endblock %}
+{% block content %}
+<h1>Ответы учеников</h1>
+{% for message in messages %}
+    <p class="info" role="status">{{ message }}</p>
+{% endfor %}
+<h2>{{ homework.subject.subject_name }} · {{ homework.study_group.group_name }}</h2>
+<p class="multiline">{{ homework.description }}</p>
+<p>Срок сдачи: {{ homework.deadline.strftime('%d.%m.%Y') }}</p>
+{% for submission in submissions %}
+    <article class="homework-card">
+        <h3>{{ submission.student.get_full_name() or submission.student.username }}</h3>
+        <p class="multiline">{{ submission.answer_text }}</p>
+        <p>Дата отправки: {{ submission.local_submitted_at.strftime('%d.%m.%Y, %H:%M') }}</p>
+        <p><strong>Статус:</strong> {{ submission.status_label }}</p>
+        <p><strong>Оценка:</strong> {% if submission.grade is none %}Не проверено{% else %}{{ submission.grade }}{% endif %}</p>
+        {% if request.user.has_perm('homework.change_submission') %}
+            <a class="button" href="{{ url('homework:teacher_grade', args=[submission.pk]) }}">{% if submission.grade is none %}Оценить{% else %}Изменить оценку{% endif %}</a>
+        {% endif %}
+    </article>
+{% else %}
+    <p class="info">Ученики пока не отправили ответы на это задание</p>
+{% endfor %}
+<p><a href="{{ url('homework:teacher') }}">Назад в кабинет</a></p>
+{% endblock %}
