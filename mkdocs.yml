@@ -7,3 +7,4 @@ theme:
 nav:
   - Главная: index.md
   - Лабораторная работа 1: lr1/report.md
+  - Лабораторная работа 2: lr2/report.md
