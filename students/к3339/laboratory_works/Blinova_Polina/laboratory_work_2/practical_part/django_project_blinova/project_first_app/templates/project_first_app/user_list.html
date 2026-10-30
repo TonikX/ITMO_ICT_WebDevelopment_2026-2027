@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Все пользователи</title>
+    <link rel="stylesheet" href="{% static 'css/owner.css' %}">
+</head>
+
+<body>
+
+    <h1>Все пользователи</h1>
+    <p>
+        <a href="{% url 'register' %}">Зарегистрировать пользователя</a>
+        &nbsp;|&nbsp;
+        <strong>Всего:</strong> {{ users|length }}
+    </p>
+
+    {% if users %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Логин</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Паспорт</th>
+                <th>Национальность</th>
+                <th>Машин</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.last_name }}</td>
+                <td>{{ u.first_name }}</td>
+                <td>{{ u.passport_number|default:"—" }}</td>
+                <td>{{ u.nationality|default:"—" }}</td>
+                <td>{{ u.cars.count }}</td>
+                <td><a href="{% url 'user_detail' u.id %}">Подробнее</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">Пользователей пока нет.</p>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'car_list' %}">К списку авто</a>
+    </p>
+
+</body>
+
+</html>

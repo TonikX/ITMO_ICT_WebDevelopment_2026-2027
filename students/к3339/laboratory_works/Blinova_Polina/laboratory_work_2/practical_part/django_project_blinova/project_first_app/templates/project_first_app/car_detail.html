@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ car.brand }} {{ car.model }}</title>
+    <link rel="stylesheet" href="{% static 'css/owner.css' %}">
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>Автомобиль</h1>
+
+        <div class="field"><span class="label">ID:</span> {{ car.id }}</div>
+        <div class="field"><span class="label">Марка:</span> {{ car.brand }}</div>
+        <div class="field"><span class="label">Модель:</span> {{ car.model }}</div>
+        <div class="field"><span class="label">Гос. номер:</span> {{ car.state_number }}</div>
+        <div class="field"><span class="label">Цвет:</span> {{ car.get_color_display }}</div>
+    </div>
+
+    <h2>Владельцы</h2>
+    {% if car.owners.all %}
+    <ul>
+        {% for owner in car.owners.all %}
+        <li>
+            <a href="{% url 'user_detail' owner.id %}">{{ owner }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">Владельцев нет</p>
+    {% endif %}
+
+    <h2>История владения</h2>
+    {% if car.ownerships.all %}
+    <table>
+        <thead>
+            <tr>
+                <th>Владелец</th>
+                <th>Начало</th>
+                <th>Окончание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in car.ownerships.all %}
+            <tr>
+                <td>{{ o.owner }}</td>
+                <td>{{ o.start_date|date:"d.m.Y" }}</td>
+                <td>{{ o.end_date|date:"d.m.Y"|default:"— (текущий)" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">История пуста.</p>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'car_update' car.pk %}">Изменить</a> |
+        <a href="{% url 'car_delete' car.pk %}" style="color: red;">Удалить</a> |
+        <a href="{% url 'car_list' %}">К списку</a>
+    </p>
+
+</body>
+
+</html>

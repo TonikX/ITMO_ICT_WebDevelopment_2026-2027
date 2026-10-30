@@ -1,0 +1,32 @@
+{% extends 'tours/base.html' %}
+
+{% block title %}Редактирование резервирования{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-pencil"></i> Редактирование резервирования
+            </div>
+            <div class="card-body">
+                <p><strong>Тур:</strong> {{ object.tour.name }}</p>
+                <p><strong>Стоимость за человека:</strong> {{ object.tour.price }} ₽</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Количество участников:</label>
+                        <input type="number" name="participants_count" value="{{ object.participants_count }}" min="1"
+                            max="{{ object.tour.available_slots }}" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check"></i> Сохранить
+                    </button>
+                    <a href="{% url 'reservation_list' %}" class="btn btn-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

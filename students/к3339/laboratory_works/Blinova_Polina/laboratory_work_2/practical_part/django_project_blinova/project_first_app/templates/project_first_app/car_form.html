@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% if form.instance.pk %}Редактирование{% else %}Новый автомобиль{% endif %}</title>
+    <link rel="stylesheet" href="{% static 'css/owner.css' %}">
+</head>
+
+<body>
+
+    <h1>
+        {% if form.instance.pk %}
+        Редактирование автомобиля
+        {% else %}
+        Новый автомобиль
+        {% endif %}
+    </h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.errors %}
+        <div style="color: red; margin-bottom: 10px;">{{ form.errors }}</div>
+        {% endif %}
+
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <p>
+            <button type="submit">
+                {% if form.instance.pk %}Сохранить{% else %}Создать{% endif %}
+            </button>
+            <a href="{% url 'car_list' %}">Отмена</a>
+        </p>
+    </form>
+
+</body>
+
+</html>

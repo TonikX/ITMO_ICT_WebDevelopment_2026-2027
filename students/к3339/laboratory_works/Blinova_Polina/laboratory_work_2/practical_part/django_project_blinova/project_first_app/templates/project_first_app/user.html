@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ owner.last_name }} {{ owner.first_name }}</title>
+    <link rel="stylesheet" href="{% static 'css/owner.css' %}">
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>Информация о пользователе</h1>
+
+        <div class="field"><span class="label">ID:</span> {{ owner.id }}</div>
+        <div class="field"><span class="label">Логин:</span> {{ owner.username }}</div>
+        <div class="field"><span class="label">Имя:</span> {{ owner.first_name }}</div>
+        <div class="field"><span class="label">Фамилия:</span> {{ owner.last_name }}</div>
+        <div class="field"><span class="label">Email:</span> {{ owner.email|default:"—" }}</div>
+        <div class="field"><span class="label">Дата рождения:</span> {{ owner.birth_date|date:"d.m.Y"|default:"—" }}
+        </div>
+
+        <hr>
+        <h2>Паспортные данные</h2>
+        <div class="field"><span class="label">Номер паспорта:</span> {{ owner.passport_number|default:"—" }}</div>
+        <div class="field"><span class="label">Домашний адрес:</span> {{ owner.home_address|default:"—" }}</div>
+        <div class="field"><span class="label">Национальность:</span> {{ owner.nationality|default:"—" }}</div>
+    </div>
+
+    <h2>Водительские удостоверения</h2>
+    {% if licenses %}
+    <table>
+        <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Категория</th>
+                <th>Дата выдачи</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for license in licenses %}
+            <tr>
+                <td>{{ license.license_number }}</td>
+                <td>{{ license.get_category_display }}</td>
+                <td>{{ license.issued_date|date:"d.m.Y"|default:"—" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">У пользователя нет водительских удостоверений</p>
+    {% endif %}
+
+    <h2>Автомобили во владении</h2>
+    {% if ownerships %}
+    <table>
+        <thead>
+            <tr>
+                <th>Марка</th>
+                <th>Модель</th>
+                <th>Гос. номер</th>
+                <th>Начало</th>
+                <th>Окончание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for o in ownerships %}
+            <tr>
+                <td>{{ o.car.brand }}</td>
+                <td>{{ o.car.model }}</td>
+                <td>{{ o.car.state_number }}</td>
+                <td>{{ o.start_date|date:"d.m.Y" }}</td>
+                <td>{{ o.end_date|date:"d.m.Y"|default:"— (текущий)" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">У пользователя нет автомобилей</p>
+    {% endif %}
+
+    <p><a href="{% url 'user_list' %}">К списку пользователей</a></p>
+
+</body>
+
+</html>
