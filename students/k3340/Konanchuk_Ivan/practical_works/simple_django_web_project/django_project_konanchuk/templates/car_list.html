@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Автомобили</h1>
+    <a href="{% url 'car_create' %}" class="btn btn-primary mb-3">Добавить автомобиль</a>
+    <table class="table table-striped">
+        <tr><th>Гос. номер</th><th>Марка</th><th>Модель</th><th>Цвет</th><th></th></tr>
+        {% for car in object_list %}
+            <tr>
+                <td><a href="{% url 'car_detail' car.pk %}">{{ car.state_number }}</a></td>
+                <td>{{ car.brand }}</td>
+                <td>{{ car.model }}</td>
+                <td>{{ car.color|default:"" }}</td>
+                <td>
+                    <a href="{% url 'car_update' car.pk %}">Изменить</a>
+                    <a href="{% url 'car_delete' car.pk %}" class="text-danger ms-2">Удалить</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

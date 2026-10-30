@@ -1,0 +1,545 @@
+[
+{
+  "model": "conferences.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$vLhNwi1FPmIBhso1tAHZXS$X0reulcU24fQ8SPiJbQm6nPzYh2HwSKrB+TF3p1AIMk=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "Иван",
+    "last_name": "Конанчук",
+    "email": "admin@conf.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:50.252Z",
+    "organization": "Университет ИТМО",
+    "academic_degree": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$GpYCi8Q8a8B9xMJHEecM3V$kazLYF7qQzC3XyXDZ5tjuu0lHHqMp6v+mCBS0YzKjm8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ivanova",
+    "first_name": "Анна",
+    "last_name": "Иванова",
+    "email": "ivanova@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:50.849Z",
+    "organization": "Университет ИТМО",
+    "academic_degree": "кандидат технических наук",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$nwIOPdyr6W0NcUocst36uF$h/iicNxXODGQo7T1bhwfCy9BOdc4mRzd/Rdxj2SrNrM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "petrov",
+    "first_name": "Сергей",
+    "last_name": "Петров",
+    "email": "petrov@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:51.484Z",
+    "organization": "СПбГУ",
+    "academic_degree": "аспирант",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$cFckrHqIhIoyVXzZ2XeEYr$SorF2Y163Mm9i1z6jm7bwufvmcX0cO3286tn7RiLmi8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "smirnova",
+    "first_name": "Ольга",
+    "last_name": "Смирнова",
+    "email": "smirnova@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:52.173Z",
+    "organization": "МФТИ",
+    "academic_degree": "доктор физико-математических наук",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$xr2R9PvYd6TDRLgTSTtrjB$BymilWyycvfTIXAyi8eCewmDxxYQ5t9lt0JOw9rxdyM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "kuznetsov",
+    "first_name": "Дмитрий",
+    "last_name": "Кузнецов",
+    "email": "kuznetsov@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:52.959Z",
+    "organization": "ВШЭ",
+    "academic_degree": "магистрант",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$e90dA0bnxI7770SxCWxIkn$8Juvqc2xFI/oWHxrhtaQTfwhYlHB8QTKDd4nM7K82F0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "volkova",
+    "first_name": "Мария",
+    "last_name": "Волкова",
+    "email": "volkova@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:53.641Z",
+    "organization": "НГУ",
+    "academic_degree": "кандидат физико-математических наук",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$BB0hIbjANVn0J9lOYaxQoG$mnZ6MdPF82r+ZsGRYxUbM/r3KAc1jlkz7DDz7uh5qOU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sokolov",
+    "first_name": "Алексей",
+    "last_name": "Соколов",
+    "email": "sokolov@mail.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-28T22:20:54.289Z",
+    "organization": "КФУ",
+    "academic_degree": "аспирант",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 1,
+  "fields": {
+    "name": "Машинное обучение"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 2,
+  "fields": {
+    "name": "Веб-разработка"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 3,
+  "fields": {
+    "name": "Базы данных"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 4,
+  "fields": {
+    "name": "Информационная безопасность"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 5,
+  "fields": {
+    "name": "Компьютерное зрение"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 6,
+  "fields": {
+    "name": "Квантовые вычисления"
+  }
+},
+{
+  "model": "conferences.topic",
+  "pk": 7,
+  "fields": {
+    "name": "Образование"
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 1,
+  "fields": {
+    "name": "Конгресс молодых учёных ИТМО",
+    "venue": "Санкт-Петербург, Кронверкский пр., 49",
+    "start_date": "2027-04-07",
+    "end_date": "2027-04-10",
+    "description": "Ежегодная конференция для студентов, аспирантов и молодых исследователей. Секции по информационным технологиям, фотонике и биотехнологиям.",
+    "venue_description": "Главный корпус Университета ИТМО. Актовый зал на 400 мест и 12 аудиторий для секций, рядом станция метро «Горьковская».",
+    "conditions": "Участие бесплатное. Нужно подать тезисы до 1 марта. Доклад 10 минут и 5 минут на вопросы.",
+    "topics": [
+      2,
+      1,
+      7
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 2,
+  "fields": {
+    "name": "Data Science Day",
+    "venue": "Москва, Технопарк «Сколково»",
+    "start_date": "2026-11-20",
+    "end_date": "2026-11-21",
+    "description": "Конференция о прикладном анализе данных: ML в продакшене, хранилища данных, MLOps.",
+    "venue_description": "Конгресс-центр технопарка, два зала и выставочная зона.",
+    "conditions": "Регистрационный взнос 3000 рублей, для студентов бесплатно. Доклад 20 минут.",
+    "topics": [
+      3,
+      1
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 3,
+  "fields": {
+    "name": "Безопасность информационных систем",
+    "venue": "Казань, КФУ",
+    "start_date": "2026-12-03",
+    "end_date": "2026-12-05",
+    "description": "Доклады по защите веб-приложений, криптографии и анализу уязвимостей.",
+    "venue_description": "Институт вычислительной математики и ИТ КФУ, конференц-зал на 200 мест.",
+    "conditions": "Тезисы до 2 страниц, участие бесплатное. Лучшие доклады публикуются в сборнике РИНЦ.",
+    "topics": [
+      3,
+      4
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 4,
+  "fields": {
+    "name": "Компьютерное зрение и робототехника",
+    "venue": "Новосибирск, Академгородок",
+    "start_date": "2027-02-15",
+    "end_date": "2027-02-17",
+    "description": "Конференция о распознавании изображений, навигации роботов и обработке видео.",
+    "venue_description": "Дом учёных СО РАН, рядом гостиница для участников.",
+    "conditions": "Полный текст статьи до 15 января. Взнос 2000 рублей.",
+    "topics": [
+      5,
+      1
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 5,
+  "fields": {
+    "name": "Квантовые технологии 2027",
+    "venue": "Москва, МФТИ",
+    "start_date": "2027-05-18",
+    "end_date": "2027-05-20",
+    "description": "Квантовые алгоритмы, квантовая криптография и физика кубитов.",
+    "venue_description": "Новый корпус МФТИ в Долгопрудном, 20 минут на электричке от Москвы.",
+    "conditions": "Доклады по приглашению и по конкурсу тезисов. Участие бесплатное.",
+    "topics": [
+      6
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 6,
+  "fields": {
+    "name": "Цифровое образование",
+    "venue": "Санкт-Петербург, СПбГУ",
+    "start_date": "2026-09-24",
+    "end_date": "2026-09-25",
+    "description": "Онлайн-курсы, образовательные платформы и аналитика учебного процесса.",
+    "venue_description": "Здание Двенадцати коллегий, Университетская набережная.",
+    "conditions": "Участие бесплатное, нужна регистрация на сайте. Доклад 15 минут.",
+    "topics": [
+      2,
+      7
+    ]
+  }
+},
+{
+  "model": "conferences.conference",
+  "pk": 7,
+  "fields": {
+    "name": "Веб-технологии и высоконагруженные системы",
+    "venue": "Екатеринбург, УрФУ",
+    "start_date": "2027-03-11",
+    "end_date": "2027-03-12",
+    "description": "Архитектура веб-сервисов, фреймворки, масштабирование и кэширование.",
+    "venue_description": "Главный учебный корпус УрФУ, проспект Ленина, 51.",
+    "conditions": "Взнос 1500 рублей. Нужна презентация и тезисы на 1 страницу.",
+    "topics": [
+      3,
+      2
+    ]
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "conference": 1,
+    "talk_title": "Нейросетевые модели для анализа учебной успеваемости",
+    "abstract": "В докладе я рассказываю про тему «Нейросетевые модели для анализа учебной успеваемости» и показываю результаты своих экспериментов.",
+    "result": "recommended",
+    "created_at": "2026-10-28T22:20:54.935Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "conference": 1,
+    "talk_title": "Генерация кода с помощью языковых моделей",
+    "abstract": "В докладе я рассказываю про тему «Генерация кода с помощью языковых моделей» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.938Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 3,
+  "fields": {
+    "user": 5,
+    "conference": 1,
+    "talk_title": "Сравнение Django и FastAPI для учебных проектов",
+    "abstract": "В докладе я рассказываю про тему «Сравнение Django и FastAPI для учебных проектов» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.939Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "conference": 2,
+    "talk_title": "Feature store для небольших команд",
+    "abstract": "В докладе я рассказываю про тему «Feature store для небольших команд» и показываю результаты своих экспериментов.",
+    "result": "recommended",
+    "created_at": "2026-10-28T22:20:54.940Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 5,
+  "fields": {
+    "user": 4,
+    "conference": 2,
+    "talk_title": "Градиентный бустинг на табличных данных",
+    "abstract": "В докладе я рассказываю про тему «Градиентный бустинг на табличных данных» и показываю результаты своих экспериментов.",
+    "result": "rejected",
+    "created_at": "2026-10-28T22:20:54.941Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 6,
+  "fields": {
+    "user": 6,
+    "conference": 2,
+    "talk_title": "Оптимизация запросов в PostgreSQL для аналитики",
+    "abstract": "В докладе я рассказываю про тему «Оптимизация запросов в PostgreSQL для аналитики» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.942Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "conference": 3,
+    "talk_title": "Поиск SQL-инъекций статическим анализом",
+    "abstract": "В докладе я рассказываю про тему «Поиск SQL-инъекций статическим анализом» и показываю результаты своих экспериментов.",
+    "result": "recommended",
+    "created_at": "2026-10-28T22:20:54.943Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 8,
+  "fields": {
+    "user": 3,
+    "conference": 3,
+    "talk_title": "Ролевые модели доступа в веб-приложениях",
+    "abstract": "В докладе я рассказываю про тему «Ролевые модели доступа в веб-приложениях» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.944Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 9,
+  "fields": {
+    "user": 4,
+    "conference": 4,
+    "talk_title": "Детекция объектов на дронах в реальном времени",
+    "abstract": "В докладе я рассказываю про тему «Детекция объектов на дронах в реальном времени» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.945Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 10,
+  "fields": {
+    "user": 6,
+    "conference": 4,
+    "talk_title": "Сегментация медицинских снимков",
+    "abstract": "В докладе я рассказываю про тему «Сегментация медицинских снимков» и показываю результаты своих экспериментов.",
+    "result": "recommended",
+    "created_at": "2026-10-28T22:20:54.946Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 11,
+  "fields": {
+    "user": 4,
+    "conference": 5,
+    "talk_title": "Квантовый алгоритм Гровера на симуляторе",
+    "abstract": "В докладе я рассказываю про тему «Квантовый алгоритм Гровера на симуляторе» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.946Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 12,
+  "fields": {
+    "user": 5,
+    "conference": 6,
+    "talk_title": "Аналитика онлайн-курсов на открытых данных",
+    "abstract": "В докладе я рассказываю про тему «Аналитика онлайн-курсов на открытых данных» и показываю результаты своих экспериментов.",
+    "result": "recommended",
+    "created_at": "2026-10-28T22:20:54.947Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 13,
+  "fields": {
+    "user": 7,
+    "conference": 6,
+    "talk_title": "Геймификация в обучении программированию",
+    "abstract": "В докладе я рассказываю про тему «Геймификация в обучении программированию» и показываю результаты своих экспериментов.",
+    "result": "rejected",
+    "created_at": "2026-10-28T22:20:54.948Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 14,
+  "fields": {
+    "user": 2,
+    "conference": 7,
+    "talk_title": "Кэширование в Django на Redis",
+    "abstract": "В докладе я рассказываю про тему «Кэширование в Django на Redis» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.949Z"
+  }
+},
+{
+  "model": "conferences.participation",
+  "pk": 15,
+  "fields": {
+    "user": 5,
+    "conference": 7,
+    "talk_title": "Нагрузочное тестирование REST API",
+    "abstract": "В докладе я рассказываю про тему «Нагрузочное тестирование REST API» и показываю результаты своих экспериментов.",
+    "result": "pending",
+    "created_at": "2026-10-28T22:20:54.950Z"
+  }
+},
+{
+  "model": "conferences.review",
+  "pk": 1,
+  "fields": {
+    "user": 5,
+    "conference": 6,
+    "text": "Хорошая организация, много практических докладов. Понравилась секция про онлайн-курсы.",
+    "rating": 9,
+    "created_at": "2026-10-28T22:20:54.950Z"
+  }
+},
+{
+  "model": "conferences.review",
+  "pk": 2,
+  "fields": {
+    "user": 7,
+    "conference": 6,
+    "text": "Интересно, но секции шли параллельно и часть докладов пропустил.",
+    "rating": 6,
+    "created_at": "2026-10-28T22:20:54.952Z"
+  }
+},
+{
+  "model": "conferences.review",
+  "pk": 3,
+  "fields": {
+    "user": 2,
+    "conference": 6,
+    "text": "Удобное место, всё по времени. Буду участвовать в следующем году.",
+    "rating": 8,
+    "created_at": "2026-10-28T22:20:54.953Z"
+  }
+},
+{
+  "model": "conferences.review",
+  "pk": 4,
+  "fields": {
+    "user": 3,
+    "conference": 1,
+    "text": "Участвую второй год, лучшая площадка для первого доклада.",
+    "rating": 10,
+    "created_at": "2026-10-28T22:20:54.954Z"
+  }
+},
+{
+  "model": "conferences.review",
+  "pk": 5,
+  "fields": {
+    "user": 4,
+    "conference": 2,
+    "text": "Сильная программа, но дорогой кофе-брейк.",
+    "rating": 7,
+    "created_at": "2026-10-28T22:20:54.955Z"
+  }
+}
+]

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Владельцы</h1>
+    <a href="{% url 'owner_create' %}" class="btn btn-primary mb-3">Добавить владельца</a>
+    <table class="table table-striped">
+        <tr><th>Фамилия</th><th>Имя</th><th>Национальность</th></tr>
+        {% for owner in owners %}
+            <tr>
+                <td><a href="{% url 'owner_detail' owner.pk %}">{{ owner.last_name }}</a></td>
+                <td>{{ owner.first_name }}</td>
+                <td>{{ owner.nationality }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

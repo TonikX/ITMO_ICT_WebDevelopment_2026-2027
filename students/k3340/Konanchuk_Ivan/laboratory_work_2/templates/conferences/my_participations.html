@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="mb-4">Мои регистрации</h1>
+    {% for participation in object_list %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ participation.talk_title }}</h5>
+                <p class="mb-1">
+                    <a href="{% url 'conference_detail' participation.conference.pk %}">{{ participation.conference.name }}</a>,
+                    {{ participation.conference.start_date|date:"d.m.Y" }}
+                </p>
+                <p class="mb-2">Результат: {{ participation.get_result_display }}</p>
+                <a href="{% url 'participation_update' participation.pk %}" class="btn btn-outline-primary btn-sm">Изменить</a>
+                <a href="{% url 'participation_delete' participation.pk %}" class="btn btn-outline-danger btn-sm">Удалить</a>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-muted">Вы пока не зарегистрированы ни на одну конференцию.</p>
+    {% endfor %}
+{% endblock %}
