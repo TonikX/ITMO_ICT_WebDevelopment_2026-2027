@@ -1,0 +1,66 @@
+{% extends "hotel/base.html" %}
+{% block title %}Гости{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Гости</h1>
+<div class="table-responsive mb-4">
+<table class="table table-striped table-bordered bg-white">
+<thead>
+<tr>
+<th scope="col">Фамилия</th>
+<th scope="col">Имя</th>
+<th scope="col">Отчество</th>
+<th scope="col">Серия паспорта</th>
+<th scope="col">Номер паспорта</th>
+<th scope="col">Город прибытия</th>
+</tr>
+</thead>
+<tbody id="rows">
+</tbody>
+</table>
+<p id="empty" class="text-secondary">Загрузка…</p>
+</div>
+<section class="card card-body">
+<h2 class="h5">Добавить гостя</h2>
+<form id="create-form" class="row g-3">{% csrf_token %}
+<div class="col-md-6">
+<label class="form-label" for="last_name">Фамилия</label>
+<input class="form-control" type="text" id="last_name" name="last_name" maxlength="100" required>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="first_name">Имя</label>
+<input class="form-control" type="text" id="first_name" name="first_name" maxlength="100" required>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="middle_name">Отчество</label>
+<input class="form-control" type="text" id="middle_name" name="middle_name" maxlength="100">
+</div>
+<div class="col-md-6">
+<label class="form-label" for="passport_series">Серия паспорта</label>
+<input class="form-control" type="text" id="passport_series" name="passport_series" maxlength="10" required>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="passport_number">Номер паспорта</label>
+<input class="form-control" type="text" id="passport_number" name="passport_number" maxlength="20" required>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="arrival_city">Город прибытия</label>
+<input class="form-control" type="text" id="arrival_city" name="arrival_city" maxlength="100" required>
+</div>
+<div class="col-12">
+<button type="submit" class="btn btn-primary" disabled>Создать</button>
+</div>
+</form>
+</section>
+{% endblock %}
+{% block scripts %}<script>
+const guestsUrl = "{% url 'hotel_app:guest-list' %}";
+async function loadGuests() {
+    const guests = await api(guestsUrl);
+    fillTable('rows', guests.map(guest => [guest.last_name, guest.first_name, guest.middle_name,
+        guest.passport_series, guest.passport_number, guest.arrival_city]));
+    document.getElementById('empty').textContent = guests.length ? '' : 'Гостей пока нет.';
+    document.querySelector('#create-form button').disabled = false;
+}
+bindForm(guestsUrl, 'Гость создан.', loadGuests);
+loadGuests().catch(error => showMessage(error.message));
+</script>{% endblock %}

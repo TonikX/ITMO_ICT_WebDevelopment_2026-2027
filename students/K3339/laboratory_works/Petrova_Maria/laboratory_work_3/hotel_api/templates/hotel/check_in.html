@@ -1,0 +1,45 @@
+{% extends "hotel/base.html" %}
+{% block title %}Заселение{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Заселение</h1>
+<section class="card card-body">
+<h2 class="h5">Новое заселение</h2>
+<form id="create-form" class="row g-3">{% csrf_token %}
+<div class="col-md-6">
+<label class="form-label" for="room">Номер</label>
+<select class="form-select" id="room" name="room" required>
+</select>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="guests">Гости</label>
+<select class="form-select" id="guests" name="guests" required multiple size=6>
+</select>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="check_in">Дата заселения</label>
+<input class="form-control" type="date" id="check_in" name="check_in" required>
+</div>
+<div class="col-md-6">
+<label class="form-label" for="planned_check_out">Планируемая дата выезда</label>
+<input class="form-control" type="date" id="planned_check_out" name="planned_check_out" required>
+</div>
+<div class="col-12">
+<p class="text-secondary">Для выбора нескольких гостей удерживайте Ctrl (Command на macOS). Вместимость, даты и стоимость проверяет сервер.</p>
+<button type="submit" class="btn btn-primary" disabled>Заселить</button>
+</div>
+</form>
+</section>
+{% endblock %}
+{% block scripts %}<script>
+async function loadOptions() {
+    const [rooms, guests] = await Promise.all([
+        api("{% url 'hotel_app:room-list' %}"), api("{% url 'hotel_app:guest-list' %}")
+    ]);
+    fillSelect('room', rooms, room => room.number);
+    fillSelect('guests', guests, guest => `${guest.last_name} ${guest.first_name} ${guest.middle_name} (ID ${guest.id})`);
+    document.querySelector('#create-form button').disabled = !rooms.length || !guests.length;
+    if (!rooms.length || !guests.length) showMessage('Сначала добавьте хотя бы один номер и одного гостя.');
+}
+bindForm("{% url 'hotel_app:check-in' %}", 'Заселение выполнено.');
+loadOptions().catch(error => showMessage(error.message));
+</script>{% endblock %}

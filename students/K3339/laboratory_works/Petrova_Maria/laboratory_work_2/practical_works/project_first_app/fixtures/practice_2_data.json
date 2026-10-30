@@ -1,0 +1,88 @@
+[
+    {
+        "model": "project_first_app.carowner",
+        "pk": 3,
+        "fields": {
+            "last_name": "Смирнов",
+            "first_name": "Алексей",
+            "birth_date": "1988-02-09T21:00:00Z",
+            "username": "owner3",
+            "password": "!",
+            "passport_number": "",
+            "home_address": "",
+            "nationality": ""
+        }
+    },
+    {
+        "model": "project_first_app.carowner",
+        "pk": 4,
+        "fields": {
+            "last_name": "Кузнецова",
+            "first_name": "Мария",
+            "birth_date": "1994-07-17T20:00:00Z",
+            "username": "owner4",
+            "password": "!",
+            "passport_number": "",
+            "home_address": "",
+            "nationality": ""
+        }
+    },
+    {
+        "model": "project_first_app.carowner",
+        "pk": 5,
+        "fields": {
+            "last_name": "Волков",
+            "first_name": "Дмитрий",
+            "birth_date": "1991-11-03T22:00:00Z",
+            "username": "owner5",
+            "password": "!",
+            "passport_number": "",
+            "home_address": "",
+            "nationality": ""
+        }
+    },
+    {
+        "model": "project_first_app.carowner",
+        "pk": 6,
+        "fields": {
+            "last_name": "Соколова",
+            "first_name": "Елена",
+            "birth_date": "1997-04-21T20:00:00Z",
+            "username": "owner6",
+            "password": "!",
+            "passport_number": "",
+            "home_address": "",
+            "nationality": ""
+        }
+    },
+    {
+        "model": "project_first_app.car",
+        "pk": 5,
+        "fields": {
+            "license_plate": "М345ММ178",
+            "brand": "Ford",
+            "model": "Focus",
+            "color": "Синий"
+        }
+    },
+    {
+        "model": "project_first_app.car",
+        "pk": 6,
+        "fields": {
+            "license_plate": "Н678НН178",
+            "brand": "Skoda",
+            "model": "Octavia",
+            "color": "Белый"
+        }
+    },
+    {
+        "model": "project_first_app.car",
+        "pk": 7,
+        "fields": {
+            "license_plate": "Р901РР178",
+            "brand": "Renault",
+            "model": "Logan",
+            "color": "Серебристый"
+        }
+    }
+]

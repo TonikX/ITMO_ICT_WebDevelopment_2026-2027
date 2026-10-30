@@ -1,0 +1,39 @@
+{% extends 'project_first_app/base.html' %}
+
+{% block title %}
+Удаление бронирования
+{% endblock %}
+
+
+{% block content %}
+
+<h1>Удаление бронирования</h1>
+
+<p>
+    Вы действительно хотите удалить бронирование номера
+    <strong>{{ reservation.room.number }}</strong>
+    с {{ reservation.check_in|localize }}
+    по {{ reservation.check_out|localize }}?
+</p>
+
+<form method="post">
+
+    {{ csrf_input }}
+
+    <button
+        type="submit"
+        class="btn btn-danger"
+    >
+        Да, удалить
+    </button>
+
+    <a
+        href="{{ url('my_reservations') }}"
+        class="btn btn-secondary"
+    >
+        Отмена
+    </a>
+
+</form>
+
+{% endblock %}

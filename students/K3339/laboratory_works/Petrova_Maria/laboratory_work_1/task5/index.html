@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+        }
+
+        button {
+            padding: 10px 18px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Журнал оценок</h1>
+
+    <form method="POST" action="/grades">
+        <p>
+            <label>Дисциплина:</label><br>
+            <input type="text" name="subject" required>
+        </p>
+
+        <p>
+            <label>Оценка:</label><br>
+            <input type="number" name="grade" min="1" max="5" required>
+        </p>
+
+        <button type="submit">Добавить оценку</button>
+    </form>
+
+    <h2>Все оценки</h2>
+
+    {{grades}}
+
+</body>
+</html>

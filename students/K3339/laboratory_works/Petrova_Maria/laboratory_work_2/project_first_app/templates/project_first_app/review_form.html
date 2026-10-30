@@ -1,0 +1,38 @@
+{% extends 'project_first_app/base.html' %}
+
+{% block title %}
+Добавить отзыв
+{% endblock %}
+
+{% block content %}
+
+<h1>Отзыв о номере {{ room.number }}</h1>
+
+<p>
+    <strong>Отель:</strong>
+    {{ room.hotel.name }}
+</p>
+
+<form method="post">
+
+    {{ csrf_input }}
+
+    {{ form.as_p() }}
+
+    <button
+        type="submit"
+        class="btn btn-primary"
+    >
+        Оставить отзыв
+    </button>
+
+    <a
+        href="{{ url('room_detail', args=[room.id]) }}"
+        class="btn btn-secondary"
+    >
+        Отмена
+    </a>
+
+</form>
+
+{% endblock %}

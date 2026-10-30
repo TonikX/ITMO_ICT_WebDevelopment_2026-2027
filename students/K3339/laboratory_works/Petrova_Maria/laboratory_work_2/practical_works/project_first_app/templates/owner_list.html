@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Владельцы{% endblock %}
+{% block content %}
+<h1>Пользователи — владельцы автомобилей</h1>
+<a href="{% url 'owner_create' %}">Создать пользователя</a>
+<ul>
+    {% for owner in owners %}
+        <li>
+            <a href="{% url 'owner_detail' owner.id %}">{{ owner }}</a>
+            ({{ owner.username }})
+        </li>
+    {% empty %}
+        <li>Нет владельцев.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

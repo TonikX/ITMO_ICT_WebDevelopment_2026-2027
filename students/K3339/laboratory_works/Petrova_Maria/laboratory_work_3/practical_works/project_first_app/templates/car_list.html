@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Автомобили{% endblock %}
+{% block content %}
+<h1>Автомобили</h1>
+<a href="{% url 'car_create' %}">Добавить автомобиль</a>
+<ul>
+    {% for car in cars %}
+        <li>
+            <a href="{% url 'car_detail' car.id %}">{{ car }}</a>
+            <a href="{% url 'car_update' car.id %}">Изменить</a>
+            <a href="{% url 'car_delete' car.id %}">Удалить</a>
+        </li>
+    {% empty %}
+        <li>Нет автомобилей.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

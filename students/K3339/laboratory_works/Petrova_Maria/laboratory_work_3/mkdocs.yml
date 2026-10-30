@@ -1,0 +1,11 @@
+site_name: Администратор гостиницы — лабораторная №3
+site_description: Отчёт по разработке системы администрирования гостиницы на Django, DRF и PostgreSQL
+nav:
+  - Отчёт по лабораторной работе №3: index.md
+theme:
+  name: mkdocs
+  locale: ru
+# Скриншоты будут добавлены в docs/images/ позднее.
+validation:
+  links:
+    not_found: ignore

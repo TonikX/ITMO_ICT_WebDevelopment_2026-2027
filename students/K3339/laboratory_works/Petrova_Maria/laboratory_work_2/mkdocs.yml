@@ -1,0 +1,16 @@
+site_name: Лабораторная работа №2 — Отели
+site_description: Отчёт по лабораторной работе по веб-программированию
+site_author: Петрова Мария
+
+theme:
+  name: mkdocs
+  locale: ru
+
+nav:
+  - Главная: index.md
+  - Постановка задачи: task.md
+  - Модель данных: database.md
+  - Реализация: implementation.md
+  - Интерфейс: interface.md
+  - Администратор: admin.md
+  - Вывод: conclusion.md

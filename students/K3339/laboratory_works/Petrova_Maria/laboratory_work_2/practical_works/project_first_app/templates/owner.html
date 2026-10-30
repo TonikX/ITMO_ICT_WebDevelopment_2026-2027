@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Владелец автомобиля{% endblock %}
+{% block content %}
+    <h1>{{ owner }}</h1>
+    <p>Идентификатор: {{ owner.id }}</p>
+    <p>Логин: {{ owner.username }}</p>
+    <p>Email: {{ owner.email|default:"Не указан" }}</p>
+    <p>Номер паспорта: {{ owner.passport_number|default:"Не указан" }}</p>
+    <p>Домашний адрес: {{ owner.home_address|default:"Не указан" }}</p>
+    <p>Национальность: {{ owner.nationality|default:"Не указана" }}</p>
+    <p>Фамилия: {{ owner.last_name }}</p>
+    <p>Имя: {{ owner.first_name }}</p>
+    <p>Дата рождения: {{ owner.birth_date|date:"d.m.Y"|default:"Не указана" }}</p>
+
+    <h2>Водительские удостоверения</h2>
+    <ul>
+        {% for license in owner.driverlicense_set.all %}
+            <li>{{ license.number }}: категория {{ license.license_type }},
+                выдано {{ license.issue_date|date:"d.m.Y" }}</li>
+        {% empty %}
+            <li>Нет водительских удостоверений.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>История владения автомобилями</h2>
+    <ul>
+        {% for ownership in owner.ownership_set.all %}
+            <li>
+                {% if ownership.car %}
+                    <a href="{% url 'car_detail' ownership.car.id %}">{{ ownership.car }}</a>.
+                {% else %}
+                    Автомобиль не указан.
+                {% endif %}
+                Цвет: {{ ownership.car.color|default:"Не указан" }}.
+                С {{ ownership.start_date|date:"d.m.Y" }}
+                по {{ ownership.end_date|date:"d.m.Y"|default:"настоящее время" }}.
+            </li>
+        {% empty %}
+            <li>Нет автомобилей.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Автовладельцы{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'owner_list' %}">Владельцы</a> |
+        <a href="{% url 'car_list' %}">Автомобили</a> |
+        <a href="/admin/">Админ-панель</a>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
