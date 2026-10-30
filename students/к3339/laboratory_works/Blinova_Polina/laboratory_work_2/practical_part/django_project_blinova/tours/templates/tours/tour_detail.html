@@ -1,0 +1,152 @@
+{% extends 'tours/base.html' %}
+
+{% block title %}{{ tour.name }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'tour_list' %}" class="btn btn-outline-secondary btn-sm mb-3">
+    <i class="bi bi-arrow-left"></i> К списку туров
+</a>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card mb-4">
+            {% if tour.image %}
+            <img src="{{ tour.image.url }}" class="card-img-top" style="max-height:400px;object-fit:cover;">
+            {% endif %}
+            <div class="card-body">
+                <h1>{{ tour.name }}</h1>
+
+                <p class="text-muted">
+                    <i class="bi bi-building"></i> <strong>Турагентство:</strong> {{ tour.agency.name }}<br>
+                    <i class="bi bi-geo-alt-fill text-danger"></i> <strong>Страна:</strong> {{ tour.country.name }}<br>
+                    <i class="bi bi-calendar-event"></i> <strong>Период:</strong>
+                    {{ tour.start_date|date:"d.m.Y" }} — {{ tour.end_date|date:"d.m.Y" }}<br>
+                    <i class="bi bi-credit-card"></i> <strong>Условия оплаты:</strong>
+                    {{ tour.get_payment_terms_display }}
+                </p>
+
+                <h4>Описание</h4>
+                <p>{{ tour.description|linebreaks }}</p>
+
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <div class="border rounded p-3 text-center bg-light">
+                            <div class="text-muted small">Цена</div>
+                            <div class="fs-3 fw-bold text-primary">{{ tour.price }} ₽</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-3 text-center bg-light">
+                            <div class="text-muted small">Свободных мест</div>
+                            <div class="fs-3 fw-bold text-success">
+                                {{ tour.available_slots }} / {{ tour.max_participants }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% if user.is_staff %}
+                <div class="mt-4">
+                    <a href="{% url 'tour_update' tour.pk %}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Редактировать
+                    </a>
+                    <a href="{% url 'tour_delete' tour.pk %}" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="bi bi-bookmark-plus"></i> Резервирование
+            </div>
+            <div class="card-body">
+                {% if not user.is_authenticated %}
+                <p class="text-muted">
+                    <a href="{% url 'login' %}">Войдите</a>, чтобы зарезервировать тур.
+                </p>
+                {% elif user_reservation %}
+                <div class="alert alert-info mb-0">
+                    <strong>Вы уже зарезервировали этот тур.</strong><br>
+                    Статус: <span class="badge bg-warning text-dark">{{ user_reservation.get_status_display }}</span><br>                    Участников: {{ user_reservation.participants_count }}<br>
+                    <a href="{% url 'reservation_list' %}" class="btn btn-sm btn-outline-primary mt-2">
+                        Мои резервирования
+                    </a>
+                </div>
+                {% elif tour.available_slots > 0 %}
+                <form method="post" action="{% url 'reserve_tour' tour.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="tour" value="{{ tour.pk }}">
+                    <div class="mb-3">
+                        <label class="form-label">Количество участников:</label>
+                        <input type="number" name="participants_count" value="1" min="1"
+                            max="{{ tour.available_slots }}" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-check-circle"></i> Зарезервировать
+                    </button>
+                </form>
+                {% else %}
+                <p class="text-danger mb-0">
+                    <i class="bi bi-x-circle"></i> Мест нет.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="bi bi-chat-left-text"></i> Отзывы ({{ reviews|length }})
+            </div>
+            <div class="card-body">
+                {% if user.is_authenticated and user_reservation.status == 'confirmed' and not user_review %}
+                <form method="post" action="{% url 'add_review' tour.pk %}" class="mb-4">
+                    {% csrf_token %}
+                    <div class="mb-2">
+                        <label class="form-label fw-bold">Оставить отзыв:</label>
+                        {{ review_form.text }}
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Рейтинг:</label>
+                        <div>
+                            {% for radio in review_form.rating %}
+                            <div class="form-check form-check-inline">
+                                {{ radio.tag }}
+                                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                                    {{ radio.choice_label }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        <i class="bi bi-send"></i> Отправить
+                    </button>
+                </form>
+                {% endif %}
+
+                {% for review in reviews %}
+                <div class="border-bottom pb-2 mb-2">
+                    <div>
+                        <strong>{{ review.user.get_full_name|default:review.user.username }}</strong>
+                        <span class="rating-stars">
+                            {% for _ in "xxxxxxxxxx"|slice:review.rating %}★{% endfor %}
+                        </span>
+                        <span class="badge bg-secondary">{{ review.rating }}/10</span>
+                    </div>
+                    <small class="text-muted">{{ review.created_at|date:"d.m.Y H:i" }}</small>
+                    <p class="mb-1 mt-1">{{ review.text }}</p>
+                </div>
+                {% empty %}
+                <p class="text-muted mb-0">Пока нет отзывов.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
