@@ -1,0 +1,79 @@
+.tour-country {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.detail-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.review {
+  padding: 20px 0;
+  border-bottom: 1px solid #e2e6eb;
+}
+
+.review:last-child {
+  border-bottom: 0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.review-author {
+  font-weight: 600;
+}
+
+.review-rating {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.review-text {
+  margin: 10px 0;
+  color: #374559;
+  line-height: 1.55;
+}
+
+.review-date {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 960px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .detail-info {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Cars{% endblock %}
+
+{% block content %}
+  <div class="page-heading">
+    <h1>Автомобили</h1>
+    {% if user.is_staff %}
+      <a
+        class="add-button"
+        href="{% url 'car_create' %}"
+        aria-label="Добавить автомобиль"
+        title="Добавить автомобиль"
+      >+</a>
+    {% endif %}
+  </div>
+
+  <ul>
+    {% for car in cars %}
+      <li class="actions">
+        <a href="{% url 'car_detail' car.pk %}"><strong>{{ car }}</strong></a>
+        {% if user.is_staff %}
+          — <a href="{% url 'car_update' car.pk %}">Редактировать</a>
+          | <a href="{% url 'car_delete' car.pk %}">Удалить</a>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li>Автомобилей пока нет</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

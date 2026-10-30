@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Car owners{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <nav class="navbar">
+    <a class="navbar-brand" href="{% url 'owner_list' %}">Car Owners</a>
+
+    <div class="navbar-links">
+      <a href="{% url 'owner_list' %}">Владельцы</a>
+      <a href="{% url 'car_list' %}">Автомобили</a>
+    </div>
+
+    <div class="navbar-auth">
+      {% if user.is_authenticated %}
+        {% if user.is_staff %}
+          <span class="navbar-admin">Админ</span>
+        {% else %}
+          <span class="navbar-user">{{ user.username }}</span>
+        {% endif %}
+
+        <a
+          class="navbar-logout"
+          href="{% url 'logout' %}"
+          aria-label="Выйти"
+          title="Выйти"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M10 17v-2h4v-2h-4v-2l-4 3 4 3zm9-12H9a2 2 0 0 0-2 2v3h2V7h10v10H9v-3H7v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"
+            />
+          </svg>
+        </a>
+      {% else %}
+        <a class="navbar-login" href="{% url 'auth' %}">Вход / Регистрация</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="page">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

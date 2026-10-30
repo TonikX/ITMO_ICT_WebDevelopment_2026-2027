@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.sqlite3
+backend/test_db.sqlite3
+practice/db.sqlite3
+.env
+.venv/
+venv/
+backend/.env
+frontend/node_modules/
+frontend/dist/
+site/
+.DS_Store
+*.log

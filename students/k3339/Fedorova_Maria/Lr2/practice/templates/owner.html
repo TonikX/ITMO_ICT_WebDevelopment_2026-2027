@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Owner {{ owner.id }}{% endblock %}
+
+{% block content %}
+  <h1>Владелец #{{ owner.id }}</h1>
+
+  <div class="info-grid">
+    <div class="info-item"><strong>Логин</strong>{{ owner.username }}</div>
+    <div class="info-item"><strong>Имя</strong>{{ owner.first_name }}</div>
+    <div class="info-item"><strong>Фамилия</strong>{{ owner.last_name }}</div>
+    <div class="info-item"><strong>Дата рождения</strong>{{ owner.birth_date }}</div>
+    <div class="info-item"><strong>Паспорт</strong>{{ owner.passport_number }}</div>
+    <div class="info-item"><strong>Адрес</strong>{{ owner.home_address }}</div>
+    <div class="info-item"><strong>Национальность</strong>{{ owner.nationality }}</div>
+  </div>
+
+  <h2>Водительские удостоверения</h2>
+  <ul>
+    {% for license in owner.licenses.all %}
+      <li>{{ license.license_number }} — {{ license.license_type }} ({{ license.issue_date }})</li>
+    {% empty %}
+      <li>Нет удостоверений</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Автомобили</h2>
+  <ul>
+    {% for ownership in owner.ownerships.all %}
+      <li>
+        {{ ownership.car }} —
+        {{ ownership.start_date }}{% if ownership.end_date %} — {{ ownership.end_date }}{% endif %}
+      </li>
+    {% empty %}
+      <li>Нет автомобилей</li>
+    {% endfor %}
+  </ul>
+
+  <p><a href="{% url 'owner_list' %}">К списку владельцев</a></p>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Create owner{% endblock %}
+
+{% block content %}
+  <div class="modal-card">
+    <h1>Добавить владельца</h1>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Сохранить</button>
+    </form>
+    <p class="form-back"><a href="{% url 'owner_list' %}">Назад</a></p>
+  </div>
+{% endblock %}
