@@ -1,0 +1,133 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1>Журнал успеваемости</h1>
+    <p class="text-muted">
+        Общая таблица оценок учеников по домашним заданиям.
+    </p>
+</div>
+
+{% if request.user.is_staff %}
+<div class="card shadow-sm p-4 mb-4">
+    <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-8">
+            <label class="form-label">Выберите класс</label>
+
+            <select name="school_class" class="form-select">
+                {% for item in classes %}
+                    <option value="{{ item.pk }}"
+                        {% if selected_class and item.pk == selected_class.pk %}
+                            selected
+                        {% endif %}>
+                        {{ item.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Показать оценки
+            </button>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% if selected_class %}
+
+<div class="card shadow-sm p-4">
+    <h3 class="mb-3">
+        Класс {{ selected_class.name }}
+    </h3>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Ученик</th>
+
+                    {% for assignment in assignments %}
+                        <th>
+                            {{ assignment.title }}
+                            <div class="small text-muted fw-normal">
+                                {{ assignment.subject.name }}
+                            </div>
+                        </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td>
+                            {{ row.student.get_full_name() or row.student.username }}
+                        </td>
+
+                        {% for cell in row.cells %}
+                            <td>
+                                {% if cell.grade is not none %}
+                                    {% if request.user.is_staff %}
+                                        <a href="{{ url('grade_submission', pk=cell.submission.pk) }}"
+                                           class="badge bg-success text-decoration-none">
+                                            {{ cell.grade }}
+                                        </a>
+                                    {% else %}
+                                        <span class="badge bg-success">
+                                            {{ cell.grade }}
+                                        </span>
+                                    {% endif %}
+
+                                {% elif cell.submission %}
+                                    {% if request.user.is_staff %}
+                                        <a href="{{ url('grade_submission', pk=cell.submission.pk) }}"
+                                           class="badge bg-warning text-dark text-decoration-none">
+                                            Проверить
+                                        </a>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">
+                                            На проверке
+                                        </span>
+                                    {% endif %}
+
+                                {% else %}
+                                    <span class="text-muted">
+                                        —
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="{{ assignments|length + 1 }}"
+                            class="text-center text-muted">
+                            В классе пока нет учеников.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not assignments %}
+        <p class="text-muted mt-3">
+            Для этого класса пока нет домашних заданий.
+        </p>
+    {% endif %}
+</div>
+
+{% else %}
+
+<div class="alert alert-info">
+    Класс не найден или ещё не назначен.
+</div>
+
+{% endif %}
+
+{% endblock %}

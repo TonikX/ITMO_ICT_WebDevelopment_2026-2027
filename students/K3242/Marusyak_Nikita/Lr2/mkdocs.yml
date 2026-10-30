@@ -1,0 +1,9 @@
+site_name: Лабораторная работа №2 - Django
+site_description: Разработка сайта Homework Board
+
+theme:
+  name: readthedocs
+  locale: ru
+
+nav:
+  - Отчёт: index.md

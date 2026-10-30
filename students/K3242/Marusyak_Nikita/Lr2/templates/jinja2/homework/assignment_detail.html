@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="{{ url('home') }}" class="btn btn-outline-secondary mb-4">
+    Назад к заданиям
+</a>
+
+<div class="card shadow-sm p-4 mb-4">
+    <h2>{{ assignment.title }}</h2>
+
+    <p class="text-muted">
+        Предмет: {{ assignment.subject.name }}
+    </p>
+
+    <p>Класс: {{ assignment.school_class.name }}</p>
+
+    <hr>
+
+    <h5>Описание задания</h5>
+    <p style="white-space: pre-wrap;">{{ assignment.description }}</p>
+
+    <hr>
+
+    <p>
+        Срок сдачи:
+        {{ assignment.due_date.strftime('%d.%m.%Y %H:%M') }}
+    </p>
+</div>
+
+{% if request.user.is_staff %}
+
+<div class="card shadow-sm p-4">
+    <h3>Ответы учеников</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Ученик</th>
+                    <th>Дата сдачи</th>
+                    <th>Оценка</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in submissions %}
+                <tr>
+                    <td>{{ item.student.username }}</td>
+                    <td>
+                        {{ item.submitted_at.strftime('%d.%m.%Y %H:%M') }}
+                    </td>
+                    <td>
+                        {% if item.grade is not none %}
+                            {{ item.grade }}
+                        {% else %}
+                            Не оценено
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url('grade_submission', pk=item.pk) }}"
+                           class="btn btn-sm btn-primary">
+                            Проверить
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">
+                        Ответов пока нет
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% else %}
+
+<div class="card shadow-sm p-4">
+    <h3>Ваш ответ</h3>
+
+    {% if submission %}
+        <div class="alert alert-info mt-3">
+            Ответ отправлен:
+            {{ submission.submitted_at.strftime('%d.%m.%Y %H:%M') }}
+        </div>
+
+        {% if submission.grade is not none %}
+            <div class="alert alert-success">
+                Ваша оценка: {{ submission.grade }}
+            </div>
+
+            {% if submission.teacher_comment %}
+                <p>
+                    Комментарий преподавателя:
+                    {{ submission.teacher_comment }}
+                </p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+    {% if can_submit %}
+        <form method="post" class="mt-3">
+            {{ csrf_input }}
+
+            <div class="mb-3">
+                <label class="form-label">
+                    Ваш ответ
+                </label>
+
+                {{ form.answer }}
+
+                {% for error in form.answer.errors %}
+                    <div class="text-danger">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                {% if submission %}
+                    Сохранить изменения
+                {% else %}
+                    Отправить ответ
+                {% endif %}
+            </button>
+        </form>
+
+    {% elif not submission %}
+        <div class="alert alert-warning mt-3">
+            Срок сдачи задания истёк.
+        </div>
+
+    {% else %}
+        <div class="mt-3">
+            <h5>Отправленный ответ</h5>
+            <p style="white-space: pre-wrap;">{{ submission.answer }}</p>
+
+            {% if submission.grade is none %}
+                <div class="alert alert-secondary">
+                    Ответ ожидает проверки.
+                    Редактирование недоступно.
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

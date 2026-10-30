@@ -1,0 +1,128 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="mb-4">
+    <h1>Домашние задания</h1>
+    <p class="text-muted">
+        Просматривайте задания по предметам и срокам сдачи.
+    </p>
+</div>
+
+<div class="card shadow-sm p-4 mb-4">
+    <form method="get" class="row g-3">
+        <div class="col-md-6">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Поиск задания..."
+                value="{{ query }}"
+            >
+        </div>
+
+        <div class="col-md-4">
+            <select name="subject" class="form-select">
+                <option value="">Все предметы</option>
+
+                {% for subject in subjects %}
+                    <option
+                        value="{{ subject.id }}"
+                        {% if selected_subject == (subject.id|string) %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ subject.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                Найти
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-3">
+    {% for assignment in page_obj.object_list %}
+
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <span class="badge bg-primary mb-2">
+                        {{ assignment.subject.name }}
+                    </span>
+
+                    <span class="badge bg-secondary mb-2">
+                        {{ assignment.school_class.name }}
+                    </span>
+
+                    <h5 class="card-title">
+                        {{ assignment.title }}
+                    </h5>
+
+                    <p class="card-text text-muted">
+                        {{ assignment.description|truncate(150) }}
+                    </p>
+
+                    <p class="small mb-0">
+                        Срок сдачи:
+                        {{ assignment.due_date.strftime('%d.%m.%Y %H:%M') }}
+                    </p>
+
+                    <a href="{{ url('assignment_detail', pk=assignment.pk) }}"
+                       class="btn btn-outline-primary mt-3">
+                        Открыть задание
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+
+        <div class="col-12">
+            <div class="alert alert-info">
+                Задания не найдены.
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+
+    <span class="text-muted">
+        Страница {{ page_obj.number }}
+        из {{ page_obj.paginator.num_pages }}
+    </span>
+
+    <div class="d-flex gap-2">
+
+        {% if page_obj.has_previous() %}
+            <a
+                class="btn btn-outline-primary"
+                href="?q={{ query|urlencode }}&subject={{ selected_subject }}&page={{ page_obj.previous_page_number() }}"
+            >
+                Назад
+            </a>
+        {% endif %}
+
+        {% if page_obj.has_next() %}
+            <a
+                class="btn btn-outline-primary"
+                href="?q={{ query|urlencode }}&subject={{ selected_subject }}&page={{ page_obj.next_page_number() }}"
+            >
+                Вперёд
+            </a>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
