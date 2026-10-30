@@ -1,0 +1,32 @@
+{% extends 'homework/base.html' %}
+{% block title %}{{ homework.subject.subject_name }} · Домашнее задание{% endblock %}
+{% block content %}
+<h1>{{ homework.subject.subject_name }}</h1>
+<p class="info">Учебная группа: <strong>{{ homework.study_group.group_name }}</strong></p>
+<p><strong>Преподаватель:</strong> {{ homework.teacher.get_full_name() or homework.teacher.username }}</p>
+<p><strong>Дата выдачи:</strong> {{ homework.issue_at.strftime('%d.%m.%Y') }}</p>
+<p><strong>Срок сдачи:</strong> {{ homework.deadline.strftime('%d.%m.%Y') }}</p>
+<h2>Текст задания</h2>
+<p class="multiline">{{ homework.description }}</p>
+<h2>Информация о штрафах</h2>
+<p class="multiline">{{ homework.penalty_info or 'Штрафы не предусмотрены' }}</p>
+<h2>Мой ответ</h2>
+<div class="submission-summary">
+    <p><strong>Статус:</strong> {{ submission_status }}</p>
+    <p><strong>Оценка:</strong> {{ grade_display }}</p>
+</div>
+{% if submission %}
+    <p class="multiline">{{ submission.answer_text }}</p>
+    <p><strong>Дата отправки:</strong> {{ submitted_at_local.strftime('%d.%m.%Y, %H:%M') }}</p>
+    <p>Ответ уже отправлен. Повторная сдача недоступна.</p>
+{% else %}
+    <form method="post" action="{{ url('homework:homework_detail', args=[homework.pk]) }}">
+        {{ csrf_input }}
+        {{ form.as_p() }}
+        <button class="button" type="submit">Сдать задание</button>
+    </form>
+{% endif %}
+<div class="actions">
+    <a class="button secondary" href="{{ url('homework:homeworks') }}">Назад к списку заданий</a>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'homework/base.html' %}
+{% block title %}Вход · Доска домашних заданий{% endblock %}
+{% block content %}
+<h1>Вход</h1>
+<p>Используйте свой логин и пароль. Сайт сам откроет раздел для вашей роли.</p>
+<form method="post" class="account-form">
+    {{ csrf_input }}
+    {{ form.as_p() }}
+    <button type="submit" class="button">Войти</button>
+</form>
+<p>Ученикам без аккаунта: <a href="{{ url('homework:register') }}">зарегистрироваться</a>.</p>
+{% endblock %}

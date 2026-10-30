@@ -1,0 +1,11 @@
+
+{% extends 'homework/base.html' %}
+{% block content %}
+<h1>Доска домашних заданий</h1>
+<p>Добро пожаловать в учебный портал!</p>
+<p>Здесь ученики могут просматривать домашние задания своей группы, а преподаватели — управлять учебными материалами.</p>
+<div class="actions">
+    <a class="button" href="{{ url('homework:login') }}">Войти</a>
+    <a class="button secondary" href="{{ url('homework:register') }}">Зарегистрироваться</a>
+</div>
+{% endblock %}

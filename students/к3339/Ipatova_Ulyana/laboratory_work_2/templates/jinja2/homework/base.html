@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Доска домашних заданий{% endblock %}</title>
+    <link rel="stylesheet" href="{{ static('css/style.css') }}?v=filters-3">
+</head>
+<body>
+    <div class="container">
+        <header class="site-header">
+            <a class="site-title" href="{{ url('homework:index') }}">Учебный портал</a>
+            <nav aria-label="Навигация">
+                {% if request.user.is_authenticated %}
+                    <span>{{ request.user.username }} · {% if request.user.is_superuser %}Администратор{% elif request.user.is_staff %}Преподаватель{% else %}Ученик{% endif %}</span>
+                    <form method="post" action="{{ url('homework:logout') }}">
+                        {{ csrf_input }}
+                        <button type="submit" class="button secondary">Выйти</button>
+                    </form>
+                {% elif request.resolver_match.view_name != 'homework:index' %}
+                    <a href="{{ url('homework:login') }}">Вход</a>
+                    <a href="{{ url('homework:register') }}">Регистрация</a>
+                {% endif %}
+            </nav>
+        </header>
+        <main>{% block content %}{% endblock %}</main>
+    </div>
+</body>
+</html>

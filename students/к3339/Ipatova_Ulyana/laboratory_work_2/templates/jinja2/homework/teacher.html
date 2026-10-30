@@ -1,0 +1,81 @@
+{% extends 'homework/base.html' %}
+{% block title %}Кабинет преподавателя · Доска домашних заданий{% endblock %}
+{% block content %}
+<h1>Кабинет преподавателя</h1>
+<p>Здравствуйте, {{ request.user.first_name or request.user.username }}!</p>
+<p class="info">Вы вошли как преподаватель.</p>
+<div class="actions">
+    {% if request.user.has_perm('homework.add_homework') %}
+        <a class="button" href="{{ url('homework:teacher_homework_create') }}">Создать домашнее задание</a>
+    {% endif %}
+    <a class="button secondary" href="{{ url('admin:index') }}">Перейти в Django Admin</a>
+</div>
+{% if request.user.has_perm('homework.view_homework') and request.user.has_perm('homework.view_submission') %}
+    <h2>Журнал оценок</h2>
+    <a class="button secondary" href="{{ url('homework:grades') }}{% if selected_group %}?group={{ selected_group.pk }}{% endif %}">Открыть журнал оценок</a>
+{% endif %}
+<h2>Мои домашние задания</h2>
+{% if request.user.has_perm('homework.view_homework') %}
+    <form method="get" action="{{ url('homework:teacher') }}" class="homework-filter">
+        <div class="search-field">
+            <label for="homework-search">Поиск домашних заданий</label>
+            <input id="homework-search" name="q" type="search" value="{{ query }}" placeholder="Введите предмет или текст задания">
+        </div>
+        <div>
+            <label for="homework-group">Учебная группа</label>
+            <select id="homework-group" name="group" onchange="this.form.submit()">
+                <option value="" {% if not selected_group %}selected{% endif %}>Все домашние задания</option>
+                {% for group in study_groups %}
+                    <option value="{{ group.pk }}" {% if selected_group and selected_group.pk == group.pk %}selected{% endif %}>{{ group.group_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="homework-subject">Дисциплина</label>
+            <select id="homework-subject" name="subject" onchange="this.form.submit()">
+                <option value="">Все дисциплины</option>
+                {% for subject in subjects %}
+                    <option value="{{ subject.pk }}" {% if selected_subject and selected_subject.pk == subject.pk %}selected{% endif %}>{{ subject.subject_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="homework-status">Статус проверки</label>
+            <select id="homework-status" name="status" onchange="this.form.submit()">
+                <option value="">Все задания</option>
+                {% for value, label in status_labels.items() %}
+                    <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="actions">
+            <button class="button" type="submit">Найти</button>
+            <a href="{{ url('homework:teacher') }}">Сбросить фильтры</a>
+        </div>
+    </form>
+    {% if not study_groups %}
+        <p class="info">У вас пока нет учебных групп с назначенными заданиями</p>
+    {% endif %}
+    {% for homework in homeworks %}
+        <article class="homework-card">
+            <h3>{{ homework.subject.subject_name }} · {{ homework.study_group.group_name }}</h3>
+            <p>{{ homework.description|truncate(200) }}</p>
+            <p>Дата выдачи: {{ homework.issue_at.strftime('%d.%m.%Y') }} · Срок сдачи: {{ homework.deadline.strftime('%d.%m.%Y') }}</p>
+            <p>Отправили ответы: {{ homework.submission_count }}</p>
+            <div class="actions">
+                {% if request.user.has_perm('homework.view_submission') %}
+                    <a class="button" href="{{ url('homework:teacher_submissions', args=[homework.pk]) }}">Посмотреть ответы</a>
+                {% endif %}
+                {% if request.user.has_perm('homework.change_homework') %}
+                    <a class="button secondary" href="{{ url('homework:teacher_homework_edit', args=[homework.pk]) }}">Редактировать</a>
+                {% endif %}
+            </div>
+        </article>
+    {% else %}
+        <p class="info">{% if filters_active %}По вашему запросу домашние задания не найдены{% else %}У вас пока нет домашних заданий{% endif %}</p>
+    {% endfor %}
+    {% include 'homework/pagination.html' %}
+{% else %}
+    <p class="info">Администратор ещё не выдал разрешение на просмотр заданий.</p>
+{% endif %}
+{% endblock %}

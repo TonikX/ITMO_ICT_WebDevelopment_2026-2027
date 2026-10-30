@@ -1,0 +1,63 @@
+{% extends 'homework/base.html' %}
+{% block title %}Журнал оценок · Доска домашних заданий{% endblock %}
+{% block content %}
+<h1>Журнал оценок</h1>
+{% if not is_student %}
+    {% if available_groups %}
+        <form method="get" class="journal-filter">
+            <div>
+                <label for="group">Учебная группа</label>
+                <select id="group" name="group" onchange="this.form.submit()">
+                    {% for group in available_groups %}
+                        <option value="{{ group.pk }}" {% if study_group and study_group.pk == group.pk %}selected{% endif %}>{{ group.group_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    {% elif request.user.is_superuser %}
+        <p class="info">Учебных групп пока нет</p>
+    {% else %}
+        <p class="info">У вас пока нет учебных групп с назначенными заданиями</p>
+    {% endif %}
+{% endif %}
+{% if study_group %}
+    <p class="info">Учебная группа: <strong>{{ study_group.group_name }}</strong></p>
+    {% if not students %}<p>В этой группе пока нет учеников</p>{% endif %}
+    {% if not homeworks %}<p>Для этой группы пока нет домашних заданий</p>{% endif %}
+    {% if students and homeworks %}
+        <p>Прочерк «—» означает, что работа не сдана или оценка ещё не выставлена.</p>
+        <div class="journal-scroll" role="region" aria-label="Таблица оценок" tabindex="0">
+            <table class="journal-table">
+                <caption>Оценки учеников группы {{ study_group.group_name }}</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Ученик</th>
+                        {% for homework in homeworks %}
+                            <th scope="col">
+                                {{ homework.subject.subject_name }}<br>
+                                <span class="journal-note">ДЗ №{{ homework.pk }}<br>{{ homework.deadline.strftime('%d.%m.%Y') }}</span>
+                                {% if request.user.is_staff and not request.user.is_superuser and homework.teacher_id == request.user.pk and request.user.has_perm('homework.view_submission') %}
+                                    <br><a href="{{ url('homework:teacher_submissions', args=[homework.pk]) }}">Посмотреть ответы</a>
+                                {% endif %}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr {% if row.is_current_user %}class="current-user"{% endif %}>
+                            <th scope="row">{{ row.name }}{% if row.is_current_user %} (вы){% endif %}</th>
+                            {% for grade in row.grades %}
+                                <td>{% if grade is none %}<span class="journal-note">—</span>{% else %}<strong>{{ grade }}</strong>{% endif %}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endif %}
+<div class="actions">
+    <a class="button secondary" href="{{ url(back_view) }}">{% if is_student %}Назад к домашним заданиям{% elif request.user.is_superuser %}Назад в Django Admin{% else %}Назад в кабинет{% endif %}</a>
+</div>
+{% endblock %}
