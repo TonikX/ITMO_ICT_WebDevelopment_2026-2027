@@ -1,0 +1,100 @@
+.filters {
+  margin-bottom: 34px;
+  padding: 24px;
+
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr auto;
+  gap: 14px;
+  align-items: end;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+.filters-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.doctor-card {
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-specialty {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.doctor-meta {
+  margin: 18px 0 22px;
+  padding-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  border-top: 1px solid #e2e6eb;
+  color: #5f6a78;
+  font-size: 13px;
+}
+
+.doctor-card-footer {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+}
+
+.pagination-label {
+  min-width: 90px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pagination-arrow {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: white;
+  color: var(--text);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.pagination-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media (max-width: 720px) {
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .doctors-grid {
+    grid-template-columns: 1fr;
+  }
+}

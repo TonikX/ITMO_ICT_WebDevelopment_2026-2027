@@ -1,0 +1,55 @@
+.appointment-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.appointment-meta {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  color: #5f6a78;
+  font-size: 13px;
+}
+
+.appointment-diagnosis {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.appointment-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.appointment-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.diagnose-form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.diagnose-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .appointment-card {
+    flex-direction: column;
+  }
+
+  .appointment-actions {
+    align-items: flex-start;
+  }
+}

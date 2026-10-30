@@ -1,0 +1,25 @@
+.auth-layout {
+  min-height: calc(100vh - 76px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 48px 24px;
+}
+
+.auth-card {
+  width: min(520px, 100%);
+}
+
+.auth-card .page-title {
+  margin-bottom: 36px;
+}
+
+.auth-form {
+  gap: 10px;
+}
+
+.auth-form .form-group {
+  gap: 6px;
+}
