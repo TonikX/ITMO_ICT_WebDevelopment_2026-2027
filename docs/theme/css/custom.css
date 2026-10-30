@@ -1,0 +1,6 @@
+.md-typeset hr {
+    height: 4px; /* Толщина линии */
+    background-color: var(--md-primary-fg-color); /* Автоматически возьмет ваш цвет indigo */
+    border: none;
+    margin: 2em 0;
+}
