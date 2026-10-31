@@ -1,0 +1,31 @@
+﻿<head>
+    <title>Доска домашних заданий</title>
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+<nav>
+    <a href="/Homework/Index">Домашние задания</a>
+    <a href="/Homework/Grades">Оценки</a>
+
+    @if (User.IsInRole("Teacher"))
+    {
+        <a href="/Teacher/Index">Проверить работы</a>
+    }
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <form method="post" action="/Account/Logout">
+            <button type="submit">Выйти</button>
+        </form>
+    }
+    else
+    {
+        <a href="/Account/Login">Войти</a>
+        <a href="/Account/Register">Регистрация</a>
+    }
+</nav>
+
+<main>
+    @RenderBody()
+</main>
+</body>

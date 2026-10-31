@@ -1,0 +1,12 @@
+@model int
+
+<h2>Сдать домашнее задание</h2>
+
+<form method="post" action="/Submission/Create">
+    <input type="hidden" name="homeworkId" value="@Model" />
+
+    <label>Ответ:</label>
+    <textarea name="answer" required></textarea>
+
+    <button type="submit">Отправить</button>
+</form>

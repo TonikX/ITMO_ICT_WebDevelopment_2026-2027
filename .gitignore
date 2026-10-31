@@ -216,3 +216,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# MkDocs
+site/
+
+# Python environment for MkDocs
+.venv/
+__pycache__/
+
+# C# / .NET build artifacts
+bin/
+obj/
+
+# JetBrains Rider
+.idea/
+
+# macOS
+.DS_Store
+/students/K3340/Avdienko_Danila/laboratory_work_2/Lab2HWTable/appsettings.Development.json

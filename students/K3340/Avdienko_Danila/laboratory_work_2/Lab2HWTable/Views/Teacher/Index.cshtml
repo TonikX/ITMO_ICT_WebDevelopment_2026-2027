@@ -1,0 +1,18 @@
+@model List<Lab2HWTable.Models.Submission>
+
+<h2>Сданные работы</h2>
+
+@foreach (var submission in Model)
+{
+    <p>Предмет: @submission.Homework.Subject</p>
+    <p>Ученик: @ViewBag.Students[submission.StudentId]</p>
+    <p>Ответ: @submission.Answer</p>
+    <p>Оценка: @submission.Grade</p>
+
+    <form method="post" action="/Teacher/Grade">
+        <input type="hidden" name="id" value="@submission.Id" />
+        <input type="number" name="grade" required />
+        <button type="submit">Поставить оценку</button>
+    </form>
+    <hr/>
+}
