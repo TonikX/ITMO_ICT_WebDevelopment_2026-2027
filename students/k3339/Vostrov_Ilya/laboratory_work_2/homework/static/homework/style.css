@@ -1,0 +1,29 @@
+/* Дополнительные стили поверх Bootstrap (учебный проект) */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.card {
+    border-radius: 0.65rem;
+}
+
+article.card .h5 {
+    line-height: 1.35;
+}
+
+/* Колонка "Текст решения" не растягивает таблицу */
+.table td {
+    vertical-align: middle;
+}
+
+.pagination .page-link {
+    border-radius: 0.4rem;
+    margin: 0 0.15rem;
+}

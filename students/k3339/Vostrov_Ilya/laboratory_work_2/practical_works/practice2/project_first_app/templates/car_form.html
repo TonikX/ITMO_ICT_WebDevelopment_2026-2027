@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Форма автомобиля{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h1 class="h4 mb-0">{{ view.title|default:'Автомобиль' }}</h1>
+    </div>
+    <div class="card-body">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a class="btn btn-outline-secondary" href="{% url 'car_list' %}">Отмена</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ object }} — автомобиль{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h1 class="h4 mb-0">Автомобиль #{{ object.pk }}</h1>
+      <a class="btn btn-sm btn-outline-primary" href="{% url 'car_list' %}">← ко всем</a>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Марка</span><span>{{ object.brand }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Модель</span><span>{{ object.model }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Цвет</span><span>{{ object.color }}</span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="text-muted">Гос. номер</span><span>{{ object.state_number }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="text-muted d-block">Владельцы</span>
+        {% for o in object.ownerships.select_related %}
+          <div>{{ o.owner.last_name }} {{ o.owner.first_name }} —
+            {{ o.start_date|date:'d.m.Y' }}
+            {% if o.end_date %}— {{ o.end_date|date:'d.m.Y' }}{% else %}— по настоящее время{% endif %}
+          </div>
+        {% empty %}
+          <span>нет данных</span>
+        {% endfor %}
+      </li>
+    </ul>
+  </div>
+{% endblock %}

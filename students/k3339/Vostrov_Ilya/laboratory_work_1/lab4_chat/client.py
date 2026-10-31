@@ -23,10 +23,7 @@ def main():
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
         client.connect(SERVER)
-        # построчно буферизованный поток для записи,
-        # чтобы каждое сообщение уходило отдельной строкой
-        writer = client.makefile('w', encoding='utf-8', buffering=1)
-        writer.write(nickname + '\n')
+        client.sendall((nickname + '\n').encode('utf-8'))
 
         threading.Thread(
             target=listener,
@@ -36,10 +33,13 @@ def main():
 
         print(f'Вы в чате {SERVER[0]}:{SERVER[1]}. Команда {LEAVE_COMMAND} — выход.')
         while True:
-            text = input('> ')
-            writer.write(text + '\n')
-            if text.strip() == LEAVE_COMMAND:
+            text = input('> ').strip()
+
+            if text == LEAVE_COMMAND:
+                client.sendall((LEAVE_COMMAND + '\n').encode('utf-8'))
                 break
+            if text:
+                client.sendall((text + '\n').encode('utf-8'))
 
     print('Вы вышли из чата.')
 

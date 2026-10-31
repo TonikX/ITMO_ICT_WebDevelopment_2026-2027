@@ -19,7 +19,7 @@ class ChatRoom:
     def join(self, connection, nickname, address):
         with self.guard:
             self.members[connection] = nickname
-        print(f'{nickname} вошёл в чат с {address[0]}:{address[1]}')
+        print(f'{nickname} вошёл в чат с {address[0]}:{address[1]}', flush=True)
         self.notify(f'* {nickname} присоединился', exclude=connection)
 
     def leave(self, connection, nickname):
@@ -27,7 +27,7 @@ class ChatRoom:
             was_present = self.members.pop(connection, None) is not None
         connection.close()
         if was_present:
-            print(f'{nickname} покинул чат')
+            print(f'{nickname} покинул чат', flush=True)
             self.notify(f'* {nickname} покинул чат', exclude=connection)
 
     def notify(self, text, exclude=None):
@@ -57,7 +57,7 @@ def chat_session(connection, address):
             if text == '/quit':
                 break
             if text:
-                print(f'{nickname}: {text}')
+                print(f'{nickname}: {text}', flush=True)
                 room.notify(f'{nickname}: {text}', exclude=connection)
     finally:
         room.leave(connection, nickname)
