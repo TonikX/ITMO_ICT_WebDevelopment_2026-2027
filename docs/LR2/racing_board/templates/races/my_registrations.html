@@ -1,0 +1,69 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Мои заявки | Racing Board{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="fw-bold">Мои заявки</h1>
+    <p class="text-secondary">
+        Список гонок, на участие в которых ты подал заявку.
+    </p>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% for registration in registrations %}
+            <div class="border-bottom py-3">
+                <div class="d-flex flex-wrap justify-content-between gap-2">
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            {{ registration.race.name }}
+                        </h5>
+
+                        <p class="text-secondary mb-1">
+                            {{ registration.race.location }}
+                        </p>
+
+                        <p class="mb-0">
+                            Дата гонки:
+                            {{ registration.race.start_date|date:"d.m.Y H:i" }}
+                        </p>
+
+                        <small class="text-secondary">
+                            Заявка подана:
+                            {{ registration.registered_at|date:"d.m.Y H:i" }}
+                        </small>
+                    </div>
+
+                    <div>
+                        {% if registration.status == 'approved' %}
+                            <span class="badge text-bg-success">
+                                Подтверждена
+                            </span>
+                        {% elif registration.status == 'rejected' %}
+                            <span class="badge text-bg-danger">
+                                Отклонена
+                            </span>
+                        {% else %}
+                            <span class="badge text-bg-warning">
+                                На рассмотрении
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="text-center py-4">
+                <h5>Заявок пока нет</h5>
+                <p class="text-secondary">
+                    Выбери гонку и подай заявку на участие.
+                </p>
+                <a href="{% url 'race_list' %}" class="btn btn-primary">
+                    Перейти к гонкам
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
