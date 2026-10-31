@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Проданные туры{% endblock %}
+
+{% block content %}
+<h1>Проданные туры по странам</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Страна</th>
+            <th>Тур</th>
+            <th>Турагентство</th>
+            <th>Период</th>
+            <th>Покупатель</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.tour.country }}</td>
+                <td><a href="{% url 'tour_detail' reservation.tour.pk %}">{{ reservation.tour }}</a></td>
+                <td>{{ reservation.tour.agency }}</td>
+                <td>{{ reservation.tour.start_date }} — {{ reservation.tour.end_date }}</td>
+                <td>{{ reservation.user }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Подтверждённых бронирований пока нет.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

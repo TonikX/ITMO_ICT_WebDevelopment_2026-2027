@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Туры{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>Туры</h1>
+        <p>Выберите подходящую страну и даты путешествия.</p>
+    </div>
+</div>
+
+<form class="filters" method="get">
+    <input type="search" name="q" value="{{ query }}" placeholder="Поиск по турам">
+    <select name="country">
+        <option value="">Все страны</option>
+        {% for country in countries %}
+            <option value="{{ country.pk }}" {% if selected_country == country.pk|stringformat:"s" %}selected{% endif %}>
+                {{ country.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Найти</button>
+    <a class="button secondary" href="{% url 'tour_list' %}">Сбросить</a>
+</form>
+
+<div class="cards">
+    {% for tour in tours %}
+        <article class="card">
+            <span class="badge">{{ tour.country }}</span>
+            <h2><a href="{% url 'tour_detail' tour.pk %}">{{ tour.name }}</a></h2>
+            <p><strong>Агентство:</strong> {{ tour.agency }}</p>
+            <p><strong>Даты:</strong> {{ tour.start_date }} — {{ tour.end_date }}</p>
+            <p>{{ tour.description|truncatewords:24 }}</p>
+            <a class="button" href="{% url 'tour_detail' tour.pk %}">Подробнее</a>
+        </article>
+    {% empty %}
+        <p>Туры не найдены.</p>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ query }}&country={{ selected_country }}">Назад</a>
+        {% endif %}
+        <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&q={{ query }}&country={{ selected_country }}">Вперёд</a>
+        {% endif %}
+    </div>
+{% endif %}
+{% endblock %}

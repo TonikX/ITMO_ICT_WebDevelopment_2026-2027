@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Удаление автомобиля{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <h1>Удалить автомобиль</h1>
+    <p>Удалить {{ object }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="danger" type="submit">Удалить</button>
+        <a class="button secondary" href="{% url 'car_detail' object.pk %}">Отмена</a>
+    </form>
+</section>
+{% endblock %}

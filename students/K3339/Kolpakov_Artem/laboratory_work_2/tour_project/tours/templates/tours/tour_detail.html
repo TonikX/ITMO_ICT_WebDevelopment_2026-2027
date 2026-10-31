@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tour.name }}{% endblock %}
+
+{% block content %}
+<article class="card detail-card">
+    <span class="badge">{{ tour.country }}</span>
+    <h1>{{ tour.name }}</h1>
+    <p><strong>Турагентство:</strong> {{ tour.agency }}</p>
+    <p><strong>Период:</strong> {{ tour.start_date }} — {{ tour.end_date }}</p>
+    <p>{{ tour.description }}</p>
+    <h2>Условия оплаты</h2>
+    <p>{{ tour.payment_terms }}</p>
+
+    {% if user.is_authenticated %}
+        <div class="actions">
+            <form method="post" action="{% url 'reserve_tour' tour.pk %}">
+                {% csrf_token %}
+                <button type="submit">Забронировать</button>
+            </form>
+            <a class="button secondary" href="{% url 'review_create' tour.pk %}">Оставить отзыв</a>
+        </div>
+    {% else %}
+        <p><a href="{% url 'login' %}">Войдите</a>, чтобы забронировать тур или оставить отзыв.</p>
+    {% endif %}
+</article>
+
+<h2>Отзывы</h2>
+<div class="cards">
+    {% for review in tour.reviews.all %}
+        <article class="card">
+            <p><strong>{{ review.user }}</strong> — оценка {{ review.rating }}/10</p>
+            <p>Даты поездки: {{ review.start_date }} — {{ review.end_date }}</p>
+            <p>{{ review.text }}</p>
+        </article>
+    {% empty %}
+        <p>Отзывов пока нет.</p>
+    {% endfor %}
+</div>
+{% endblock %}

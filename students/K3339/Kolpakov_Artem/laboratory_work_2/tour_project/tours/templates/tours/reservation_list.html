@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Бронирования{% endblock %}
+
+{% block content %}
+<h1>{% if user.is_staff %}Все бронирования{% else %}Мои бронирования{% endif %}</h1>
+
+<table>
+    <thead>
+        <tr>
+            {% if user.is_staff %}<th>Пользователь</th>{% endif %}
+            <th>Тур</th>
+            <th>Страна</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                {% if user.is_staff %}<td>{{ reservation.user }}</td>{% endif %}
+                <td><a href="{% url 'tour_detail' reservation.tour.pk %}">{{ reservation.tour }}</a></td>
+                <td>{{ reservation.tour.country }}</td>
+                <td>
+                    {% if reservation.is_confirmed %}
+                        <span class="status confirmed">Подтверждено</span>
+                    {% else %}
+                        <span class="status">Ожидает подтверждения</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="actions">
+                        {% if reservation.user == user %}
+                            <a href="{% url 'reservation_update' reservation.pk %}">Изменить</a>
+                            <a href="{% url 'reservation_delete' reservation.pk %}">Удалить</a>
+                        {% endif %}
+                        {% if user.is_staff and not reservation.is_confirmed %}
+                            <form method="post" action="{% url 'reservation_confirm' reservation.pk %}">
+                                {% csrf_token %}
+                                <button type="submit">Подтвердить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Бронирований пока нет.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

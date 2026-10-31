@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ owner }}{% endblock %}
+
+{% block content %}
+<h1>{{ owner }}</h1>
+
+<section class="card detail-card">
+    <p><strong>Имя пользователя:</strong> {{ owner.username }}</p>
+    <p><strong>Дата рождения:</strong> {{ owner.birth_date|default:"Не указана" }}</p>
+    <p><strong>Номер паспорта:</strong> {{ owner.passport_number }}</p>
+    <p><strong>Домашний адрес:</strong> {{ owner.home_address }}</p>
+    <p><strong>Национальность:</strong> {{ owner.nationality }}</p>
+</section>
+
+<h2>Водительские удостоверения</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Категория</th>
+            <th>Дата выдачи</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for license in owner.driver_licenses.all %}
+            <tr>
+                <td>{{ license.number }}</td>
+                <td>{{ license.category }}</td>
+                <td>{{ license.issue_date }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">Удостоверений нет.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Автомобили</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Автомобиль</th>
+            <th>Начало владения</th>
+            <th>Окончание владения</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ownership in owner.ownerships.all %}
+            <tr>
+                <td><a href="{% url 'car_detail' ownership.car.pk %}">{{ ownership.car }}</a></td>
+                <td>{{ ownership.start_date }}</td>
+                <td>{{ ownership.end_date|default:"По настоящее время" }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">Автомобилей нет.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

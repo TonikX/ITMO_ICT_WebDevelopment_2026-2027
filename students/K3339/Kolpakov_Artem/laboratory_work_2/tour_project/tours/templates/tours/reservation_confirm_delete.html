@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Удаление бронирования{% endblock %}
+
+{% block content %}
+<section class="form-card">
+    <h1>Удалить бронирование</h1>
+    <p>Удалить бронирование тура «{{ object.tour }}»?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="danger" type="submit">Удалить</button>
+        <a class="button secondary" href="{% url 'reservation_list' %}">Отмена</a>
+    </form>
+</section>
+{% endblock %}

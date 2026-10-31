@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ car }}{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>{{ car.brand }} {{ car.model_name }}</h1>
+    {% if user.is_authenticated %}
+        <div class="actions">
+            <a class="button" href="{% url 'car_update' car.pk %}">Изменить</a>
+            <a class="button danger" href="{% url 'car_delete' car.pk %}">Удалить</a>
+        </div>
+    {% endif %}
+</div>
+
+<section class="card detail-card">
+    <p><strong>Государственный номер:</strong> {{ car.registration_number }}</p>
+    <p><strong>Марка:</strong> {{ car.brand }}</p>
+    <p><strong>Модель:</strong> {{ car.model_name }}</p>
+    <p><strong>Цвет:</strong> {{ car.color }}</p>
+</section>
+
+<h2>История владения</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Владелец</th>
+            <th>Дата начала</th>
+            <th>Дата окончания</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ownership in car.ownerships.all %}
+            <tr>
+                <td><a href="{% url 'owner_detail' ownership.owner.pk %}">{{ ownership.owner }}</a></td>
+                <td>{{ ownership.start_date }}</td>
+                <td>{{ ownership.end_date|default:"По настоящее время" }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">Данных о владельцах нет.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

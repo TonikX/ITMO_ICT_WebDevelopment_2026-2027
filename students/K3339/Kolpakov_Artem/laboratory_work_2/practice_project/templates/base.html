@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Практические задания 2.1–2.3{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a class="logo" href="{% url 'practice_home' %}">Автовладельцы</a>
+            <div class="nav-links">
+                <a href="{% url 'owner_list' %}">Владельцы</a>
+                <a href="{% url 'car_list' %}">Автомобили</a>
+
+                {% if user.is_authenticated %}
+                    <span class="username">{{ user.username }}</span>
+                    <a href="{% url 'logout' %}">Выйти</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Войти</a>
+                    <a href="{% url 'register' %}">Регистрация</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

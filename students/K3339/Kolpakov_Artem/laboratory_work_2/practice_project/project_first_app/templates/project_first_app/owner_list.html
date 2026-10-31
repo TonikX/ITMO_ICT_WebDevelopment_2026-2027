@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Владельцы автомобилей{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>Владельцы автомобилей</h1>
+        <p>Список пользователей и их автомобилей.</p>
+    </div>
+    <a class="button" href="{% url 'register' %}">Добавить владельца</a>
+</div>
+
+<div class="cards">
+    {% for owner in owners %}
+        <article class="card">
+            <h2><a href="{% url 'owner_detail' owner.pk %}">{{ owner }}</a></h2>
+            <p><strong>Паспорт:</strong> {{ owner.passport_number }}</p>
+            <p><strong>Адрес:</strong> {{ owner.home_address }}</p>
+            <p><strong>Национальность:</strong> {{ owner.nationality }}</p>
+        </article>
+    {% empty %}
+        <p>Владельцев пока нет.</p>
+    {% endfor %}
+</div>
+{% endblock %}
