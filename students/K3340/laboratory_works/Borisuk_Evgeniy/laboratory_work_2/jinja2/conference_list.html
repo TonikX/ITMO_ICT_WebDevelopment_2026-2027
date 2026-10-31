@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="eyebrow">КАТАЛОГ МЕРОПРИЯТИЙ</p>
+<h1>Научные конференции</h1>
+<p class="lead">Выберите конференцию, зарегистрируйте выступление и узнайте результат.</p>
+<form method="get" class="filters panel">
+  <div><label for="q">Поиск по названию, описанию и месту</label><input id="q" name="q" value="{{ query }}" placeholder="Название или город"></div>
+  <div><label for="topic">Тематика</label><select id="topic" name="topic"><option value="">Все тематики</option>
+  {% for topic in topics %}<option value="{{ topic.pk }}" {% if selected_topic == topic.pk|string %}selected{% endif %}>{{ topic.name }}</option>{% endfor %}
+  </select></div><button>Найти</button><a href="{{ url('conference_list') }}">Сбросить</a>
+</form>
+<div class="grid">
+{% for conference in page %}
+<article class="panel card">
+  <p class="muted">{{ conference.start_date.strftime('%d.%m.%Y') }} — {{ conference.end_date.strftime('%d.%m.%Y') }}</p>
+  <h2><a href="{{ url('conference_detail', args=[conference.pk]) }}">{{ conference.title }}</a></h2>
+  <p>{{ conference.location }}</p>
+  <div>{% for topic in conference.topics.all() %}<span class="badge">{{ topic.name }}</span>{% endfor %}</div>
+  <p>{{ conference.description|truncate(170) }}</p>
+  <a href="{{ url('conference_detail', args=[conference.pk]) }}">Подробнее →</a>
+</article>
+{% else %}<p class="panel">Конференции не найдены. Измените параметры поиска.</p>{% endfor %}
+</div>
+{% if page.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Страницы каталога">
+{% if page.has_previous() %}<a class="button secondary" href="?{{ pagination_query }}&page={{ page.previous_page_number() }}">Назад</a>{% endif %}
+<span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+{% if page.has_next() %}<a class="button secondary" href="?{{ pagination_query }}&page={{ page.next_page_number() }}">Далее</a>{% endif %}
+</nav>{% endif %}
+{% endblock %}

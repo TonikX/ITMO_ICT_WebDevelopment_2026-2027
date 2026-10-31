@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block content %}<h1>{{ object }}</h1><div class="panel"><p>Марка: {{ object.brand }}</p><p>Модель: {{ object.model_name }}</p><p>Цвет: {{ object.color or 'Не указан' }}</p></div>
+<a class="button" href="{{ url('practice:car_edit', args=[object.pk]) }}">Редактировать</a><a class="button secondary" href="{{ url('practice:car_delete', args=[object.pk]) }}">Удалить</a>
+<a href="{{ url('practice:car_list') }}">К списку автомобилей</a>{% endblock %}

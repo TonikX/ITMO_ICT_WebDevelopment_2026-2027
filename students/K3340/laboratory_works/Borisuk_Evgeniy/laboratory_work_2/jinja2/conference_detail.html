@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ conference.title }}{% endblock %}
+{% block content %}
+<a href="{{ url('conference_list') }}">← Каталог</a>
+<h1>{{ conference.title }}</h1>
+<p class="lead">{{ conference.location }} · {{ conference.start_date.strftime('%d.%m.%Y') }} — {{ conference.end_date.strftime('%d.%m.%Y') }}</p>
+<div>{% for topic in conference.topics.all() %}<span class="badge">{{ topic.name }}</span>{% endfor %}</div>
+<section class="panel"><h2>О конференции</h2><p class="text">{{ conference.description }}</p>
+<h2>Место проведения</h2><p class="text">{{ conference.venue_description }}</p>
+<h2>Условия участия</h2><p class="text">{{ conference.participation_terms }}</p></section>
+<section class="panel"><h2>Ваше выступление</h2>
+{% if not request.user.is_authenticated %}
+<p><a href="{{ url('login') }}">Войдите</a> или <a href="{{ url('signup') }}">зарегистрируйтесь</a> для участия.</p>
+{% elif registration %}
+<h3>{{ registration.presentation_title }}</h3><p class="text">{{ registration.abstract }}</p>
+<p>Результат: <strong>{{ registration.get_result_display() }}</strong></p>
+<a class="button" href="{{ url('registration_edit', args=[registration.pk]) }}">Редактировать</a>
+<a class="button secondary" href="{{ url('registration_delete', args=[registration.pk]) }}">Удалить регистрацию</a>
+{% else %}<a class="button" href="{{ url('registration_create', args=[conference.pk]) }}">Зарегистрировать выступление</a>{% endif %}
+</section>
+<section class="panel"><h2>Отзывы</h2>
+{% if request.user.is_authenticated %}<a class="button secondary" href="{{ url('review_create', args=[conference.pk]) }}">Написать отзыв</a>{% endif %}
+{% for review in reviews %}
+<article class="review"><h3>{{ review.author.get_full_name() or review.author.username }} · {{ review.rating }}/10</h3>
+<p class="muted">Даты конференции: {{ review.start_date.strftime('%d.%m.%Y') }} — {{ review.end_date.strftime('%d.%m.%Y') }}</p>
+<p class="text">{{ review.text }}</p></article>
+{% else %}<p class="muted">Отзывов пока нет.</p>{% endfor %}
+</section>
+{% endblock %}

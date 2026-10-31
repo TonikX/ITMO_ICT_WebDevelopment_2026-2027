@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block content %}<h1>Автомобили</h1><a class="button" href="{{ url('practice:car_create') }}">Добавить автомобиль</a>
+<ul class="panel">{% for car in object_list %}<li><a href="{{ url('practice:car_detail', args=[car.pk]) }}">{{ car }}</a></li>{% else %}<li>Автомобилей пока нет.</li>{% endfor %}</ul>
+<a href="{{ url('practice:owner_list') }}">Автовладельцы</a>{% endblock %}

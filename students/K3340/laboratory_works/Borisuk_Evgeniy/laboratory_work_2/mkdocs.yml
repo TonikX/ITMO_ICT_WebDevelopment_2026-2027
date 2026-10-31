@@ -1,0 +1,12 @@
+site_name: Веб-программирование — Борисюк Евгений
+site_url: https://doney888.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+docs_dir: docs
+nav:
+  - ЛР №1 — Сокеты: index.md
+  - ЛР №2 — Конференции:
+      - Отчёт: lab2/index.md
+      - Установка и запуск: lab2/setup.md
+      - Архитектура и модель данных: lab2/models.md
+      - Интерфейсы и обработка запросов: lab2/interfaces.md
+      - Тестирование и защита: lab2/testing.md
+      - Практики 2.1–2.3: practice.md

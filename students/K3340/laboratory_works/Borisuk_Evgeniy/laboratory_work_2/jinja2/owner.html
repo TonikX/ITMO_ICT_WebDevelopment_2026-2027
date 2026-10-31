@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}<h1>{{ owner.get_full_name() or owner.username }}</h1><div class="panel">
+<dl><dt>Дата рождения</dt><dd>{{ owner.birth_date or 'Не указана' }}</dd><dt>Паспорт</dt><dd>{{ owner.passport_number or 'Не указан' }}</dd><dt>Адрес</dt><dd>{{ owner.address or 'Не указан' }}</dd><dt>Национальность</dt><dd>{{ owner.nationality or 'Не указана' }}</dd></dl>
+<h2>Владение автомобилями</h2><ul>{% for item in owner.ownership_set.select_related('car') %}<li>{{ item.car }}: {{ item.start_date }} — {{ item.end_date or 'по настоящее время' }}</li>{% else %}<li>Автомобилей нет.</li>{% endfor %}</ul>
+</div><a href="{{ url('practice:owner_list') }}">К списку владельцев</a>{% endblock %}

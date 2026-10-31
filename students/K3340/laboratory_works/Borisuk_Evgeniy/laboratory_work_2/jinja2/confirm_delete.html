@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block content %}<section class="panel narrow"><h1>Удалить запись?</h1><p>{{ object }}</p>
+<form method="post">{{ csrf_input }}<button class="danger">Удалить</button><a class="button secondary" href="{{ url('conference_list') }}">Отмена</a></form>
+</section>{% endblock %}

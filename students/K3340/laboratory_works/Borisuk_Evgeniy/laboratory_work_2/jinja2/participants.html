@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}<h1>Участники конференций</h1>
+<form method="get" class="filters panel"><label for="conference">Конференция</label>
+<select id="conference" name="conference"><option value="">Все конференции</option>{% for conference in conferences %}
+<option value="{{ conference.pk }}" {% if selected_conference == conference.pk|string %}selected{% endif %}>{{ conference.title }}</option>{% endfor %}</select><button>Показать</button></form>
+<div class="panel table-scroll"><table><thead><tr><th>Конференция</th><th>Автор</th><th>Выступление</th><th>Результат</th><th>Действие</th></tr></thead><tbody>
+{% for registration in registrations %}<tr><td>{{ registration.conference.title }}</td><td>{{ registration.author.get_full_name() or registration.author.username }}</td><td>{{ registration.presentation_title }}</td><td>{{ registration.get_result_display() }}</td><td><a href="{{ url('result_edit', args=[registration.pk]) }}">Указать результат</a></td></tr>
+{% else %}<tr><td colspan="5">Участников пока нет.</td></tr>{% endfor %}
+</tbody></table></div>{% endblock %}

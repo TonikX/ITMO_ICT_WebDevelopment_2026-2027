@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block content %}<h1>Практики 2.1–2.3: автовладельцы</h1>
+<p><a class="button" href="{{ url('practice:owner_create') }}">Создать владельца</a> <a class="button secondary" href="{{ url('practice:car_list') }}">Автомобили</a></p>
+<ul class="panel">{% for owner in owners %}<li><a href="{{ url('practice:owner_detail', args=[owner.pk]) }}">{{ owner.get_full_name() or owner.username }}</a></li>{% else %}<li>Владельцев пока нет.</li>{% endfor %}</ul>
+{% endblock %}
