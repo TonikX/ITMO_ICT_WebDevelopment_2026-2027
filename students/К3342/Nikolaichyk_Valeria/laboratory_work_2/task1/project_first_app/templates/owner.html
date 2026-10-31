@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об автовладельце</title>
+</head>
+<body>
+    <h1>Информация об автовладельце</h1>
+
+    <p>Фамилия: {{ owner.surname }}</p>
+    <p>Имя: {{ owner.name }}</p>
+    <p>Дата рождения: {{ owner.birth_date|date:"d.m.Y" }}</p>
+    {% if owner.user %}
+        <h2>Данные пользователя</h2>
+        <p>Имя пользователя: {{ owner.user.username }}</p>
+        <p>Имя: {{ owner.user.first_name }}</p>
+        <p>Фамилия: {{ owner.user.last_name }}</p>
+
+        {% if owner.user.profile %}
+            <h2>Дополнительная информация</h2>
+            <p>Номер паспорта: {{ owner.user.profile.passport_number }}</p>
+            <p>Домашний адрес: {{ owner.user.profile.home_address }}</p>
+            <p>Национальность: {{ owner.user.profile.nationality }}</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
