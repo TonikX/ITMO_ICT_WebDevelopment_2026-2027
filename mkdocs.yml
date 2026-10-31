@@ -1,4 +1,4 @@
-﻿site_name: Веб-программирование. Nikolaichyk Valeria. К3342
+site_name: Веб-программирование. Nikolaichyk Valeria. К3342
 
 theme:
   name: material
@@ -8,3 +8,6 @@ nav:
   - Главная: index.md
   - ЛР1:
       - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчёт: lr2/report.md
+
