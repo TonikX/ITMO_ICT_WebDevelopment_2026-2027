@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Racing Board{% endblock %}</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        body {
+            background: #f3f5f9;
+            color: #172033;
+            min-height: 100vh;
+        }
+
+        .hero {
+            background: linear-gradient(120deg, #101828, #263e65);
+            color: white;
+            border-radius: 20px;
+        }
+
+        .card {
+            border: 0;
+            border-radius: 16px;
+        }
+
+        .section-title {
+            font-weight: 700;
+        }
+
+        .form-control {
+            padding: 10px 12px;
+        }
+
+        footer {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+            RACING BOARD
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Открыть меню"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <div class="navbar-nav ms-auto align-items-lg-center">
+                <a class="nav-link" href="{% url 'home' %}">
+                    Главная
+                </a>
+
+                <a class="nav-link" href="{% url 'race_list' %}">
+                    Гонки
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'profile' %}">
+                        Мой профиль
+                    </a>
+
+                    <a class="nav-link" href="{% url 'my_registrations' %}">
+                        Мои заявки
+                    </a>
+
+                    <span class="navbar-text text-light me-lg-3">
+                        {{ user.username }}
+                    </span>
+
+                    <form
+                        method="post"
+                        action="{% url 'logout' %}"
+                        class="d-inline"
+                    >
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-outline-light btn-sm my-1"
+                        >
+                            Выйти
+                        </button>
+                    </form>
+                {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">
+                        Войти
+                    </a>
+
+                    <a
+                        class="btn btn-info btn-sm ms-lg-2 my-1"
+                        href="{% url 'register' %}"
+                    >
+                        Регистрация
+                    </a>
+                {% endif %}
+
+                {% if user.is_staff %}
+    <a
+        class="nav-link text-warning"
+        href="{% url 'manage_registrations' %}"
+    >
+        Заявки участников
+    </a>
+
+    <a
+        class="nav-link text-warning"
+        href="{% url 'admin:index' %}"
+    >
+        Администрирование
+    </a>
+{% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+    <div class="container pt-3">
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show">
+                {{ message }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Закрыть"
+                ></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<main class="container py-4">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="container py-4 text-center text-secondary">
+    Racing Board · Табло победителей автогонок
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

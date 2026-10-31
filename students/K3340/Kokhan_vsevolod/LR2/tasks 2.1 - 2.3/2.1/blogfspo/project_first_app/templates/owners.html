@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список владельцев</title>
+</head>
+<body>
+    <h1>Список владельцев</h1>
+
+    <p>
+        <a href="{% url 'owner_create' %}">Добавить владельца</a>
+    </p>
+
+    {% for owner in owners %}
+        <div>
+            <p>Фамилия: {{ owner.surname }}</p>
+            <p>Имя: {{ owner.name }}</p>
+            <p>Дата рождения: {{ owner.birth_date }}</p>
+
+            <a href="{% url 'owner_detail' owner.id_owner %}">
+                Подробнее
+            </a>
+
+            <hr>
+        </div>
+    {% empty %}
+        <p>Владельцев пока нет.</p>
+    {% endfor %}
+</body>
+</html>
