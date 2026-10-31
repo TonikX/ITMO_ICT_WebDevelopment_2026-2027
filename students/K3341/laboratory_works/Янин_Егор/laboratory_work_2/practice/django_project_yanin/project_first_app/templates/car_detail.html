@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Машина</title>
+</head>
+<body>
+	<main>
+		<h1>Информация о машине</h1>
+		{% if car %}
+			<dl>
+				<dt>ID</dt>
+				<dd>{{ car.id }}</dd>
+
+				<dt>Марка</dt>
+				<dd>{{ car.brand }}</dd>
+
+				<dt>Модель</dt>
+				<dd>{{ car.model }}</dd>
+
+                <dt>Гос. номер</dt>
+                <dd>{{ car.gov_number }}</dd>
+            
+			</dl>
+		{% else %}
+			<p>Владелец не найден.</p>
+		{% endif %}
+	</main>
+</body>
+</html>

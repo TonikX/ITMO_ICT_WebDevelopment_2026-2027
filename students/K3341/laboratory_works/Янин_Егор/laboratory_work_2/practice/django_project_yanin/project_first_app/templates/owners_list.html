@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Автовладельцы</title>
+</head>
+<body>
+	<main>
+		<h1>Автовладельцы</h1>
+		<ul>
+			{% for owner in owners %}
+				<li>{{ owner.name }} {{ owner.surname }} (ID: {{ owner.id }})</li>
+			{% empty %}
+				<li>Не найдено автовладельцов.</li>
+			{% endfor %}
+		</ul>
+	</main>
+</body>
+</html>

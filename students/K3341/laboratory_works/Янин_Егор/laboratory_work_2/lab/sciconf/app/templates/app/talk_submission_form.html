@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f9fa">
+    <title>{% if is_editing %}Редактирование заявки{% else %}Заявка на выступление{% endif %} — {{ conference.name }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+    {% include "app/partials/header.html" %}
+    <main class="container flex-grow-1 d-flex flex-column align-items-center justify-content-center py-5">
+        <section class="card border-0 shadow-sm w-100" style="max-width: 42rem;">
+            <div class="card-body p-4 p-md-5">
+                <a class="link-secondary text-decoration-none small"
+                   href="{% url 'conference_detail' conference.id %}">← К конференции</a>
+                <span class="d-block text-primary text-uppercase fw-semibold small mt-4">
+                    {% if is_editing %}Редактирование заявки{% else %}Заявка на выступление{% endif %}
+                </span>
+                <h1 class="h2 mt-2">{{ conference.name }}</h1>
+                <p class="text-body-secondary">
+                    {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}
+                </p>
+
+                {% if conference.description %}
+                    <div class="mb-4">
+                        <h2 class="h5">О конференции</h2>
+                        <p class="text-body-secondary">{{ conference.description|linebreaksbr }}</p>
+                    </div>
+                {% endif %}
+
+                <div class="rounded-3 bg-body-tertiary p-3 mb-4">
+                    <h2 class="h6">Условия участия</h2>
+                    <p class="text-body-secondary small mb-0">
+                        {{ conference.participation_terms|linebreaksbr }}
+                    </p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">
+                                {% if field.name == "title" %}Название доклада{% else %}Аннотация{% endif %}
+                            </label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="invalid-feedback d-block" role="alert">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-2">
+                        {% if is_editing %}Сохранить изменения{% else %}Отправить заявку{% endif %}
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

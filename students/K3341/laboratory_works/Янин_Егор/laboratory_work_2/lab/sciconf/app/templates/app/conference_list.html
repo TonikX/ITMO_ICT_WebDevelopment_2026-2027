@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f9fa">
+    <title>Конференции — SciConf</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+    {% include "app/partials/header.html" %}
+    <main class="container flex-grow-1 py-5">
+
+        <section class="mb-4">
+            <span class="text-primary text-uppercase fw-semibold small">SciConf</span>
+            <h1 class="display-6 fw-bold mt-2">Научные конференции</h1>
+            <p class="text-body-secondary">Найдите конференцию по названию, тематике или месту проведения.</p>
+        </section>
+
+        <form method="get" class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-lg-4">
+                        <label for="conference-search" class="form-label">Название</label>
+                        <input id="conference-search" type="search" name="q" value="{{ search_query }}"
+                               class="form-control" placeholder="Например, SciConf">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="theme-filter" class="form-label">Тематика</label>
+                        <select id="theme-filter" name="theme" class="form-select">
+                            <option value="">Все тематики</option>
+                            {% for theme in themes %}
+                                <option value="{{ theme.id }}" {% if selected_theme == theme.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ theme.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="location-filter" class="form-label">Место проведения</label>
+                        <select id="location-filter" name="location" class="form-select">
+                            <option value="">Все места</option>
+                            {% for location in locations %}
+                                <option value="{{ location.id }}" {% if selected_location == location.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ location.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">Найти</button>
+                        <a href="{% url 'conference_list' %}" class="btn btn-outline-secondary">Сбросить</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <p class="small text-body-secondary">
+            Найдено конференций: {{ page_obj.paginator.count }}
+        </p>
+
+        <div class="row g-4">
+            {% for conference in page_obj %}
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="card h-100 border-0 shadow-sm">
+                        <div class="card-body d-flex flex-column p-4">
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                {% for theme in conference.themes.all %}
+                                    <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis">
+                                        {{ theme.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                            <h2 class="h5">{{ conference.name }}</h2>
+                            <p class="small text-body-secondary mb-2">
+                                {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }}
+                            </p>
+                            <p class="small text-body-secondary">{{ conference.location.name }}</p>
+                            {% if conference.description %}
+                                <p class="text-body-secondary">{{ conference.description|truncatewords:24 }}</p>
+                            {% endif %}
+                            <p class="mb-4">{{ conference.participation_terms|truncatewords:24 }}</p>
+                            <a class="btn btn-outline-primary mt-auto"
+                               href="{% url 'conference_detail' conference.id %}">Подробнее</a>
+                        </div>
+                    </article>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-light border" role="status">
+                        По заданным параметрам конференции не найдены.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+            <nav class="mt-5" aria-label="Страницы конференций">
+                <ul class="pagination justify-content-center flex-wrap">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">Назад</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Назад</span></li>
+                    {% endif %}
+
+                    {% for page_number in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == page_number %}active{% endif %}">
+                            <a class="page-link" href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_number }}">
+                                {{ page_number }}
+                            </a>
+                        </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if query_string %}{{ query_string }}&amp;{% endif %}page={{ page_obj.next_page_number }}">Вперёд</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Вперёд</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f9fa">
+    <title>Участники конференций — SciConf</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-body-tertiary d-flex flex-column min-vh-100">
+    {% include "app/partials/header.html" %}
+    <main class="container flex-grow-1 py-5">
+        <span class="text-primary text-uppercase fw-semibold small">Панель администратора</span>
+        <h1 class="display-6 fw-bold mt-2">Участники конференций</h1>
+        <p class="text-body-secondary mb-4">
+            Список авторов, подавших заявки на выступления.
+        </p>
+
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Конференция</th>
+                            <th scope="col">Даты</th>
+                            <th scope="col">Участник</th>
+                            <th scope="col">Доклад</th>
+                            <th scope="col">Заявка</th>
+                            <th scope="col">Результат</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for submission in participants %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'conference_detail' submission.conference_id %}">
+                                        {{ submission.conference.name }}
+                                    </a>
+                                </td>
+                                <td class="text-nowrap">
+                                    {{ submission.conference.start_date|date:"d.m.Y" }} —
+                                    {{ submission.conference.end_date|date:"d.m.Y" }}
+                                </td>
+                                <td>
+                                    <div>{{ submission.author.get_full_name|default:submission.author.username }}</div>
+                                    <small class="text-body-secondary">{{ submission.author.email|default:submission.author.username }}</small>
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">{{ submission.title }}</div>
+                                    <small class="text-body-secondary">{{ submission.abstract|truncatewords:18 }}</small>
+                                </td>
+                                <td class="text-nowrap">{{ submission.submitted_at|date:"d.m.Y H:i" }}</td>
+                                <td>
+                                    {% if submission.recommended_to_publish is True %}
+                                        <span class="badge text-bg-success">Рекомендован</span>
+                                    {% elif submission.recommended_to_publish is False %}
+                                        <span class="badge text-bg-danger">Не рекомендован</span>
+                                    {% else %}
+                                        <span class="badge text-bg-secondary">На рассмотрении</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="6" class="py-5 text-center text-body-secondary">
+                                    Заявок на выступление пока нет.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

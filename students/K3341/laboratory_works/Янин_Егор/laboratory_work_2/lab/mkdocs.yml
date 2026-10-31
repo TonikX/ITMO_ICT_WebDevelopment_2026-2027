@@ -1,0 +1,11 @@
+site_name: "Лабораторная работа 2"
+theme:
+  name: material
+
+nav:
+  - Главная: index.md
+  - Модель данных: model.md
+  - Регистрация и авторизация: auth.md
+  - Конференции: conferences.md
+  - Участники: participants.md
+  - Админ-панель: admin.md
