@@ -1,0 +1,10 @@
+{% extends 'flights/base.html' %}
+{% block content %}
+<h1>Отменить резервирование?</h1>
+<p>Рейс: {{ object.flight.number }}</p>
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">Да, отменить</button>
+    <a href="{% url 'flight_detail' object.flight.id %}" class="btn btn-secondary">Назад</a>
+</form>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'flights/base.html' %}
+{% block title %}{{ object.number }}{% endblock %}
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2>Рейс {{ object.number }} — {{ object.airline.name }}</h2>
+    </div>
+    <div class="card-body">
+        <p><strong>Откуда:</strong> {{ object.departure_city }}</p>
+        <p><strong>Куда:</strong> {{ object.arrival_city }}</p>
+        <p><strong>Вылет:</strong> {{ object.departure_time|date:"d.m.Y H:i" }}</p>
+        <p><strong>Прилёт:</strong> {{ object.arrival_time|date:"d.m.Y H:i" }}</p>
+        <p><strong>Гейт:</strong> {{ object.gate_number }}</p>
+        {% if user.is_authenticated %}
+            {% if object.id in my_reservations %}
+                <a href="{% url 'reserve' object.id %}" class="btn btn-warning">Изменить резервирование</a>
+            {% else %}
+                <a href="{% url 'reserve' object.id %}" class="btn btn-success">Зарезервировать место</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline-primary">Войдите для резервирования</a>
+        {% endif %}
+    </div>
+</div>
+
+<h3>Пассажиры ({{ passengers.count }})</h3>
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Пользователь</th>
+            <th>Номер билета</th>
+            <th>Дата резерва</th>
+            {% if user.is_authenticated %}<th>Действия</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in passengers %}
+        <tr>
+            <td>{{ r.user.username }}</td>
+            <td>{{ r.ticket_number|default:"—" }}</td>
+            <td>{{ r.created_at|date:"d.m.Y H:i" }}</td>
+            <td>
+                {% if user.is_staff %}
+                    <a href="{% url 'reservation_update' r.id %}" class="btn btn-sm btn-warning">Изменить</a>
+                    <a href="{% url 'reservation_delete' r.id %}" class="btn btn-sm btn-danger">Удалить</a>
+                {% elif r.user == user %}
+                    <a href="{% url 'reservation_delete' r.id %}" class="btn btn-sm btn-outline-danger">Отменить</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center">Пока никого нет</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3 class="mt-4">Отзывы</h3>
+{% if user.is_authenticated %}
+    <a href="{% url 'review_create' object.id %}" class="btn btn-sm btn-outline-primary mb-3">Оставить отзыв</a>
+{% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить отзыв.</p>
+{% endif %}
+
+<ul class="list-group">
+    {% for rev in reviews %}
+    <li class="list-group-item">
+        <strong>{{ rev.user.username }}</strong> — <span class="badge bg-warning text-dark">{{ rev.rating }}/10</span>
+        <br><small class="text-muted">{{ rev.created_at|date:"d.m.Y H:i" }}</small>
+        <p class="mt-2 mb-0">{{ rev.text }}</p>
+    </li>
+    {% empty %}
+    <li class="list-group-item">Отзывов пока нет</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'flight_list' %}" class="btn btn-secondary mt-3">← К табло</a>
+{% endblock %}

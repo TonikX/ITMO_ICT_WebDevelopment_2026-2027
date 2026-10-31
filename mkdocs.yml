@@ -1,0 +1,15 @@
+site_name: Веб-программирование. Моломожнов Никита, к3340
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - ЛР1 — Работа с сокетами: lr1/report.md
+  - ЛР2 — Табло авиаперелётов: lr2/report.md
+markdown_extensions:
+  - tables
+  - fenced_code
+  - codehilite
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
