@@ -1,0 +1,34 @@
+@model List<Lab2HWTable.Models.Submission>
+
+@{
+    var students = (Dictionary<string, string?>)ViewBag.Students;
+    var subjects = (List<string>)ViewBag.Subjects;
+}
+
+<h2>Оценки учеников</h2>
+
+<table>
+    <tr>
+        <th>Ученик</th>
+        @foreach (var subject in subjects)
+        {
+            <th>@subject</th>
+        }
+    </tr>
+
+    @foreach (var student in students)
+    {
+        <tr>
+            <td>@student.Value</td>
+            @foreach (var subject in subjects)
+            {
+                var grades = Model
+                    .Where(s => s.StudentId == student.Key && s.Homework.Subject == subject)
+                    .Where(s => s.Grade != null)
+                    .Select(s => s.Grade)
+                    .ToList();
+                <td>@(grades.Count > 0 ? string.Join(", ", grades) : "-")</td>
+            }
+        </tr>
+    }
+</table>
