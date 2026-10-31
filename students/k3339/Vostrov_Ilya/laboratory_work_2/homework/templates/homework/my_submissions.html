@@ -1,0 +1,70 @@
+{% extends 'homework/base.html' %}
+{% block title %}Мои работы{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Мои сданные работы</h1>
+    <span class="text-muted">Всего: {{ pages.paginator.count }}</span>
+  </div>
+
+  {% if not pages %}
+    <div class="alert alert-info">
+      Вы пока не сдали ни одной работы.
+      <a href="{% url 'homework:index' %}" class="alert-link">Перейти к заданиям</a>.
+    </div>
+  {% endif %}
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle bg-white shadow-sm rounded">
+      <thead class="table-primary">
+        <tr>
+          <th>Задание</th>
+          <th>Предмет</th>
+          <th>Срок</th>
+          <th>Сдано</th>
+          <th>Отметка</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in pages %}
+          <tr>
+            <td>
+              <a href="{% url 'homework:homework_detail' s.homework.pk %}">{{ s.homework.text|truncatechars:60 }}</a>
+              <div class="text-muted small" style="white-space: pre-wrap;">{{ s.text|truncatechars:90 }}</div>
+            </td>
+            <td><span class="badge bg-primary">{{ s.homework.subject }}</span></td>
+            <td class="text-nowrap">{{ s.homework.deadline|date:'d.m.Y' }}</td>
+            <td class="text-nowrap">{{ s.submitted_at|date:'d.m.Y H:i' }}</td>
+            <td>
+              {% if s.mark %}
+                <span class="badge rounded-pill bg-{% if s.mark >= 4 %}success{% elif s.mark >= 3 %}warning{% else %}danger{% endif %}">
+                  {{ s.mark }}
+                </span>
+              {% else %}
+                <span class="badge bg-secondary">на проверке</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted">Работ нет.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if pages.paginator.num_pages > 1 %}
+    <nav aria-label="Навигация по страницам">
+      <ul class="pagination justify-content-center">
+        {% if pages.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ pages.previous_page_number }}">←</a></li>
+        {% endif %}
+        <li class="page-item disabled">
+          <span class="page-link">Страница {{ pages.number }} из {{ pages.paginator.num_pages }}</span>
+        </li>
+        {% if pages.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ pages.next_page_number }}">→</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

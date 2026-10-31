@@ -1,0 +1,13 @@
+# Сгенерированные артефакты Django
+db.sqlite3
+staticfiles/
+__pycache__/
+*.pyc
+
+# Окружение
+.venv/
+venv/
+
+# Служебные
+.DS_Store
+*.sqlite3

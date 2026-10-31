@@ -1,0 +1,90 @@
+{% extends 'homework/base.html' %}
+{% block title %}Домашние задания{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Домашние задания</h1>
+    <span class="text-muted">Всего: {{ pages.paginator.count }}</span>
+  </div>
+
+  <!-- Фильтр по предмету + поиск -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-2" role="search">
+        <div class="col-md-6">
+          <label for="subject" class="form-label small mb-1">Предмет</label>
+          <select name="subject" id="subject" class="form-select">
+            <option value="">— все предметы —</option>
+            {% for s in subjects %}
+              <option value="{{ s }}" {% if s == current_subject %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="q" class="form-label small mb-1">Поиск по тексту или преподавателю</label>
+          <div class="input-group">
+            <input type="search" name="q" id="q" class="form-control"
+                   value="{{ query }}" placeholder="Например: интегралы">
+            <button type="submit" class="btn btn-primary">Найти</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if not pages %}
+    <div class="alert alert-info">Ничего не найдено. Попробуйте изменить фильтр или запрос.</div>
+  {% endif %}
+
+  {% for h in pages %}
+    <article class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between align-items-start">
+          <div>
+            <span class="badge bg-primary">{{ h.subject }}</span>
+            {% if not user.is_authenticated %}
+              <span class="badge bg-secondary">авторизуйтесь, чтобы сдать</span>
+            {% elif user.id in submitted_ids %}
+              <span class="badge bg-success">✓ сдано</span>
+            {% endif %}
+          </div>
+          <div class="text-muted small">
+            📅 выдано {{ h.issue_date|date:'d.m.Y' }} · ⏰ срок {{ h.deadline|date:'d.m.Y' }}
+          </div>
+        </div>
+
+        <h2 class="h5 mt-2 mb-1">{{ h.text|truncatechars:90 }}</h2>
+        <p class="text-muted small mb-1">Преподаватель: {{ h.teacher }}</p>
+        {% if h.penalty_info %}
+          <p class="small text-warning-emphasis mb-2">⚠️ {{ h.penalty_info|truncatechars:120 }}</p>
+        {% endif %}
+
+        <a href="{% url 'homework:homework_detail' h.pk %}"
+           class="btn btn-sm btn-outline-primary">Подробнее →</a>
+      </div>
+    </article>
+  {% endfor %}
+
+  <!-- Пагинация (сохраняем фильтры) -->
+  {% if pages.paginator.num_pages > 1 %}
+    <nav aria-label="Навигация по страницам">
+      <ul class="pagination justify-content-center">
+        {% if pages.has_previous %}
+          <li class="page-item">
+            <a class="page-link"
+               href="?page={{ pages.previous_page_number }}&subject={{ current_subject|urlencode }}&q={{ query|urlencode }}">←</a>
+          </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <span class="page-link">Страница {{ pages.number }} из {{ pages.paginator.num_pages }}</span>
+        </li>
+        {% if pages.has_next %}
+          <li class="page-item">
+            <a class="page-link"
+               href="?page={{ pages.next_page_number }}&subject={{ current_subject|urlencode }}&q={{ query|urlencode }}">→</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Удаление автомобиля{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h1 class="h5 mb-3">Удалить автомобиль {{ object.brand }} {{ object.model }}
+        ({{ object.state_number }})?</h1>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Да, удалить</button>
+        <a class="btn btn-outline-secondary" href="{% url 'car_list' %}">Отмена</a>
+      </form>
+    </div>
+  </div>
+{% endblock %}

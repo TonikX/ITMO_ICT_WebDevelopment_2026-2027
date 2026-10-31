@@ -1,0 +1,55 @@
+site_name: ЛР2. Доска домашних заданий
+site_description: Отчёт по лабораторной работе №2 — сайт на Django
+docs_dir: docs
+repo_url: ''
+
+theme:
+  name: material
+  language: ru
+  features:
+    - content.code.copy
+    - navigation.top
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Переключить на тёмную тему
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Переключить на светлую тему
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_javascript:
+  - https://unpkg.com/mermaid@11/dist/mermaid.min.js
+
+nav:
+  - Главная: index.md
+  - Запуск и требования: run.md
+  - Модель данных: model.md
+  - Страницы и маршруты: pages.md
+  - Разграничение прав: rights.md
+  - Пагинация и фильтрация: filters.md
+  - Панель администратора: admin.md
+  - Тестирование: tests.md
+  - Примеры работы: examples.md
+  - Выводы: conclusions.md
