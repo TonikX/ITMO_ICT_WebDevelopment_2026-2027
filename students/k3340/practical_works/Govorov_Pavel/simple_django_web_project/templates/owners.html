@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Владельцы автомобилей</h1>
+  <ul>
+    {% for owner in owners %}
+      <li>
+        <a href="{% url 'owner_detail' owner.pk %}">{{ owner }}</a> · {{ owner.nationality }}
+      </li>
+    {% empty %}
+      <li>Владельцев пока нет.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

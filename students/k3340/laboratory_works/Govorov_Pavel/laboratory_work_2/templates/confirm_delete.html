@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Удалить бронирование{% endblock %}
+{% block content %}
+  <section class="panel form-panel">
+    <h1>Удалить бронирование?</h1>
+    <p>{{ booking }}</p>
+    <form method="post" class="actions">
+      {{ csrf_input }}
+      <button class="danger" type="submit">Да, удалить</button>
+      <a href="{{ url('my_bookings') }}">Отмена</a>
+    </form>
+  </section>
+{% endblock %}

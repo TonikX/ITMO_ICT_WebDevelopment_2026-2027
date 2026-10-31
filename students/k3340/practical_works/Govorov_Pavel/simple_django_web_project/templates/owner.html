@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ owner }}</h1>
+  <p>Дата рождения: {{ owner.birth_date }}</p>
+  <p>Паспорт: {{ owner.passport_number }}</p>
+  <p>Адрес: {{ owner.home_address }}</p>
+  <p>Национальность: {{ owner.nationality }}</p>
+  <h2>История владения</h2>
+  <ul>
+    {% for item in ownerships %}
+      <li>{{ item.car }} · {{ item.start_date }} — {{ item.end_date|default:'по настоящее время' }}</li>
+    {% empty %}
+      <li>Нет данных.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

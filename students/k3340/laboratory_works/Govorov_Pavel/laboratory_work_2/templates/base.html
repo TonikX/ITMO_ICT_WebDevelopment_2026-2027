@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f4ee">
+    <title>{% block title %}Каталог номеров{% endblock %} · Отели</title>
+    <link rel="stylesheet" href="{{ static('style.css') }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+    <header class="site-header">
+      <nav class="container main-nav" aria-label="Основная навигация">
+        <a class="brand"
+           href="{{ url('room_list') }}"
+           aria-label="Отели — главная">
+          <svg width="28"
+               height="30"
+               viewBox="0 0 28 30"
+               fill="none"
+               aria-hidden="true">
+            <path d="M4 28V7L14 2L24 7V28M1 28H27M10 28V20H18V28M10 10H11M17 10H18M10 15H11M17 15H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <span>отели<span class="brand-dot">.</span></span>
+        </a>
+        <div class="nav-links">
+          <a href="{{ url('room_list') }}"
+             {% if request.resolver_match.url_name in ['room_list', 'room_detail'] %}aria-current="page"{% endif %}>Номера и отели</a>
+          {% if request.user.is_authenticated %}
+            <a href="{{ url('my_bookings') }}"
+               {% if request.resolver_match.url_name == 'my_bookings' %}aria-current="page"{% endif %}>Мои бронирования</a>
+            {% if request.user.is_staff or request.user.is_superuser %}
+              <a href="{{ url('guest_report') }}"
+                 {% if request.resolver_match.url_name == 'guest_report' %}aria-current="page"{% endif %}>Постояльцы</a>
+              <a href="{{ url('admin:index') }}">Админ-панель ↗</a>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="nav-account">
+          {% if request.user.is_authenticated %}
+            <span>{{ request.user.username }}</span>
+            <form method="post" action="{{ url('logout') }}">
+              {{ csrf_input }}
+              <button class="link" type="submit">Выйти</button>
+            </form>
+          {% else %}
+            <a href="{{ url('login') }}">Войти</a>
+            <a class="button small" href="{{ url('signup') }}">Регистрация</a>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+    <main id="main" class="container">
+      {% for message in get_messages(request) %}
+        <p class="notice" role="status">{{ message }}</p>
+      {% endfor %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+      <p class="container photo-note">Фотографии интерьеров используются для иллюстрации. Фото: Unsplash.</p>
+    </footer>
+  </body>
+</html>

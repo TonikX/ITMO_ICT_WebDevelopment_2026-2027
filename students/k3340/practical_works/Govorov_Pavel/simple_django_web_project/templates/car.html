@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ object }}</h1>
+  <p>Цвет: {{ object.color }}</p>
+  <a href="{% url 'car_update' object.pk %}">Изменить</a> · <a href="{% url 'car_delete' object.pk %}">Удалить</a>
+{% endblock %}

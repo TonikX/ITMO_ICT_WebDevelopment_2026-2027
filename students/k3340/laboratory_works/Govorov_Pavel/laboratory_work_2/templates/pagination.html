@@ -1,0 +1,15 @@
+{% if page.paginator.num_pages > 1 %}
+  {% set page_prefix = '?' ~ (query ~ '&' if query else '') %}
+  {% set anchor = '#catalog' if request.resolver_match.url_name == 'room_list' else '' %}
+  <nav class="pagination" aria-label="Страницы">
+    {% if page.has_previous() %}
+      <a class="button secondary"
+         href="{{ page_prefix }}page={{ page.previous_page_number() }}{{ anchor }}">← Назад</a>
+    {% endif %}
+    <span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+    {% if page.has_next() %}
+      <a class="button secondary"
+         href="{{ page_prefix }}page={{ page.next_page_number() }}{{ anchor }}">Далее →</a>
+    {% endif %}
+  </nav>
+{% endif %}

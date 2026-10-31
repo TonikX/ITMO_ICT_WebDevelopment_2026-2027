@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Практические работы 2.1–2.3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font: 16px/1.6 system-ui;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+            color: #24332e
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 16px
+        }
+
+        a {
+            color: #176446
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        td,
+        th {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd
+        }
+
+        form {
+            max-width: 550px
+        }
+
+        label {
+            display: block
+        }
+
+        input {
+            padding: 9px;
+            width: 100%;
+            font: inherit;
+            border: 1px solid #aaa;
+            border-radius: 5px
+        }
+
+        button {
+            padding: 10px 18px;
+            background: #216749;
+            color: white;
+            border: 0;
+            border-radius: 5px;
+            cursor: pointer
+        }
+
+        .helptext {
+            font-size: 13px
+        }
+
+        .errorlist {
+            color: #a32c2c
+        }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="{% url 'car_list' %}">Автомобили</a>
+      <a href="{% url 'owner_list' %}">Владельцы</a>
+      <a href="{% url 'car_create' %}">Добавить автомобиль</a>
+      <a href="{% url 'owner_create' %}">Создать пользователя</a>
+      <a href="{% url 'admin:index' %}">Админ-панель</a>
+    </nav>
+    {% block content %}{% endblock %}
+  </body>
+</html>

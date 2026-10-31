@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Мои бронирования{% endblock %}
+{% block content %}
+  <h1>Мои бронирования</h1>
+  <div class="table-wrap panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Отель и номер</th>
+          <th>Проживание</th>
+          <th>Гости</th>
+          <th>Статус</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in bookings %}
+          <tr>
+            <td>
+              <a href="{{ url('room_detail', args=[booking.room_id]) }}">{{ booking.room }}</a>
+            </td>
+            <td>{{ booking.arrival.strftime("%d.%m.%Y") }} — {{ booking.departure.strftime("%d.%m.%Y") }}</td>
+            <td>{{ booking.guests }}</td>
+            <td>
+              <span class="badge">{{ booking.get_status_display() }}</span>
+            </td>
+            <td>
+              <a href="{{ url('booking_edit', args=[booking.pk]) }}">Изменить</a> · <a href="{{ url('booking_delete', args=[booking.pk]) }}">Удалить</a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="5">
+              У вас пока нет бронирований. <a href="{{ url('room_list') }}">Выбрать номер</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

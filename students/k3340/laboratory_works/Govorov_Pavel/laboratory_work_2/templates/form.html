@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+  <section class="panel form-panel">
+    <h1>{{ title }}</h1>
+    <form method="post">
+      {{ csrf_input }}
+      {{ form.as_p() }}
+      <button type="submit">{{ button }}</button>
+    </form>
+  </section>
+{% endblock %}
