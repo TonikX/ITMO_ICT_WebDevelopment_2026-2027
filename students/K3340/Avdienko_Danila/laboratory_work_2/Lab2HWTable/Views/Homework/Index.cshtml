@@ -1,0 +1,41 @@
+@model List<Lab2HWTable.Models.Homework>
+<h2>Домашние задания</h2>
+
+@if (User.IsInRole("Teacher"))
+{
+    <a href="/Teacher/Index">Проверить работы</a>
+}
+
+<form method="get" action="/Homework/Index">
+    <input type="text" name="search" value="@ViewBag.Search" placeholder="Поиск по предмету" />
+    <select name="teacher">
+        <option value="">Все преподаватели</option>
+        @foreach (var teacher in ViewBag.Teachers)
+        {
+            <option value="@teacher" selected="@(ViewBag.Teacher == teacher)">@teacher</option> // сохраняем выбранного преподавателя в фильтре
+        }
+    </select>
+    <button type="submit">Найти</button>
+</form>
+
+@foreach (var homework in Model)
+{
+    <h3>@homework.Subject</h3>
+    <p>Преподаватель: @homework.Teacher</p>
+    <p>Дата выдачи: @homework.IssueDate.ToShortDateString()</p>
+    <p>Начало выполнения: @homework.StartDate.ToShortDateString()</p>
+    <p>Срок сдачи: @homework.EndDate.ToShortDateString()</p>
+    <p>Задание: @homework.Description</p>
+    <p>Штрафы: @homework.PenaltyInfo</p>
+    @if (User.Identity?.IsAuthenticated == true && !User.IsInRole("Teacher"))
+    {
+        <a href="/Submission/Create?id=@homework.Id">Сдать задание</a>
+    }
+    <hr/>
+}
+<div>
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    { 
+        <a href="/Homework/Index?page=@i&search=@ViewBag.Search&teacher=@ViewBag.Teacher">@i</a>
+    }
+</div>
