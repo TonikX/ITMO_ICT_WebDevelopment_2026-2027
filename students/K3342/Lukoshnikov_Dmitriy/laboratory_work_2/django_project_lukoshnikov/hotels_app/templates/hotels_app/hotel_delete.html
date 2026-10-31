@@ -1,0 +1,17 @@
+{% extends 'hotels_app/base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 text-center">
+        <div class="card shadow p-4">
+            <h2 class="text-danger">Удалить отель?</h2>
+            <p>Вы уверены, что хотите удалить <strong>{{ hotel.name }}</strong>?</p>
+            <p class="text-muted">Все номера, брони и отзывы этого отеля будут безвозвратно удалены.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Да, удалить</button>
+                <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

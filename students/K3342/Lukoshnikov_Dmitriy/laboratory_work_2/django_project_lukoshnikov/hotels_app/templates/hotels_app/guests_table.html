@@ -1,0 +1,29 @@
+{% extends 'hotels_app/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Постояльцы за последний месяц</h2>
+<table class="table table-striped bg-white shadow-sm">
+    <thead class="table-primary">
+        <tr>
+            <th>Гость</th>
+            <th>Отель</th>
+            <th>Номер</th>
+            <th>Заезд</th>
+            <th>Выезд</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.user.username }}</td>
+            <td>{{ booking.room.hotel.name }}</td>
+            <td>{{ booking.room.room_type }}</td>
+            <td>{{ booking.check_in|date:"d.m.Y" }}</td>
+            <td>{{ booking.check_out|date:"d.m.Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center">За последний месяц заселений не было.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

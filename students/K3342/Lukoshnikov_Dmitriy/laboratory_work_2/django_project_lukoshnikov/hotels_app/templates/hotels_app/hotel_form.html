@@ -1,0 +1,35 @@
+{% extends 'hotels_app/base.html' %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+        <div class="card shadow p-4">
+            <h2 class="mb-4">{{ action }}</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Название отеля</label>
+                    <input type="text" name="name" class="form-control" value="{{ hotel.name|default:'' }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Владелец</label>
+                    <input type="text" name="owner_name" class="form-control" value="{{ hotel.owner_name|default:'' }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Адрес</label>
+                    <input type="text" name="address" class="form-control" value="{{ hotel.address|default:'' }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Описание</label>
+                    <textarea name="description" class="form-control" rows="3">{{ hotel.description|default:'' }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Звезды (1-5)</label>
+                    <input type="number" name="stars" class="form-control" value="{{ hotel.stars|default:'' }}" min="1" max="5" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="{% url 'hotel_list' %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

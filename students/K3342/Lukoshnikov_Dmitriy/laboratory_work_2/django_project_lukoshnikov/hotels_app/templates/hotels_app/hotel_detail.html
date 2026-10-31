@@ -1,0 +1,101 @@
+{% extends 'hotels_app/base.html' %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">{{ hotel.name }} ({{ hotel.stars }} ★)</h2>
+        {% if user.is_staff %}
+            <div>
+                <a href="{% url 'hotel_update' hotel.pk %}" class="btn btn-warning btn-sm">Редактировать</a>
+                <a href="{% url 'hotel_delete' hotel.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        <p><strong>Владелец:</strong> {{ hotel.owner_name }}</p>
+        <p><strong>Адрес:</strong> {{ hotel.address }}</p>
+        <p><strong>Описание:</strong> {{ hotel.description }}</p>
+
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+            <h4 class="mb-0">Номера:</h4>
+            {% if user.is_staff %}
+                <a href="{% url 'room_create' hotel.pk %}" class="btn btn-success btn-sm">+ Добавить номер</a>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% for room in hotel.rooms.all %}
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ room.room_type }} (до {{ room.capacity }} чел.)</h5>
+                        <h6 class="text-success">{{ room.price }} руб./ночь</h6>
+                        <p class="mb-2"><strong>Удобства:</strong>
+                            {% for amenity in room.amenities.all %}
+                                <span class="badge bg-info text-dark">{{ amenity.name }}</span>
+                            {% empty %}
+                                Нет
+                            {% endfor %}
+                        </p>
+                        {% if user.is_authenticated %}
+                        <form method="post" class="row g-2 mt-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="room" value="{{ room.id }}">
+                            <div class="col-6"><input type="date" name="check_in" class="form-control form-control-sm" required></div>
+                            <div class="col-6"><input type="date" name="check_out" class="form-control form-control-sm" required></div>
+                            <div class="col-12"><button type="submit" name="book" class="btn btn-sm btn-success w-100">Забронировать</button></div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% if user.is_authenticated %}
+<div class="card shadow mb-4 border-success">
+    <div class="card-header bg-success text-white">
+        <h4>Оставить отзыв</h4>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select name="room" class="form-select" required>
+                        {% for room in hotel.rooms.all %}
+                            <option value="{{ room.id }}">{{ room.room_type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4"><input type="text" name="stay_period" class="form-control" placeholder="Период (напр. Июль 2026)" required></div>
+                <div class="col-md-4"><input type="number" name="rating" class="form-control" placeholder="Оценка (1-10)" min="1" max="10" required></div>
+                <div class="col-12"><textarea name="text" class="form-control" placeholder="Текст отзыва" required></textarea></div>
+                <div class="col-12"><button type="submit" name="review" class="btn btn-success">Отправить</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<h3 class="mt-4 mb-3">Отзывы гостей</h3>
+<div class="row">
+    {% for room in hotel.rooms.all %}
+        {% for review in room.reviews.all %}
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.user.username }} — {{ review.rating }}/10</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Проживание: {{ review.stay_period }}</h6>
+                    <p class="card-text">{{ review.text }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+</div>
+
+<a href="{% url 'hotel_list' %}" class="btn btn-secondary mb-5">Назад к списку</a>
+{% endblock %}

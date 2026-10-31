@@ -1,0 +1,12 @@
+site_name: Веб-программирование. Лукошников Дмитрий. К3342
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчет: lr2/report.md
