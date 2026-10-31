@@ -1,0 +1,55 @@
+
+{% extends 'tours/base.html' %}
+
+{% block title %}Управление бронированиями — Travel Agency{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Управление бронированиями</h1>
+
+{% if bookings %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Тур</th>
+                    <th>Дата заявки</th>
+                    <th>Количество мест</th>
+                    <th>Статус</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.user.username }}</td>
+                        <td>{{ booking.tour.title }}</td>
+                        <td>{{ booking.booking_date|date:"d.m.Y H:i" }}</td>
+                        <td>{{ booking.places }}</td>
+                        <td>
+                            {{ booking.get_status_display }}
+                        </td>
+                        <td>
+                            {% if booking.status == 'pending' %}
+                                <form method="post"
+                                      action="{% url 'confirm_booking' booking.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        Подтвердить
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">Нет действий</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Заявок на бронирование пока нет.
+    </div>
+{% endif %}
+{% endblock %}
