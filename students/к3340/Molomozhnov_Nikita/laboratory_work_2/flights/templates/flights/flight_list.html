@@ -1,0 +1,62 @@
+{% extends 'flights/base.html' %}
+{% block title %}Рейсы{% endblock %}
+{% block content %}
+<h1 class="mb-4">Табло рейсов</h1>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Номер рейса" value="{{ request.GET.search }}">
+    </div>
+    <div class="col-md-4">
+        <select name="type" class="form-select">
+            <option value="">Все типы</option>
+            <option value="departure" {% if request.GET.type == 'departure' %}selected{% endif %}>Отлёт</option>
+            <option value="arrival" {% if request.GET.type == 'arrival' %}selected{% endif %}>Прилёт</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <button class="btn btn-primary w-100">Найти</button>
+    </div>
+</form>
+
+<table class="table table-hover align-middle">
+    <thead class="table-dark">
+        <tr><th>Рейс</th><th>Авиакомпания</th><th>Откуда → Куда</th><th>Тип</th><th>Время</th><th>Гейт</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for f in flights %}
+        <tr>
+            <td>{{ f.number }}</td>
+            <td>{{ f.airline.name }}</td>
+            <td>{{ f.departure_city }} → {{ f.arrival_city }}</td>
+            <td>
+                {% if f.flight_type == 'departure' %}
+                    <span class="badge bg-success">Отлёт</span>
+                {% else %}
+                    <span class="badge bg-info text-dark">Прилёт</span>
+                {% endif %}
+            </td>
+            <td>{{ f.departure_time|date:"d.m.Y H:i" }}</td>
+            <td>{{ f.gate_number }}</td>
+            <td><a href="{% url 'flight_detail' f.id %}" class="btn btn-sm btn-outline-primary">Подробнее</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center">Рейсов нет</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}">←</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}">→</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

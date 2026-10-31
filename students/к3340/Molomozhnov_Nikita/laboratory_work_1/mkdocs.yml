@@ -1,0 +1,22 @@
+site_name: Отчёт по лабораторной работе №1
+site_author: Моломожнов Никита Владимирович
+site_description: Работа с сокетами
+
+theme:
+  name: material
+  language: ru
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+
+nav:
+  - Главная: index.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - admonition
+  - toc:
+      permalink: true
