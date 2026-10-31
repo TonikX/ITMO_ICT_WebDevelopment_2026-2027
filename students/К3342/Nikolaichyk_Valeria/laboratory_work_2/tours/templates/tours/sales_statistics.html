@@ -1,0 +1,37 @@
+
+{% extends 'tours/base.html' %}
+
+{% block title %}Статистика продаж — Travel Agency{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Статистика проданных туров</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% if statistics %}
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Страна</th>
+                            <th>Количество проданных мест</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in statistics %}
+                            <tr>
+                                <td>{{ item.tour__country }}</td>
+                                <td>{{ item.sold_places }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info mb-0">
+                Подтверждённых продаж пока нет.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
