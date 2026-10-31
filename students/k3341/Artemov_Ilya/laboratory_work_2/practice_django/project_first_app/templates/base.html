@@ -1,0 +1,13 @@
+{% load static %}
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Автовладельцы — практики 2.1–2.3{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'project_first_app/style.css' %}?v=1"></head>
+<body><header><a class="brand" href="{% url 'owners' %}">Автовладельцы</a><nav aria-label="Главное меню">
+<a href="{% url 'owners' %}">Владельцы</a><a href="{% url 'cars' %}">Автомобили</a>
+<a href="{% url 'owner_create' %}">Создать пользователя</a>
+{% if user.is_staff %}<a href="{% url 'admin:index' %}">Администрирование</a>{% endif %}
+{% if user.is_authenticated %}<span>{{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Выйти</button></form>
+{% else %}<a href="{% url 'login' %}">Войти</a>{% endif %}</nav></header>
+<main>{% block content %}{% endblock %}</main>
+<footer>Практические работы 2.1, 2.2, 2.3 · Артемов Илья, K3341</footer></body></html>

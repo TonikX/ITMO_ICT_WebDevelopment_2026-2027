@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Владельцы автомобилей</h1><p>Пользователи и сведения об автовладельцах.</p>
+<div class="table-wrap"><table><thead><tr><th>ФИО</th><th>Пользователь</th><th>Дата рождения</th><th>Национальность</th></tr></thead><tbody>
+{% for owner in owners %}<tr><td><a href="{% url 'owner' owner.pk %}">{{ owner }}</a></td><td>{{ owner.username }}</td><td>{{ owner.birth_date|date:'d.m.Y'|default:'—' }}</td><td>{{ owner.nationality|default:'—' }}</td></tr>
+{% empty %}<tr><td colspan="4">Владельцев пока нет.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}<div class="page-heading"><div><p class="eyebrow">Расписание аэропорта</p><h1>Табло авиаперелётов</h1><p class="muted">Время отлёта и прилёта указано по Москве (UTC+3).</p></div>
+{% if is_staff(request.user) %}<a class="button" href="{{ url('admin:flights_flight_add') }}">Добавить рейс</a>{% endif %}</div>
+<form class="filters card" method="get">{% for field in filter_form %}<div class="field">{{ field.label_tag() }}{{ field }}{{ field.errors }}</div>{% endfor %}
+<button>Найти</button><a href="{{ url('flights:list') }}">Сбросить</a></form>
+<p class="muted">Найдено рейсов: {{ page.paginator.count }}</p>
+<div class="table-wrap"><table><thead><tr><th>Рейс / авиакомпания</th><th>Маршрут</th><th>Отлёт</th><th>Прилёт</th><th>Тип</th><th>Гейт</th><th>Свободно</th><th><span class="sr-only">Подробности</span></th></tr></thead><tbody>
+{% for flight in page %}<tr><td><strong>{{ flight.number }}</strong><small>{{ flight.airline }}</small></td><td>{{ flight.origin }}<span class="route-arrow" aria-hidden="true"> → </span>{{ flight.destination }}</td><td class="nowrap">{{ flight.departure_at|date_time }}</td><td class="nowrap">{{ flight.arrival_at|date_time }}</td><td><span class="badge {{ flight.direction }}">{{ flight.get_direction_display() }}</span></td><td>{{ flight.gate }}</td><td>{{ flight.seat_count - flight.reserved_count }} / {{ flight.seat_count }}</td><td><a href="{{ url('flights:detail', flight.pk) }}">Открыть<span class="sr-only"> рейс {{ flight.number }}</span></a></td></tr>
+{% else %}<tr><td colspan="8">Рейсы не найдены. Попробуйте изменить параметры поиска.</td></tr>{% endfor %}</tbody></table></div>
+{% if page.has_other_pages() %}<nav class="pagination" aria-label="Страницы рейсов">{% if page.has_previous() %}<a href="{{ page_url(request, page.previous_page_number()) }}">← Назад</a>{% endif %}
+{% for number in page.paginator.get_elided_page_range(page.number, on_each_side=2) %}{% if number == page.number %}<span class="current" aria-current="page">{{ number }}</span>{% elif number == page.paginator.ELLIPSIS %}<span>{{ number }}</span>{% else %}<a href="{{ page_url(request, number) }}">{{ number }}</a>{% endif %}{% endfor %}
+{% if page.has_next() %}<a href="{{ page_url(request, page.next_page_number()) }}">Далее →</a>{% endif %}</nav>{% endif %}{% endblock %}

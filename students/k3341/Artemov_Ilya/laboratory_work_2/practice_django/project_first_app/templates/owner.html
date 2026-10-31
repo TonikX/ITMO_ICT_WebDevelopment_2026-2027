@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}<h1>{{ owner }}</h1><dl><dt>Пользователь</dt><dd>{{ owner.username }}</dd><dt>Дата рождения</dt><dd>{{ owner.birth_date|date:'d.m.Y'|default:'—' }}</dd><dt>Национальность</dt><dd>{{ owner.nationality|default:'—' }}</dd>
+{% if user.is_staff or user.pk == owner.pk %}<dt>Номер паспорта</dt><dd>{{ owner.passport_number }}</dd><dt>Домашний адрес</dt><dd>{{ owner.home_address }}</dd><dt>Email</dt><dd>{{ owner.email|default:'—' }}</dd>{% endif %}</dl>
+<h2>История владения</h2><div class="table-wrap"><table><thead><tr><th>Автомобиль</th><th>Начало</th><th>Окончание</th></tr></thead><tbody>
+{% for ownership in ownerships %}<tr><td><a href="{% url 'car' ownership.car_id %}">{{ ownership.car }}</a></td><td>{{ ownership.start_date|date:'d.m.Y' }}</td><td>{{ ownership.end_date|date:'d.m.Y'|default:'По настоящее время' }}</td></tr>{% empty %}<tr><td colspan="3">Нет записей.</td></tr>{% endfor %}</tbody></table></div>
+<h2>Водительские удостоверения</h2><ul>{% for license in owner.driver_licenses.all %}<li>Категория {{ license.category }}, выдано {{ license.issue_date|date:'d.m.Y' }}{% if user.is_staff or user.pk == owner.pk %}, № {{ license.number }}{% endif %}</li>{% empty %}<li>Нет записей.</li>{% endfor %}</ul>{% endblock %}

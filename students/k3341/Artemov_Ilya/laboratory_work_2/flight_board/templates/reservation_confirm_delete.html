@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Удалить бронирование?</h1><div class="card"><p>Рейс {{ reservation.flight.number }}, место {{ reservation.seat_number }}, пассажир {{ reservation.passenger_name }}.</p><form method="post">{{ csrf_input }}<button class="danger">Да, удалить</button> <a href="{{ url('flights:my_reservations') }}">Отмена</a></form></div>{% endblock %}

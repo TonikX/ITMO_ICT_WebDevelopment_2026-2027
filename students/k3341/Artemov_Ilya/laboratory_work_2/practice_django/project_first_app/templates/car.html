@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}<h1>{{ object }}</h1><p>Цвет: {{ object.color|default:'—' }}</p>
+{% if user.is_authenticated %}<p><a href="{% url 'car_update' object.pk %}">Редактировать</a> · <a href="{% url 'car_delete' object.pk %}">Удалить</a></p>{% endif %}
+<h2>Владельцы</h2><ul>{% for ownership in object.ownerships.all %}<li><a href="{% url 'owner' ownership.owner_id %}">{{ ownership.owner }}</a>: {{ ownership.start_date|date:'d.m.Y' }} — {{ ownership.end_date|date:'d.m.Y'|default:'настоящее время' }}</li>{% empty %}<li>Нет записей.</li>{% endfor %}</ul>{% endblock %}

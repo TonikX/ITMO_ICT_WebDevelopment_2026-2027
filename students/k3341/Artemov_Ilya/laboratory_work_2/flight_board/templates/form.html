@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>{{ title }}</h1><form class="card form-card" method="post">{{ csrf_input }}{{ form.as_p() }}<div class="actions"><button>{{ submit }}</button><a href="{{ url('flights:list') }}">К табло</a></div></form>{% endblock %}

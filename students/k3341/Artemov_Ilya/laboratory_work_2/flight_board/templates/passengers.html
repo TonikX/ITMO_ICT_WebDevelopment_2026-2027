@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}<a href="{{ url('flights:detail', flight.pk) }}">← К рейсу</a><div class="page-heading"><div><p class="eyebrow">{{ flight.origin }} → {{ flight.destination }}</p><h1>Пассажиры рейса {{ flight.number }}</h1><p class="muted">Отлёт {{ flight.departure_at|date_time }} · Все забронированные места и зарегистрированные пассажиры.</p></div>
+{% if is_staff(request.user) %}<a class="button" href="{{ url('flights:staff_reserve', flight.pk) }}">Зарегистрировать пассажира</a>{% endif %}</div>
+<div class="table-wrap"><table><thead><tr><th>Место</th><th>Пассажир</th><th>Статус</th>{% if is_staff(request.user) %}<th>Пользователь</th><th>Номер билета</th><th>Действие</th>{% endif %}</tr></thead><tbody>
+{% for reservation in reservations %}<tr><td>{{ reservation.seat_number }}</td><td>{{ reservation.passenger_name }}</td><td><span class="badge">{{ 'Зарегистрирован' if reservation.checked_in else 'Забронировано' }}</span></td>
+{% if is_staff(request.user) %}<td>{{ reservation.user.username }}</td><td>{{ reservation.ticket_number or '—' }}</td><td><a href="{{ url('flights:check_in', reservation.pk) }}">{{ 'Изменить билет' if reservation.checked_in else 'Зарегистрировать' }}</a></td>{% endif %}</tr>
+{% else %}<tr><td colspan="{{ 6 if is_staff(request.user) else 3 }}">Пассажиров пока нет.</td></tr>{% endfor %}</tbody></table></div>{% endblock %}
