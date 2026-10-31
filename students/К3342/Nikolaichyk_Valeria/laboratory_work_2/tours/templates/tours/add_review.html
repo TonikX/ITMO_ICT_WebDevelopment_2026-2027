@@ -1,0 +1,37 @@
+
+{% extends 'tours/base.html' %}
+
+{% block title %}Оставить отзыв — Travel Agency{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="mb-3">Отзыв о туре</h2>
+
+                <p class="text-muted">
+                    Тур: {{ tour.title }}
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-primary">
+                        Опубликовать отзыв
+                    </button>
+
+                    <a href="{% url 'tour_detail' tour.id %}"
+                       class="btn btn-outline-secondary">
+                        Назад к туру
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
