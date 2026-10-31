@@ -1,0 +1,15 @@
+{% extends 'hotels_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center mt-5">
+        <h2>Удалить бронирование?</h2>
+        <p>Вы уверены, что хотите отменить бронь отеля <strong>{{ booking.room.hotel.name }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a href="{% url 'my_bookings' %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

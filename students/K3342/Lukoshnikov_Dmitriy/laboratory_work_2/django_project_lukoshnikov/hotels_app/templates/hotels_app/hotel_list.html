@@ -1,0 +1,56 @@
+{% extends 'hotels_app/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Поиск отелей</h2>
+    {% if user.is_staff %}
+        <a href="{% url 'hotel_create' %}" class="btn btn-success">+ Добавить отель</a>
+    {% endif %}
+</div>
+
+<form method="get" class="row g-3 mb-4 bg-white p-3 rounded shadow-sm">
+    <div class="col-md-5">
+        <input type="text" name="search" class="form-control" placeholder="Название отеля..." value="{{ search_query }}">
+    </div>
+    <div class="col-md-4">
+        <select name="city" class="form-select">
+            <option value="">Все адреса</option>
+            {% for city in cities %}
+                <option value="{{ city }}" {% if city == city_query %}selected{% endif %}>{{ city }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Найти</button>
+    </div>
+</form>
+
+<div class="row">
+    {% for hotel in hotels %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ hotel.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ hotel.address }}</h6>
+                    <p class="card-text">{{ hotel.description|truncatewords:15 }}</p>
+                    <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-outline-primary w-100">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12"><p class="text-center">Отелей не найдено.</p></div>
+    {% endfor %}
+</div>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&city={{ city_query }}">Назад</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&city={{ city_query }}">Вперед</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}

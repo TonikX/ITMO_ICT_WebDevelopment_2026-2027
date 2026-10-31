@@ -1,0 +1,75 @@
+{% extends 'hotels_app/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-8">
+        <div class="card shadow border-0">
+            <div class="card-body p-5">
+                <h3 class="card-title text-center mb-4 fw-bold">Регистрация</h3>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Имя пользователя (логин)</label>
+                            <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" required>
+                            <div class="form-text text-muted" style="font-size: 0.8rem;">Только буквы, цифры и @/./+/-/_.</div>
+                            {% for error in form.username.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">ФИО</label>
+                            <input type="text" name="name" class="form-control {% if form.name.errors %}is-invalid{% endif %}">
+                            {% for error in form.name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Номер паспорта</label>
+                            <input type="text" name="passport_number" class="form-control {% if form.passport_number.errors %}is-invalid{% endif %}">
+                            {% for error in form.passport_number.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Домашний адрес</label>
+                            <input type="text" name="home_address" class="form-control {% if form.home_address.errors %}is-invalid{% endif %}">
+                            {% for error in form.home_address.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-12 mb-4">
+                            <label class="form-label fw-bold">Национальность</label>
+                            <input type="text" name="nationality" class="form-control {% if form.nationality.errors %}is-invalid{% endif %}">
+                            {% for error in form.nationality.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label fw-bold">Пароль</label>
+                            <input type="password" name="password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" required>
+                            <div class="form-text text-muted" style="font-size: 0.8rem;">
+                                Минимум 8 символов. Не должен быть слишком простым.
+                            </div>
+                            {% for error in form.password1.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+
+                        <div class="col-md-12 mb-4">
+                            <label class="form-label fw-bold">Подтверждение пароля</label>
+                            <input type="password" name="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" required>
+                            {% for error in form.password2.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 fs-5">Создать аккаунт</button>
+                </form>
+
+                <div class="text-center mt-4">
+                    <span class="text-muted">Уже есть аккаунт?</span> <a href="/accounts/login/" class="text-decoration-none">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

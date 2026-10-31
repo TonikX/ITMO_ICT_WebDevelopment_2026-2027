@@ -1,0 +1,16 @@
+<h1>Список пользователей</h1>
+<a href="{% url 'user_create' %}">Создать пользователя</a>
+<ul>
+    {% for u in users %}
+        <li>
+            <strong>{{ u.username }}</strong>
+            {% if u.name %} ({{ u.name }}) {% endif %}
+            — Паспорт: {{ u.passport_number|default:"-" }},
+            Адрес: {{ u.home_address|default:"-" }},
+            Национальность: {{ u.nationality|default:"-" }}
+        </li>
+    {% empty %}
+        <li>Пользователей нет.</li>
+    {% endfor %}
+</ul>
+<a href="/admin/">В админку</a>

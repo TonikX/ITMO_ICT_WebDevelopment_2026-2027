@@ -1,0 +1,12 @@
+<h1>Создать пользователя</h1>
+<form method="post">
+    {% csrf_token %}
+    <p>Логин: <input type="text" name="username" required></p>
+    <p>Пароль: <input type="password" name="password" required></p>
+    <p>Имя: <input type="text" name="name"></p>
+    <p>Номер паспорта: <input type="text" name="passport_number"></p>
+    <p>Домашний адрес: <input type="text" name="home_address"></p>
+    <p>Национальность: <input type="text" name="nationality"></p>
+    <button type="submit">Создать</button>
+</form>
+<a href="{% url 'user_list' %}">Назад к списку</a>
