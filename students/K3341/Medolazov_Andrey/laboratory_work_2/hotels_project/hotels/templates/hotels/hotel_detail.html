@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ hotel.name }}{% endblock %}
+
+{% block content %}
+<nav class="mb-3"><a href="{% url 'hotel_list' %}">&larr; Все отели</a></nav>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between flex-wrap gap-2">
+            <h1 class="h3">{{ hotel.name }}</h1>
+            <div>
+                <a href="{% url 'guests' %}?hotel={{ hotel.pk }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-people"></i> Постояльцы за месяц</a>
+                {% if user.is_staff %}
+                    <a href="{% url 'admin:hotels_hotel_change' hotel.pk %}" class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i> Редактировать</a>
+                {% endif %}
+            </div>
+        </div>
+        <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> {{ hotel.city }}, {{ hotel.address }}</p>
+        <p class="text-muted"><i class="bi bi-person-badge"></i> Владелец: {{ hotel.owner }}</p>
+        <p>{{ hotel.description|linebreaksbr }}</p>
+        {% for a in hotel.amenities.all %}
+            <span class="badge text-bg-primary">{{ a.name }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+<h2 class="h4 mb-3">Номера</h2>
+
+<form method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-4">
+            <select name="type" class="form-select">
+                <option value="">Любой тип</option>
+                {% for value, label in types %}
+                    <option value="{{ value }}" {% if value == room_type %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="guests" min="1" value="{{ guests }}" class="form-control" placeholder="Гостей не менее">
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="max_price" min="0" value="{{ max_price }}" class="form-control" placeholder="Цена до, ₽">
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button class="btn btn-primary flex-grow-1">Фильтр</button>
+            <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-outline-secondary"><i class="bi bi-x-lg"></i></a>
+        </div>
+    </div>
+</form>
+
+<div class="list-group">
+    {% for room in page_obj %}
+        <div class="list-group-item py-3">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+                <div>
+                    <h5 class="mb-1">Номер {{ room.number }} <span class="badge text-bg-secondary">{{ room.get_room_type_display }}</span></h5>
+                    <div class="text-muted small mb-1">
+                        <i class="bi bi-people"></i> до {{ room.capacity }} гостей
+                        {% if room.avg_rating %}· <span class="rating"><i class="bi bi-star-fill"></i> {{ room.avg_rating|floatformat:1 }}</span>{% endif %}
+                    </div>
+                    {% for a in room.amenities.all %}
+                        <span class="badge text-bg-light border">{{ a.name }}</span>
+                    {% endfor %}
+                </div>
+                <div class="text-end">
+                    <div class="fs-5 fw-semibold">{{ room.price|floatformat:0 }} ₽ <span class="fs-6 text-muted fw-normal">/ ночь</span></div>
+                    <a href="{% url 'room_detail' room.pk %}" class="btn btn-sm btn-outline-primary mt-1">Подробнее</a>
+                    <a href="{% url 'reservation_create' room.pk %}" class="btn btn-sm btn-primary mt-1">Забронировать</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="list-group-item text-muted">Подходящих номеров нет.</div>
+    {% endfor %}
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock %}

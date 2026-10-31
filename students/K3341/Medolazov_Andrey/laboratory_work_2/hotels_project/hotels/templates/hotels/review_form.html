@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Отзыв{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="h4">Отзыв о номере</h1>
+                <p class="text-muted">{{ room.hotel.name }}, номер {{ room.number }}</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include 'includes/form_fields.html' %}
+                    <button class="btn btn-primary">Отправить</button>
+                    <a href="{% url 'room_detail' room.pk %}" class="btn btn-link">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

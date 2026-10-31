@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if edit %}Изменение бронирования{% else %}Бронирование{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="h4">{% if edit %}Изменение бронирования{% else %}Бронирование номера{% endif %}</h1>
+                <p class="text-muted">
+                    {{ room.hotel.name }}, номер {{ room.number }} ({{ room.get_room_type_display }})<br>
+                    {{ room.price|floatformat:0 }} ₽ за ночь, до {{ room.capacity }} гостей
+                </p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include 'includes/form_fields.html' %}
+                    <button class="btn btn-primary">{% if edit %}Сохранить{% else %}Забронировать{% endif %}</button>
+                    <a href="{% if edit %}{% url 'my_reservations' %}{% else %}{% url 'room_detail' room.pk %}{% endif %}" class="btn btn-link">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

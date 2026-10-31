@@ -8,3 +8,5 @@ nav:
   - Главная: index.md
   - ЛР1:
       - Отчет: laboratory_work_1/report.md
+  - ЛР2:
+      - Отчет: laboratory_work_2/report.md
