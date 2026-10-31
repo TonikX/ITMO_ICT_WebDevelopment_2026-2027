@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-4">Рейсы</h1>
+
+<form class="row g-2 mb-4" method="get">
+    <div class="col-md-6">
+        <input class="form-control" name="q" value="{{ query }}" placeholder="Номер рейса, авиакомпания или город">
+    </div>
+    <div class="col-md-3">
+        <select class="form-select" name="kind">
+            <option value="">Вылет и прилёт</option>
+            <option value="departure" {% if kind == 'departure' %}selected{% endif %}>Только вылет</option>
+            <option value="arrival" {% if kind == 'arrival' %}selected{% endif %}>Только прилёт</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <button class="btn btn-primary w-100">Найти</button>
+    </div>
+</form>
+
+<table class="table table-hover bg-white">
+    <thead class="table-dark">
+    <tr>
+        <th>Рейс</th>
+        <th>Авиакомпания</th>
+        <th>Тип</th>
+        <th>Маршрут</th>
+        <th>Вылет</th>
+        <th>Прилёт</th>
+        <th>Гейт</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for flight in page %}
+        <tr>
+            <td><a href="{% url 'flight' flight.pk %}">{{ flight.number }}</a></td>
+            <td>{{ flight.airline }}</td>
+            <td>{{ flight.get_kind_display }}</td>
+            <td>{{ flight.from_city }} → {{ flight.to_city }}</td>
+            <td>{{ flight.takeoff|date:'d.m H:i' }}</td>
+            <td>{{ flight.landing|date:'d.m H:i' }}</td>
+            <td>{{ flight.gate }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="7">Ничего не найдено</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul class="pagination">
+    {% if page.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page.previous_page_number }}&q={{ query|urlencode }}&kind={{ kind }}">Назад</a>
+        </li>
+    {% endif %}
+    <li class="page-item disabled">
+        <span class="page-link">Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+    </li>
+    {% if page.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page.next_page_number }}&q={{ query|urlencode }}&kind={{ kind }}">Вперёд</a>
+        </li>
+    {% endif %}
+</ul>
+{% endblock %}

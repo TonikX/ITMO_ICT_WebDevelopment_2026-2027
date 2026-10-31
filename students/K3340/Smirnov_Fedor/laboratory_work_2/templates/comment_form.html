@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 560px">
+    <div class="card-body">
+        <h1 class="h4">Отзыв о рейсе {{ flight.number }}</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary">Отправить</button>
+            <a class="btn btn-link" href="{% url 'flight' flight.pk %}">Назад к рейсу</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

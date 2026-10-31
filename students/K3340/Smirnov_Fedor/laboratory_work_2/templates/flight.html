@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-4">Рейс {{ flight.number }}</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p><b>Авиакомпания:</b> {{ flight.airline }}</p>
+        <p><b>Маршрут:</b> {{ flight.from_city }} → {{ flight.to_city }}</p>
+        <p><b>Вылет:</b> {{ flight.takeoff|date:'d.m.Y H:i' }}, <b>прилёт:</b> {{ flight.landing|date:'d.m.Y H:i' }}</p>
+        <p><b>Тип:</b> {{ flight.get_kind_display }}, <b>гейт:</b> {{ flight.gate }}</p>
+        <p><b>Свободно мест:</b> {{ free }} из {{ flight.seats }}</p>
+        {% if user.is_authenticated %}
+            <a class="btn btn-primary" href="{% url 'book_seat' flight.pk %}">Забронировать место</a>
+            <a class="btn btn-outline-primary" href="{% url 'add_comment' flight.pk %}">Оставить отзыв</a>
+        {% else %}
+            <p class="mb-0"><a href="{% url 'login' %}">Войдите</a>, чтобы бронировать места и оставлять отзывы.</p>
+        {% endif %}
+    </div>
+</div>
+
+<h2>Пассажиры рейса</h2>
+<table class="table bg-white mb-4">
+    <thead>
+    <tr>
+        <th>Место</th>
+        <th>Пассажир</th>
+        {% if user.is_staff %}
+            <th>Номер билета</th>
+            <th>Регистрация</th>
+            <th></th>
+        {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for booking in passengers %}
+        <tr>
+            <td>{{ booking.seat }}</td>
+            <td>{{ booking.passenger.get_full_name|default:booking.passenger.username }}</td>
+            {% if user.is_staff %}
+                <td>{{ booking.ticket|default:'—' }}</td>
+                <td>{% if booking.checked_in %}зарегистрирован{% else %}нет{% endif %}</td>
+                <td><a class="btn btn-warning btn-sm" href="{% url 'check_in' booking.pk %}">Зарегистрировать</a></td>
+            {% endif %}
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">Мест пока никто не бронировал</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Отзывы</h2>
+{% for comment in comments %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <p class="mb-1">
+                <b>{{ comment.author.get_full_name|default:comment.author.username }}</b>,
+                рейс {{ comment.flight_date|date:'d.m.Y' }}, оценка {{ comment.rating }}/10
+            </p>
+            <p class="mb-0">{{ comment.text }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p>Отзывов пока нет.</p>
+{% endfor %}
+{% endblock %}

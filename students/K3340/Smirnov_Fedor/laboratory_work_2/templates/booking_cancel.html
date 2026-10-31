@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 480px">
+    <div class="card-body">
+        <h1 class="h4">Отменить бронь?</h1>
+        <p>Рейс {{ booking.flight }}, место {{ booking.seat }}.</p>
+        <form method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger">Да, отменить</button>
+            <a class="btn btn-link" href="{% url 'my_bookings' %}">Нет</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

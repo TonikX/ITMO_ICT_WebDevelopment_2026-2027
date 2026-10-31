@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 480px">
+    <div class="card-body">
+        <h1 class="h4">Регистрация на рейс {{ booking.flight.number }}</h1>
+        <p>Пассажир: {{ booking.passenger.get_full_name|default:booking.passenger.username }}, место {{ booking.seat }}</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-warning">Сохранить</button>
+            <a class="btn btn-link" href="{% url 'flight' booking.flight.pk %}">Назад к рейсу</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

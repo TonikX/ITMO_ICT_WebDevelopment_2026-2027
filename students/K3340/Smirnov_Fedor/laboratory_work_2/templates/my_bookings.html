@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-4">Мои брони</h1>
+
+<table class="table bg-white">
+    <thead>
+    <tr>
+        <th>Рейс</th>
+        <th>Маршрут</th>
+        <th>Вылет</th>
+        <th>Место</th>
+        <th>Билет</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for booking in bookings %}
+        <tr>
+            <td><a href="{% url 'flight' booking.flight.pk %}">{{ booking.flight.number }}</a></td>
+            <td>{{ booking.flight.from_city }} → {{ booking.flight.to_city }}</td>
+            <td>{{ booking.flight.takeoff|date:'d.m.Y H:i' }}</td>
+            <td>{{ booking.seat }}</td>
+            <td>{{ booking.ticket|default:'ещё не выдан' }}</td>
+            <td>
+                {% if booking.checked_in %}
+                    <span class="badge bg-success">Вы зарегистрированы</span>
+                {% else %}
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'change_booking' booking.pk %}">Изменить</a>
+                    <a class="btn btn-outline-danger btn-sm" href="{% url 'cancel_booking' booking.pk %}">Отменить</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6">Броней пока нет. Выберите рейс на <a href="{% url 'board' %}">табло</a>.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

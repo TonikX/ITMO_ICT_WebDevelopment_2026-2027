@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mx-auto" style="max-width: 520px">
+    <div class="card-body">
+        <h1 class="h4">Регистрация</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary">Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
