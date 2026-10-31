@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои бронирования{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <h1 class="h3 mb-0">Мои бронирования</h1>
+    <form method="get" class="d-flex gap-2">
+        <select name="status" class="form-select" onchange="this.form.submit()">
+            <option value="">Все статусы</option>
+            {% for value, label in statuses %}
+                <option value="{{ value }}" {% if value == status %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Отель</th>
+                <th>Номер</th>
+                <th>Даты</th>
+                <th>Гостей</th>
+                <th>Стоимость</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for r in page_obj %}
+                <tr>
+                    <td><a href="{% url 'hotel_detail' r.room.hotel.pk %}">{{ r.room.hotel.name }}</a></td>
+                    <td><a href="{% url 'room_detail' r.room.pk %}">{{ r.room.number }}</a> <span class="text-muted small">{{ r.room.get_room_type_display }}</span></td>
+                    <td>{{ r.date_from|date:'d.m.Y' }} – {{ r.date_to|date:'d.m.Y' }} <span class="text-muted small">({{ r.nights }} ноч.)</span></td>
+                    <td>{{ r.guests }}</td>
+                    <td>{{ r.total_price|floatformat:0 }} ₽</td>
+                    <td>
+                        <span class="badge {% if r.status == 'checked_in' %}text-bg-success{% elif r.status == 'booked' %}text-bg-primary{% elif r.status == 'cancelled' %}text-bg-danger{% else %}text-bg-secondary{% endif %}">{{ r.get_status_display }}</span>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        {% if r.can_edit %}
+                            <a href="{% url 'reservation_edit' r.pk %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <a href="{% url 'reservation_delete' r.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                        {% elif r.status == 'checked_out' %}
+                            <a href="{% url 'review_create' r.room.pk %}" class="btn btn-sm btn-outline-secondary">Отзыв</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="7" class="text-center text-muted py-4">Бронирований нет. <a href="{% url 'hotel_list' %}">Выбрать отель</a></td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock %}

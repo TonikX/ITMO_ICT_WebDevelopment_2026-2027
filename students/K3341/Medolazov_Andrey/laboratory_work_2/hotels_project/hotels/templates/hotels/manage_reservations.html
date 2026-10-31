@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Заселение{% endblock %}
+
+{% block content %}
+<h1 class="h3">Заселение и выселение</h1>
+<p class="text-muted">Страница доступна только администраторам</p>
+
+<form method="get" class="card card-body mb-3">
+    <div class="row g-2">
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="" {% if not status %}selected{% endif %}>Все статусы</option>
+                {% for value, label in statuses %}
+                    <option value="{{ value }}" {% if value == status %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select name="hotel" class="form-select">
+                <option value="">Все отели</option>
+                {% for h in hotels %}
+                    <option value="{{ h.pk }}" {% if h.pk|stringformat:'s' == hotel %}selected{% endif %}>{{ h.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Гость">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">Показать</button>
+        </div>
+    </div>
+</form>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Гость</th>
+                <th>Отель / номер</th>
+                <th>Даты</th>
+                <th>Гостей</th>
+                <th>Статус</th>
+                <th class="text-end">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for r in page_obj %}
+                <tr>
+                    <td>{{ r.user.get_full_name|default:r.user.username }}<br><span class="text-muted small">{{ r.user.email }}</span></td>
+                    <td>{{ r.room.hotel.name }}<br><span class="text-muted small">номер {{ r.room.number }}</span></td>
+                    <td>{{ r.date_from|date:'d.m.Y' }} – {{ r.date_to|date:'d.m.Y' }}</td>
+                    <td>{{ r.guests }}</td>
+                    <td><span class="badge {% if r.status == 'checked_in' %}text-bg-success{% elif r.status == 'booked' %}text-bg-primary{% elif r.status == 'cancelled' %}text-bg-danger{% else %}text-bg-secondary{% endif %}">{{ r.get_status_display }}</span></td>
+                    <td class="text-end text-nowrap">
+                        {% if r.status == 'booked' %}
+                            <form method="post" action="{% url 'change_status' r.pk 'check_in' %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <button class="btn btn-sm btn-success">Заселить</button>
+                            </form>
+                            <form method="post" action="{% url 'change_status' r.pk 'cancel' %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <button class="btn btn-sm btn-outline-danger">Отменить</button>
+                            </form>
+                        {% elif r.status == 'checked_in' %}
+                            <form method="post" action="{% url 'change_status' r.pk 'check_out' %}" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <button class="btn btn-sm btn-outline-danger">Выселить</button>
+                            </form>
+                        {% endif %}
+                        <a href="{% url 'admin:hotels_reservation_change' r.pk %}" class="btn btn-sm btn-outline-secondary" title="Открыть в админке"><i class="bi bi-gear"></i></a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6" class="text-center text-muted py-4">Ничего не найдено</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% include 'includes/pagination.html' %}
+{% endblock %}

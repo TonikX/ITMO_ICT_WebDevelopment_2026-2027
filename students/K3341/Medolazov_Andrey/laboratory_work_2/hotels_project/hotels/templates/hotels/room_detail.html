@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Номер {{ room.number }}{% endblock %}
+
+{% block content %}
+<nav class="mb-3"><a href="{% url 'hotel_detail' room.hotel.pk %}">&larr; {{ room.hotel.name }}</a></nav>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h1 class="h3">Номер {{ room.number }} <span class="badge text-bg-secondary fs-6 align-middle">{{ room.get_room_type_display }}</span></h1>
+                <p class="text-muted">{{ room.hotel.name }}, {{ room.hotel.city }}</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-cash"></i> {{ room.price|floatformat:0 }} ₽ за ночь</li>
+                    <li><i class="bi bi-people"></i> Вместимость: {{ room.capacity }}</li>
+                    <li>
+                        <i class="bi bi-star"></i> Рейтинг:
+                        {% if avg_rating %}<span class="rating">{{ avg_rating|floatformat:1 }} / 10</span>{% else %}пока нет отзывов{% endif %}
+                    </li>
+                </ul>
+                {% for a in room.amenities.all %}
+                    <span class="badge text-bg-light border">{{ a.name }}</span>
+                {% endfor %}
+                <div class="mt-3">
+                    <a href="{% url 'reservation_create' room.pk %}" class="btn btn-primary">Забронировать</a>
+                    <a href="{% url 'review_create' room.pk %}" class="btn btn-outline-primary">Оставить отзыв</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'admin:hotels_room_change' room.pk %}" class="btn btn-warning"><i class="bi bi-pencil"></i> Изменить в админке</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <h2 class="h4 mb-3">Отзывы ({{ page_obj.paginator.count }})</h2>
+        {% for review in page_obj %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <b>{{ review.user.get_full_name|default:review.user.username }}</b>
+                            <span class="text-muted small">· проживал(а) {{ review.date_from|date:'d.m.Y' }} – {{ review.date_to|date:'d.m.Y' }}</span>
+                        </div>
+                        <span class="rating"><i class="bi bi-star-fill"></i> {{ review.rating }}/10</span>
+                    </div>
+                    <p class="mb-1 mt-2">{{ review.text|linebreaksbr }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">{{ review.created_at|date:'d.m.Y H:i' }}</span>
+                        {% if review.user == user or user.is_staff %}
+                            <form method="post" action="{% url 'review_delete' review.pk %}" onsubmit="return confirm('Удалить отзыв?')">
+                                {% csrf_token %}
+                                <button class="btn btn-link btn-sm text-danger p-0">Удалить</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted">Отзывов пока нет. Будьте первым!</p>
+        {% endfor %}
+        {% include 'includes/pagination.html' %}
+    </div>
+
+    <div class="col-lg-4">
+        {% if user.is_staff %}
+            <div class="card border-warning">
+                <div class="card-header bg-warning-subtle"><i class="bi bi-shield-lock"></i> Бронирования номера</div>
+                <ul class="list-group list-group-flush">
+                    {% for r in reservations %}
+                        <li class="list-group-item small">
+                            <div class="d-flex justify-content-between">
+                                <b>{{ r.user.get_full_name|default:r.user.username }}</b>
+                                <span class="badge {% if r.status == 'checked_in' %}text-bg-success{% elif r.status == 'booked' %}text-bg-primary{% else %}text-bg-secondary{% endif %}">{{ r.get_status_display }}</span>
+                            </div>
+                            {{ r.date_from|date:'d.m.Y' }} – {{ r.date_to|date:'d.m.Y' }}, гостей: {{ r.guests }}
+                            {% if r.status == 'booked' %}
+                                <form method="post" action="{% url 'change_status' r.pk 'check_in' %}" class="mt-1">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    <button class="btn btn-success btn-sm">Заселить</button>
+                                </form>
+                            {% elif r.status == 'checked_in' %}
+                                <form method="post" action="{% url 'change_status' r.pk 'check_out' %}" class="mt-1">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                    <button class="btn btn-outline-danger btn-sm">Выселить</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted small">Бронирований нет</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="card">
+                <div class="card-header">Занятые даты</div>
+                <ul class="list-group list-group-flush">
+                    {% for r in busy %}
+                        <li class="list-group-item small">{{ r.date_from|date:'d.m.Y' }} – {{ r.date_to|date:'d.m.Y' }}</li>
+                    {% empty %}
+                        <li class="list-group-item text-muted small">Номер свободен</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

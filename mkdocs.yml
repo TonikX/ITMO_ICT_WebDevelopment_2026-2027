@@ -1,0 +1,12 @@
+site_name: Веб-программирование. Медолазов Андрей. K3341
+docs_dir: students/K3341/Medolazov_Andrey
+use_directory_urls: false
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчет: laboratory_work_1/report.md
+  - ЛР2:
+      - Отчет: laboratory_work_2/report.md
