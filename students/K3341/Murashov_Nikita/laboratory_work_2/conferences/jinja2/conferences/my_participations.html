@@ -1,0 +1,29 @@
+{% extends "conferences/base.html" %}
+{% from "conferences/macros.html" import pagination, result_badge %}
+{% block title %}Мои регистрации{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Мои регистрации</h1>
+{% if participations %}
+<div class="card"><div class="table-responsive">
+  <table class="table align-middle mb-0">
+    <thead><tr><th>Конференция</th><th>Доклад</th><th>Результат</th><th></th></tr></thead>
+    <tbody>
+    {% for p in participations %}
+      <tr>
+        <td><a href="{{ p.conference.get_absolute_url() }}">{{ p.conference.title }}</a></td>
+        <td>{{ p.talk_title }}</td>
+        <td>{{ result_badge(p) }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{{ url('participation-update', args=[p.pk]) }}">Изменить</a>
+          <a class="btn btn-sm btn-outline-danger" href="{{ url('participation-delete', args=[p.pk]) }}">Удалить</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div></div>
+{{ pagination(page_obj, '') }}
+{% else %}
+<div class="alert alert-info">Вы пока никуда не зарегистрированы. <a href="{{ url('conference-list') }}">К списку конференций</a></div>
+{% endif %}
+{% endblock %}

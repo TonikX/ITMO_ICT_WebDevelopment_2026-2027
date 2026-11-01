@@ -1,0 +1,73 @@
+{% extends "conferences/base.html" %}
+{% from "conferences/macros.html" import pagination %}
+{% block title %}Конференции{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Научные конференции</h1>
+  {% if user.is_staff %}
+  <a class="btn btn-success" href="{{ url('conference-create') }}">+ Добавить конференцию</a>
+  {% endif %}
+</div>
+
+<form class="card card-body mb-4" method="get">
+  <div class="row g-2">
+    <div class="col-md-4">
+      <input class="form-control" type="search" name="q" aria-label="Поиск" placeholder="Название, место, тематика" value="{{ filters.get('q', '') }}">
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="topic" aria-label="Тематика">
+        <option value="">Все тематики</option>
+        {% for t in topics %}
+        <option value="{{ t.id }}" {{ 'selected' if filters.get('topic') == t.id|string }}>{{ t.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="city" aria-label="Город">
+        <option value="">Все города</option>
+        {% for c in cities %}
+        <option value="{{ c }}" {{ 'selected' if filters.get('city') == c }}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2"><input class="form-control" type="date" name="date_from" aria-label="Заканчивается не раньше" title="Заканчивается не раньше" value="{{ filters.get('date_from', '') }}"></div>
+    <div class="col-md-2"><input class="form-control" type="date" name="date_to" aria-label="Начинается не позже" title="Начинается не позже" value="{{ filters.get('date_to', '') }}"></div>
+  </div>
+  <div class="row g-2 mt-1">
+    <div class="col-md-3">
+      <select class="form-select form-select-sm" name="sort" aria-label="Сортировка">
+        {% for key, label in sort_options %}
+        <option value="{{ key }}" {{ 'selected' if filters.get('sort') == key }}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="mt-2">
+    <button class="btn btn-primary btn-sm">Применить</button>
+    <a class="btn btn-link btn-sm" href="{{ url('conference-list') }}">Сбросить</a>
+  </div>
+</form>
+
+{% for c in conferences %}
+<div class="card mb-3"><div class="card-body">
+  <div class="d-flex justify-content-between">
+    <h2 class="h5"><a class="text-decoration-none" href="{{ c.get_absolute_url() }}">{{ c.title }}</a></h2>
+    <span class="text-muted rating">
+      {% if c.avg_rating %}★ {{ '%.1f'|format(c.avg_rating) }}/10{% else %}нет оценок{% endif %}
+    </span>
+  </div>
+  <div class="text-muted mb-2">
+    {{ c.start_date|date }} – {{ c.end_date|date }} · {{ c.city }}, {{ c.venue_name }}
+  </div>
+  <p class="mb-2">{{ c.description|truncate(220) }}</p>
+  <div>
+    {% for t in c.topics.all() %}<span class="badge text-bg-light border">{{ t.name }}</span> {% endfor %}
+    <span class="float-end text-muted small">Докладов: {{ c.participants_count }}</span>
+  </div>
+</div></div>
+{% else %}
+<div class="alert alert-info">Ничего не найдено.</div>
+{% endfor %}
+
+{{ pagination(page_obj, query) }}
+{% endblock %}

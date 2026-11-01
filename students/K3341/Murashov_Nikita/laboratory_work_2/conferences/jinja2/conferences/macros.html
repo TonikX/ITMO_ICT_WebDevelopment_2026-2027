@@ -1,0 +1,43 @@
+{% macro render_form(form) %}
+  {% for error in form.non_field_errors() %}
+  <div class="alert alert-danger">{{ error }}</div>
+  {% endfor %}
+  {% for field in form %}
+  <div class="mb-3">
+    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+    {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+  </div>
+  {% endfor %}
+{% endmacro %}
+
+{% macro pagination(page_obj, query) %}
+  {% if page_obj.paginator.num_pages > 1 %}
+  {% set base = '?' ~ query ~ '&' if query else '?' %}
+  <nav>
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous() %}
+      <li class="page-item"><a class="page-link" href="{{ base }}page={{ page_obj.previous_page_number() }}">&laquo;</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+      <li class="page-item {{ 'active' if num == page_obj.number }}">
+        <a class="page-link" href="{{ base }}page={{ num }}">{{ num }}</a>
+      </li>
+      {% endfor %}
+      {% if page_obj.has_next() %}
+      <li class="page-item"><a class="page-link" href="{{ base }}page={{ page_obj.next_page_number() }}">&raquo;</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+{% endmacro %}
+
+{% macro result_badge(participation) %}
+  {% set colors = {'pending': 'secondary', 'recommended': 'success', 'not_recommended': 'danger'} %}
+  <span class="badge text-bg-{{ colors[participation.result] }}">{{ participation.get_result_display() }}</span>
+{% endmacro %}

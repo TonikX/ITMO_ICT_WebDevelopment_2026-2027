@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Автовладельцы{% endblock %}</title>
+  <style>
+    body { font-family: sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    nav a { margin-right: 1rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: .4rem .6rem; text-align: left; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="{% url 'owner_list' %}">Владельцы</a>
+  <a href="{% url 'owner_create' %}">+ Владелец</a>
+  <a href="{% url 'car_list' %}">Автомобили</a>
+  <a href="{% url 'car_create' %}">+ Автомобиль</a>
+  <a href="{% url 'admin:index' %}">Админка</a>
+</nav>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>

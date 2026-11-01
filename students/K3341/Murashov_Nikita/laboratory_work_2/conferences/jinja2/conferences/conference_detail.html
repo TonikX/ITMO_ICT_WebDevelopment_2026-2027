@@ -1,0 +1,69 @@
+{% extends "conferences/base.html" %}
+{% from "conferences/macros.html" import pagination, result_badge %}
+{% block title %}{{ conference.title }}{% endblock %}
+{% block content %}
+<div class="card mb-4"><div class="card-body">
+  <div class="d-flex justify-content-between align-items-start">
+    <h1 class="h3">{{ conference.title }}</h1>
+    {% if user.is_staff %}
+    <div class="btn-group">
+      <a class="btn btn-outline-primary btn-sm" href="{{ url('conference-update', args=[conference.pk]) }}">Изменить</a>
+      <a class="btn btn-outline-danger btn-sm" href="{{ url('conference-delete', args=[conference.pk]) }}">Удалить</a>
+    </div>
+    {% endif %}
+  </div>
+  <p class="text-muted">
+    {{ conference.start_date|date }} – {{ conference.end_date|date }} ·
+    {{ conference.city }}, {{ conference.venue_name }}
+    {% if avg_rating %}· <span class="rating">★ {{ '%.1f'|format(avg_rating) }}/10</span>{% endif %}
+  </p>
+  <p>{% for t in conference.topics.all() %}<span class="badge text-bg-light border">{{ t.name }}</span> {% endfor %}</p>
+
+  <h2 class="h5 mt-4">О конференции</h2>
+  <p class="multiline">{{ conference.description }}</p>
+  {% if conference.venue_description %}
+  <h2 class="h5">О месте проведения</h2>
+  <p class="multiline">{{ conference.venue_description }}</p>
+  {% endif %}
+  <h2 class="h5">Условия участия</h2>
+  <p class="multiline">{{ conference.participation_terms }}</p>
+
+  {% if not user.is_authenticated %}
+  <a class="btn btn-primary" href="{{ url('login') }}?next={{ request.path }}">Войдите, чтобы зарегистрироваться</a>
+  {% elif my_participation %}
+  <div class="alert alert-secondary d-flex justify-content-between align-items-center mb-0">
+    <span>Вы заявили доклад «{{ my_participation.talk_title }}» {{ result_badge(my_participation) }}</span>
+    <a href="{{ url('my-participations') }}">Мои регистрации</a>
+  </div>
+  {% else %}
+  <a class="btn btn-primary" href="{{ url('participation-create', args=[conference.pk]) }}">Зарегистрироваться как автор</a>
+  {% endif %}
+  <a class="btn btn-outline-secondary" href="{{ url('participants') }}?conference={{ conference.pk }}">Участники конференции</a>
+</div></div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h4 mb-0">Отзывы</h2>
+  {% if user.is_authenticated %}
+  <a class="btn btn-outline-primary btn-sm" href="{{ url('review-create', args=[conference.pk]) }}">Оставить отзыв</a>
+  {% endif %}
+</div>
+{% for review in reviews %}
+<div class="card mb-2"><div class="card-body">
+  <div class="d-flex justify-content-between">
+    <strong>{{ review.author }}</strong>
+    <span class="rating">★ {{ review.rating }}/10</span>
+  </div>
+  {% set author = review.author %}
+  <div class="text-muted small mb-2">
+    {{ [author.organization, author.academic_degree, 'участвовал(а) ' ~ review.start_date|date ~ ' – ' ~ review.end_date|date]|select|join(' · ') }}
+  </div>
+  <p class="mb-1">{{ review.text }}</p>
+  {% if user.is_staff or review.author_id == user.id %}
+  <a class="small text-danger" href="{{ url('review-delete', args=[review.pk]) }}">Удалить</a>
+  {% endif %}
+</div></div>
+{% else %}
+<p class="text-muted">Отзывов пока нет.</p>
+{% endfor %}
+{{ pagination(reviews, '') }}
+{% endblock %}

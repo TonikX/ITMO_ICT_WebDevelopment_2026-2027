@@ -1,0 +1,63 @@
+{% extends "conferences/base.html" %}
+{% from "conferences/macros.html" import pagination, result_badge %}
+{% block title %}Участники{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Участники конференций</h1>
+
+<form class="card card-body mb-4" method="get">
+  <div class="row g-2">
+    <div class="col-md-4"><input class="form-control" type="search" name="q" aria-label="Поиск" placeholder="ФИО, организация, доклад" value="{{ filters.get('q', '') }}"></div>
+    <div class="col-md-4">
+      <select class="form-select" name="conference" aria-label="Конференция">
+        <option value="">Все конференции</option>
+        {% for c in all_conferences %}
+        <option value="{{ c.id }}" {{ 'selected' if filters.get('conference') == c.id|string }}>{{ c.title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select class="form-select" name="result" aria-label="Результат">
+        <option value="">Любой результат</option>
+        {% for value, label in results %}
+        <option value="{{ value }}" {{ 'selected' if filters.get('result') == value }}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-1"><button class="btn btn-primary w-100">Найти</button></div>
+  </div>
+</form>
+
+{% for conference, rows in groups %}
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <a class="fw-semibold text-decoration-none" href="{{ conference.get_absolute_url() }}">{{ conference.title }}</a>
+    <span class="text-muted small">
+      {{ conference.start_date|date }} – {{ conference.end_date|date }} · участников: {{ rows|length }}
+    </span>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr><th>Участник</th><th>Организация</th><th>Доклад</th><th>Результат</th>{% if user.is_staff %}<th></th>{% endif %}</tr>
+      </thead>
+      <tbody>
+      {% for p in rows %}
+        <tr>
+          <td>{{ p.user }}</td>
+          <td>{{ p.user.organization }}</td>
+          <td>{{ p.talk_title }}</td>
+          <td>{{ result_badge(p) }}</td>
+          {% if user.is_staff %}
+          <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{{ url('participation-result', args=[p.pk]) }}">Результат</a></td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info">Участников не найдено.</div>
+{% endfor %}
+{{ pagination(page_obj, query) }}
+{% endblock %}

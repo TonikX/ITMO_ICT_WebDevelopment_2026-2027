@@ -1,0 +1,18 @@
+site_name: Веб-программирование. Мурашов Никита. K3341
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчёт: lr2/report.md
+      - Практики 2.1–2.3: lr2/practice.md
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

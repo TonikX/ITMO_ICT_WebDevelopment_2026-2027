@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Автовладельцы</h1>
+<table>
+  <tr><th>Фамилия</th><th>Имя</th><th>Дата рождения</th><th>Национальность</th></tr>
+  {% for owner in owners %}
+  <tr>
+    <td><a href="{% url 'owner_detail' owner.pk %}">{{ owner.last_name|default:owner.username }}</a></td>
+    <td>{{ owner.first_name }}</td>
+    <td>{{ owner.birth_date|default:"—" }}</td>
+    <td>{{ owner.nationality|default:"—" }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
