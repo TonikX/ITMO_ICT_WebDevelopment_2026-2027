@@ -1,0 +1,20 @@
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px/1.5 Arial, sans-serif; color: #202b38; background: #f4f6f8; }
+header { background: #233b55; padding: 18px 24px; }
+nav { max-width: 1180px; margin: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 22px; color: white; }
+nav a { color: white; }
+main { max-width: 1180px; margin: 32px auto; padding: 0 24px; }
+h1 { font-size: 28px; } h2 { font-size: 20px; }
+a { color: #175c99; } article { background: white; border: 1px solid #d5dce4; padding: 16px 20px; margin: 16px 0; border-radius: 5px; }
+article h2 { margin-top: 0; }
+button { background: #175c99; color: white; border: 0; padding: 9px 16px; border-radius: 4px; font: inherit; cursor: pointer; }
+input, select, textarea { font: inherit; padding: 8px; border: 1px solid #8e9bab; border-radius: 3px; max-width: 100%; }
+.edit-form { max-width: 640px; } .edit-form label { display: block; font-weight: bold; margin-bottom: 5px; }
+.edit-form input, .edit-form textarea, .edit-form select { width: 100%; }
+.helptext { display: block; color: #526273; font-size: 14px; }
+.errorlist { color: #a51e26; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: white; }
+th, td { padding: 12px; border: 1px solid #ced6df; text-align: left; vertical-align: top; }
+th { background: #e5ecf3; }
+.text { white-space: pre-wrap; overflow-wrap: anywhere; }

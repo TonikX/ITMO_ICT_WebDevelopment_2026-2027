@@ -1,0 +1,2 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Удаление регистрации</h1><p>Удалить регистрацию «{{ entry }}»?</p><form method="post">{{ csrf_input }}<button>Удалить</button> <a href="{{ url('my_registrations') }}">Отмена</a></form>{% endblock %}
