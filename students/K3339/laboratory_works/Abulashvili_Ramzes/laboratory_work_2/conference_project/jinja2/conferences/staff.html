@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Рабочее место организатора</h1><p class="muted">Просмотр заявок и внесение результатов выступлений.</p>
+<section class="panel"><form class="filters" method="get">
+<div class="search"><label for="conference">Конференция</label><select name="conference" id="conference"><option value="">Все конференции</option>{% for conference in conferences %}<option value="{{ conference.pk }}" {% if selected_conference == conference.pk|string %}selected{% endif %}>{{ conference.title }}</option>{% endfor %}</select></div>
+<div><label for="result">Результат</label><select name="result" id="result"><option value="">Все результаты</option>{% for value, label in results %}<option value="{{ value }}" {% if selected_result == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+<button type="submit">Показать</button></form></section>
+<section class="panel table-wrap"><table><thead><tr><th>Конференция</th><th>Автор и выступление</th><th>Результат</th><th>Действие</th></tr></thead><tbody>
+{% for registration in registrations %}<tr><td>{{ registration.conference.title }}</td><td>{{ registration.author.get_full_name() or registration.author.username }}<br><small>{{ registration.presentation_title }}</small></td>
+<td><span class="badge {{ registration.result }}">{{ registration.get_result_display() }}</span></td><td><a href="{{ url('result_edit', args=[registration.pk]) }}">Указать результат</a></td></tr>
+{% else %}<tr><td colspan="4">Заявки по выбранным условиям отсутствуют.</td></tr>{% endfor %}
+</tbody></table></section>{% endblock %}

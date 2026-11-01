@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}{{ conference.title }} — Научные конференции{% endblock %}
+{% block content %}
+<a class="back" href="{{ url('conference_list') }}">← Все конференции</a>
+<div class="page-head"><h1>{{ conference.title }}</h1><div class="tags">{% for topic in conference.topics.all() %}<span class="tag">{{ topic.name }}</span>{% endfor %}</div></div>
+<section class="panel"><h2>О конференции</h2><p class="text">{{ conference.description }}</p><dl>
+<dt>Даты</dt><dd>{{ conference.start_date.strftime('%d.%m.%Y') }} — {{ conference.end_date.strftime('%d.%m.%Y') }}</dd>
+<dt>Место</dt><dd>{{ conference.venue.name }}, {{ conference.venue.city }}<br>{{ conference.venue.address }}</dd>
+<dt>О площадке</dt><dd class="text">{{ conference.venue.description }}</dd>
+<dt>Условия участия</dt><dd class="text">{{ conference.participation_terms }}</dd>
+</dl><div class="actions">
+{% if request.user.is_authenticated %}
+{% if registration %}<a class="button" href="{{ url('registration_edit', args=[registration.pk]) }}">Редактировать заявку</a><span class="badge {{ registration.result }}">{{ registration.get_result_display() }}</span>
+{% else %}<a class="button" href="{{ url('registration_create', args=[conference.pk]) }}">Подать заявку на выступление</a>{% endif %}
+{% else %}<a class="button" href="{{ url('login') }}?next={{ url('registration_create', args=[conference.pk]) }}">Войти и подать заявку</a>{% endif %}
+<a href="{{ url('participants') }}?conference={{ conference.pk }}">Участники конференции</a>
+</div></section>
+<section class="panel"><h2>Отзывы</h2>
+{% for review in reviews %}<article class="review"><h3>{{ review.author.get_full_name() or review.author.username }} <span class="tag">{{ review.rating }}/10</span></h3>
+<p class="muted">Даты конференции: {{ review.conference_start.strftime('%d.%m.%Y') }} — {{ review.conference_end.strftime('%d.%m.%Y') }}</p><p class="text">{{ review.text }}</p></article>
+{% else %}<p class="muted">Отзывов пока нет.</p>{% endfor %}
+{% if request.user.is_authenticated %}<div class="actions"><a class="button secondary" href="{{ url('review_edit', args=[conference.pk]) }}">{{ 'Изменить свой отзыв' if my_review else 'Оставить отзыв' }}</a></div>
+{% else %}<p><a href="{{ url('login') }}?next={{ url('review_edit', args=[conference.pk]) }}">Войдите</a>, чтобы оставить отзыв.</p>{% endif %}
+</section>
+{% endblock %}

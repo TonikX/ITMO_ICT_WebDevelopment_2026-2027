@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Участники конференций</h1>
+<section class="panel"><form method="get" class="filters"><div class="search"><label for="conference">Конференция</label><select id="conference" name="conference"><option value="">Все конференции</option>
+{% for conference in conferences %}<option value="{{ conference.pk }}" {% if selected_conference == conference.pk|string %}selected{% endif %}>{{ conference.title }}</option>{% endfor %}
+</select></div><button type="submit">Показать</button></form></section>
+<section class="panel table-wrap"><table><thead><tr><th>Участник</th><th>Организация</th><th>Тема выступления</th><th>Результат</th></tr></thead><tbody>
+{% for group in registrations|groupby('conference_id') %}
+<tr class="group-row"><th colspan="4">{{ group.list[0].conference.title }}</th></tr>
+{% for registration in group.list %}<tr><td>{{ registration.author.get_full_name() or registration.author.username }}</td><td>{{ registration.affiliation }}</td>
+<td>{{ registration.presentation_title }}</td><td><span class="badge {{ registration.result }}">{{ registration.get_result_display() }}</span></td></tr>{% endfor %}
+{% else %}<tr><td colspan="4">Зарегистрированных участников пока нет.</td></tr>{% endfor %}
+</tbody></table></section>{% endblock %}

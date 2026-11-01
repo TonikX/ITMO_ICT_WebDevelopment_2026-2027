@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<a class="back" href="{% url 'cars' %}">← Все автомобили</a><h1>{{ car.brand }} {{ car.model_name }}</h1>
+<section class="panel"><dl><dt>Государственный номер</dt><dd>{{ car.plate_number }}</dd><dt>Цвет</dt><dd>{{ car.color|default:'—' }}</dd></dl>
+<div class="actions"><a class="button" href="{% url 'car_update' car.pk %}">Редактировать</a><a class="button secondary" href="{% url 'car_delete' car.pk %}">Удалить</a></div></section>
+<section class="panel table-wrap"><h2>История владения</h2><table><thead><tr><th>Владелец</th><th>Начало</th><th>Окончание</th></tr></thead><tbody>
+{% for period in car.ownership_set.all %}<tr><td><a href="{% url 'owner_detail' period.owner.pk %}">{{ period.owner }}</a></td>
+<td>{{ period.start_date|date:'d.m.Y' }}</td><td>{{ period.end_date|date:'d.m.Y'|default:'По настоящее время' }}</td></tr>
+{% empty %}<tr><td colspan="3">Владельцы пока не указаны.</td></tr>{% endfor %}
+</tbody></table></section>
+{% endblock %}

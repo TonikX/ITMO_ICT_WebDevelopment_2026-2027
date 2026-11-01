@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Вход</h1><section class="panel form-panel">
+<form method="post">{{ csrf_input }}{{ form.as_p() }}<input type="hidden" name="next" value="{{ next }}">
+<div class="actions"><button type="submit">Войти</button><a href="{{ url('signup') }}">Создать аккаунт</a></div></form>
+</section>{% endblock %}

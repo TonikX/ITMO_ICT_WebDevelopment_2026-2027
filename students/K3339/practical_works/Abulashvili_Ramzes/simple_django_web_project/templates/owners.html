@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">Практики Django</p><h1>Владельцы автомобилей</h1>
+<p class="muted">Пользователи, их автомобили и история владения.</p>
+<a class="button" href="{% url 'owner_create' %}">Добавить владельца</a></div>
+<section class="panel table-wrap"><table>
+<thead><tr><th>Владелец</th><th>Имя пользователя</th><th>Дата рождения</th><th>Автомобили</th></tr></thead>
+<tbody>{% for owner in owners %}<tr>
+<td><a href="{% url 'owner_detail' owner.pk %}">{{ owner }}</a></td><td>{{ owner.username }}</td>
+<td>{{ owner.birth_date|date:'d.m.Y'|default:'—' }}</td>
+<td>{% for car in owner.cars.all %}{{ car }}{% if not forloop.last %}<br>{% endif %}{% empty %}Нет автомобилей{% endfor %}</td>
+</tr>{% empty %}<tr><td colspan="4">Владельцы пока не добавлены.</td></tr>{% endfor %}</tbody>
+</table></section>
+{% endblock %}

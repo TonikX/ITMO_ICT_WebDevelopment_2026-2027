@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Удаление автомобиля</h1><section class="panel form-panel">
+<p>Удалить автомобиль <strong>{{ object }}</strong> и его историю владения?</p>
+<form method="post">{% csrf_token %}<div class="actions"><button class="danger" type="submit">Удалить</button><a href="{% url 'car_detail' object.pk %}">Отмена</a></div></form>
+</section>{% endblock %}

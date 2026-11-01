@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} — Научные конференции{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>{% if subtitle %}<p class="muted">{{ subtitle }}</p>{% endif %}
+<section class="panel form-panel"><form method="post">{{ csrf_input }}{{ form.as_p() }}
+<div class="actions"><button type="submit">{{ button|default('Сохранить') }}</button><a href="{{ url('conference_list') }}">К конференциям</a></div>
+</form></section>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Удаление заявки</h1><section class="panel form-panel">
+<p>Отменить участие в конференции <strong>{{ registration.conference.title }}</strong> с выступлением «{{ registration.presentation_title }}»?</p>
+<form method="post">{{ csrf_input }}<div class="actions"><button class="danger" type="submit">Удалить заявку</button><a href="{{ url('my_registrations') }}">Отмена</a></div></form>
+</section>{% endblock %}

@@ -1,0 +1,13 @@
+site_name: Веб-программирование — Абулашвили Рамзес, K3339
+site_url: https://rachektor.github.io/ITMO_ICT_WebDevelopment_2026-2027/
+theme:
+  name: material
+  language: ru
+nav:
+  - Главная: index.md
+  - Практики Django:
+      - Практика 2.1: practice21.md
+      - Практика 2.2: practice22.md
+      - Практика 2.3: practice23.md
+  - ЛР2. Простой сайт на Django:
+      - Отчёт: lab2.md

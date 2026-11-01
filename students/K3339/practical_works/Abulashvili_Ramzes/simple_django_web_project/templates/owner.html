@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}{{ owner }} — Автовладельцы{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'owners' %}">← Все владельцы</a>
+<h1>{{ owner }}</h1>
+<section class="panel"><h2>Данные пользователя</h2><dl>
+<dt>Имя пользователя</dt><dd>{{ owner.username }}</dd>
+<dt>Дата рождения</dt><dd>{{ owner.birth_date|date:'d.m.Y'|default:'—' }}</dd>
+<dt>Номер паспорта</dt><dd>{{ owner.passport_number|default:'—' }}</dd>
+<dt>Домашний адрес</dt><dd>{{ owner.home_address|default:'—' }}</dd>
+<dt>Национальность</dt><dd>{{ owner.nationality|default:'—' }}</dd>
+</dl></section>
+<section class="panel table-wrap"><h2>История владения</h2><table>
+<thead><tr><th>Автомобиль</th><th>Начало</th><th>Окончание</th></tr></thead><tbody>
+{% for period in periods %}<tr><td><a href="{% url 'car_detail' period.car.pk %}">{{ period.car }}</a></td>
+<td>{{ period.start_date|date:'d.m.Y' }}</td><td>{{ period.end_date|date:'d.m.Y'|default:'По настоящее время' }}</td></tr>
+{% empty %}<tr><td colspan="3">Записей пока нет.</td></tr>{% endfor %}
+</tbody></table></section>
+<section class="panel"><h2>Водительские удостоверения</h2>
+{% for license in owner.licenses.all %}<p>{{ license.number }} · Категория {{ license.category }} · Выдано {{ license.issue_date|date:'d.m.Y' }}</p>
+{% empty %}<p class="muted">Удостоверения пока не добавлены.</p>{% endfor %}</section>
+{% endblock %}

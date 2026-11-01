@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Автовладельцы{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'site.css' %}">
+</head>
+<body>
+<header><div class="header-inner">
+  <a class="brand" href="{% url 'owners' %}">Автовладельцы</a>
+  <nav aria-label="Основное меню">
+    <a href="{% url 'owners' %}">Владельцы</a>
+    <a href="{% url 'cars' %}">Автомобили</a>
+    <a href="{% url 'admin:index' %}">Администрирование</a>
+  </nav>
+</div></header>
+<main>{% block content %}{% endblock %}</main>
+<footer>Практические работы 2.1–2.3 · Абулашвили Рамзес · K3339</footer>
+</body>
+</html>
