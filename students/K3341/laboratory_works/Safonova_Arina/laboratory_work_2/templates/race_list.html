@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Автогонки</h1>
+<form method="get">
+<label for="q">Название гонки</label>
+<input id="q" name="q" value="{{ query }}">
+<button>Найти</button>
+<a href="{{ url('race_list') }}">Сбросить</a>
+</form>
+{% for race in page %}
+<article>
+<h2><a href="{{ url('race_detail', args=[race.pk]) }}">{{ race.name }}</a></h2>
+<p>{{ race.start_date.strftime('%d.%m.%Y') }} — {{ race.end_date.strftime('%d.%m.%Y') }}</p>
+<a href="{{ url('race_detail', args=[race.pk]) }}">Участники и результаты</a>
+</article>
+{% else %}<p>Гонки не найдены.</p>{% endfor %}
+<p>
+{% if page.has_previous() %}<a href="?q={{ query|urlencode }}&page={{ page.previous_page_number() }}">Назад</a>{% endif %}
+Страница {{ page.number }} из {{ page.paginator.num_pages }}
+{% if page.has_next() %}<a href="?q={{ query|urlencode }}&page={{ page.next_page_number() }}">Далее</a>{% endif %}
+</p>
+{% endblock %}

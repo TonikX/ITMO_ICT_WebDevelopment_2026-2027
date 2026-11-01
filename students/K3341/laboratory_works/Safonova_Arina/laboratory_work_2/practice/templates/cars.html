@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Автомобили</h1><a href="{{ url('car_create') }}">Создать автомобиль</a>{% for car in object_list %}<article><a href="{{ url('car_detail', args=[car.pk]) }}">{{ car }}</a><p>{{ car.color or 'Цвет не указан' }}</p></article>{% else %}<p>Автомобилей нет.</p>{% endfor %}{% endblock %}

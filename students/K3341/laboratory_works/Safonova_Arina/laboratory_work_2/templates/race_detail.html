@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ race.name }}{% endblock %}
+{% block content %}
+<h1>{{ race.name }}</h1>
+<p>{{ race.start_date.strftime('%d.%m.%Y') }} — {{ race.end_date.strftime('%d.%m.%Y') }}</p>
+{% if request.user.is_authenticated %}<p><a href="{{ url('registration_create', args=[race.pk]) }}">Зарегистрировать гонщика</a></p>{% else %}<p>Для регистрации гонщика и добавления комментариев <a href="{{ url('login') }}">войдите</a>.</p>{% endif %}
+<h2>Все заезды и результаты</h2>
+<div class="table-wrap"><table><thead><tr><th>ФИО</th><th>Команда</th><th>Автомобиль</th><th>Участник</th><th>Опыт, лет</th><th>Класс</th><th>Время</th><th>Результат</th>{% if request.user.is_staff or request.user.is_superuser %}<th>Управление</th>{% endif %}</tr></thead>
+<tbody>{% for entry in entries %}<tr><td>{{ entry.full_name }}</td><td>{{ entry.team }}</td><td>{{ entry.car_description }}</td><td>{{ entry.description }}</td><td>{{ entry.experience }}</td><td>{{ entry.driver_class }}</td><td>{{ entry.race_time if entry.race_time is not none else 'Не указано' }}</td><td>{{ entry.result or 'Не указан' }}</td>{% if request.user.is_staff or request.user.is_superuser %}<td><a href="{{ url('result_edit', args=[entry.pk]) }}">Указать результат</a></td>{% endif %}</tr>{% else %}<tr><td colspan="{{ 9 if request.user.is_staff or request.user.is_superuser else 8 }}">Участников пока нет.</td></tr>{% endfor %}</tbody></table></div>
+<h2>Отзывы и комментарии</h2>
+{% if request.user.is_authenticated %}<p><a href="{{ url('comment_create', args=[race.pk]) }}">Добавить комментарий</a></p>{% endif %}
+{% for comment in comments %}<article><p><strong>{{ comment.user.username }}</strong> · {{ comment.get_comment_type_display() }} · {{ comment.rating }}/10</p><p>Даты заезда: {{ comment.start_date.strftime('%d.%m.%Y') }} — {{ comment.end_date.strftime('%d.%m.%Y') }}</p><p class="text">{{ comment.text }}</p></article>{% else %}<p>Комментариев пока нет.</p>{% endfor %}
+{% endblock %}

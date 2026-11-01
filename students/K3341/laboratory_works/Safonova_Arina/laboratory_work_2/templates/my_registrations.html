@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block content %}<h1>Мои регистрации</h1>
+{% for entry in entries %}<article><h2>{{ entry.full_name }}</h2><p><a href="{{ url('race_detail', args=[entry.race_id]) }}">{{ entry.race.name }}</a> · {{ entry.team }}</p><a href="{{ url('registration_edit', args=[entry.pk]) }}">Изменить</a> · <a href="{{ url('registration_delete', args=[entry.pk]) }}">Удалить</a></article>{% else %}<p>Регистраций пока нет. Выберите гонку в <a href="{{ url('race_list') }}">списке</a>.</p>{% endfor %}
+{% endblock %}

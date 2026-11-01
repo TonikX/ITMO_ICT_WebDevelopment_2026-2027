@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<h1>Владельцы</h1>{% for owner in owners %}<p><a href="{{ url('owner_detail', args=[owner.pk]) }}">{{ owner }}</a></p>{% else %}<p>Владельцев нет.</p>{% endfor %}{% endblock %}

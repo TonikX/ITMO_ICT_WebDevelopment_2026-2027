@@ -1,0 +1,236 @@
+[
+  {
+    "model": "project_first_app.owner",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$0cfYAJhcEBTHyTMwUUicSB$FGcvSKbn4ONmDEFFokq5kMAj3wGshmenUUMR9PYPxh0=",
+      "username": "owner1",
+      "first_name": "Имя1",
+      "last_name": "Фамилия1",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000001",
+      "address": "Невско-Янтарная улица, дом 7",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.owner",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$v1jqmd96ea0KZRnOrbTTo0$n381y21QRMsxMDxoXpRNW1vfrfnhaPac2aHbiuP742Q=",
+      "username": "owner2",
+      "first_name": "Имя2",
+      "last_name": "Фамилия2",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000002",
+      "address": "Фонарно-Мойкинская улица, дом 12",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.owner",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$yhhnjXme9TCefZ3UYLMfrU$RLKWXi0LP+ebIehG7O3GqxUHVITEXHu1+uc6rTCemOU=",
+      "username": "owner3",
+      "first_name": "Имя3",
+      "last_name": "Фамилия3",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000003",
+      "address": "Петроградско-Туманная улица, дом 4",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.owner",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$t2unbw7iPx6DCOZ6Aqs3MM$HtOXrtRDoDsAhHMRlMAnnjpLwypGzjIsDsAWjPPOaBI=",
+      "username": "owner4",
+      "first_name": "Имя4",
+      "last_name": "Фамилия4",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000004",
+      "address": "Лахтинско-Звёздная улица, дом 19",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.owner",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$SXWnDnZeNFDm0iXBOBAv8n$rOHaJo7Th+xxpPWBAPyK5ueQ+RKJ0jn+gRn68D/5Vk4=",
+      "username": "owner5",
+      "first_name": "Имя5",
+      "last_name": "Фамилия5",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000005",
+      "address": "Василеостровско-Парусная улица, дом 8",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.owner",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$k0P1KgqJ7VNGj6LG6hsBCr$wMIzoQds2JUNchV/pb0RbrjTCZw+t5ePTetdbDoiKSg=",
+      "username": "owner6",
+      "first_name": "Имя6",
+      "last_name": "Фамилия6",
+      "birth_date": "1995-01-01",
+      "passport": "0000 000006",
+      "address": "Летне-Садовая улица, дом 23",
+      "nationality": "Учебные данные"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 1,
+    "fields": {
+      "plate": "А001АА78",
+      "brand": "Lada",
+      "model": "Модель1",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 2,
+    "fields": {
+      "plate": "А002АА78",
+      "brand": "Lada",
+      "model": "Модель2",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 3,
+    "fields": {
+      "plate": "А003АА78",
+      "brand": "Lada",
+      "model": "Модель3",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 4,
+    "fields": {
+      "plate": "А004АА78",
+      "brand": "Lada",
+      "model": "Модель4",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 5,
+    "fields": {
+      "plate": "А005АА78",
+      "brand": "Lada",
+      "model": "Модель5",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 6,
+    "fields": {
+      "plate": "А006АА78",
+      "brand": "Lada",
+      "model": "Модель6",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.car",
+    "pk": 7,
+    "fields": {
+      "plate": "А007АА78",
+      "brand": "Lada",
+      "model": "Модель7",
+      "color": "Белый"
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 1,
+    "fields": {
+      "owner": 2,
+      "car": 1,
+      "start_date": "2020-01-01",
+      "end_date": "2021-12-31"
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 2,
+    "fields": {
+      "owner": 2,
+      "car": 2,
+      "start_date": "2020-01-01",
+      "end_date": "2021-12-31"
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 3,
+    "fields": {
+      "owner": 2,
+      "car": 3,
+      "start_date": "2020-01-01",
+      "end_date": "2021-12-31"
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 4,
+    "fields": {
+      "owner": 3,
+      "car": 2,
+      "start_date": "2022-01-01",
+      "end_date": null
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 5,
+    "fields": {
+      "owner": 3,
+      "car": 3,
+      "start_date": "2022-01-01",
+      "end_date": null
+    }
+  },
+  {
+    "model": "project_first_app.ownership",
+    "pk": 6,
+    "fields": {
+      "owner": 3,
+      "car": 4,
+      "start_date": "2022-01-01",
+      "end_date": null
+    }
+  },
+  {
+    "model": "project_first_app.license",
+    "pk": 1,
+    "fields": {
+      "owner": 2,
+      "number": "0000000001",
+      "license_type": "B",
+      "issued_at": "2019-01-01"
+    }
+  },
+  {
+    "model": "project_first_app.license",
+    "pk": 2,
+    "fields": {
+      "owner": 3,
+      "number": "0000000002",
+      "license_type": "B",
+      "issued_at": "2019-01-01"
+    }
+  }
+]

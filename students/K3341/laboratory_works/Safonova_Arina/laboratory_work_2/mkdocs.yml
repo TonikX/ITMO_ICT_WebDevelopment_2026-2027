@@ -1,0 +1,10 @@
+site_name: 'Лабораторная работа № 2 — Сафонова Арина, K3341'
+use_directory_urls: false
+theme:
+  name: mkdocs
+  locale: ru
+  highlightjs: false
+nav:
+  - Отчет: index.md
+  - Практики 2.1–2.3: practice.md
+plugins: []

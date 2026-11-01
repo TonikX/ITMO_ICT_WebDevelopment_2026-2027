@@ -1,0 +1,12 @@
+site_name: 'Веб-программирование — Сафонова Арина, K3341'
+site_url: 'https://rrriash.github.io/ITMO_ICT_WebDevelopment_2026-2027/'
+use_directory_urls: false
+theme:
+  name: mkdocs
+  locale: ru
+  highlightjs: false
+nav:
+  - ЛР1 — Сокеты: index.md
+  - ЛР2 — Django: lab2.md
+  - Практики 2.1–2.3: practice.md
+plugins: []
