@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Удаление автомобиля</h2>
+    <p>Вы действительно хотите удалить автомобиль <strong>{{ object }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, удалить</button>
+        <a href="/cars/">Отмена</a>
+    </form>
+</body>
+</html>

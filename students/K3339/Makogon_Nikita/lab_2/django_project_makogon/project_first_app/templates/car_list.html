@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Список автомобилей</h2>
+    <p><a href="/car/create/">+ Добавить новый автомобиль</a></p>
+    <ul>
+        {% for car in object_list %}
+            <li>
+                <a href="/car/{{ car.id }}/">{{ car.brand }} {{ car.model_name }}</a>
+                [<a href="/car/{{ car.id }}/update/">Редактировать</a>]
+                [<a href="/car/{{ car.id }}/delete/">Удалить</a>]
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

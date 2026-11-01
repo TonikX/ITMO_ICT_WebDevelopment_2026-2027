@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о владельце</title>
+</head>
+<body style="font-family: Arial, sans-serif; padding: 20px;">
+    <h2>Карточка автовладельца #{{ owner.id }}</h2>
+    <p><strong>Имя:</strong> {{ owner.first_name }}</p>
+    <p><strong>Фамилия:</strong> {{ owner.last_name }}</p>
+    <p><strong>Дата рождения:</strong> {{ owner.birth_date|default:"Не указана" }}</p>
+    <a href="/admin/project_first_app/carowner/">Вернуться в список (Admin)</a>
+</body>
+</html>

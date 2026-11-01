@@ -1,0 +1,56 @@
+{% extends 'racing_board/base.html' %}
+
+{% block content %}
+<h1 class="mb-4">Расписание автогонок</h1>
+
+<form method="get" class="mb-4 d-flex">
+    <input type="text" name="q" class="form-control me-2" placeholder="Поиск по названию или трассе..." value="{{ request.GET.q }}">
+    <button type="submit" class="btn btn-outline-primary">Найти</button>
+</form>
+
+<div class="row">
+    {% for race in races %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 {% if race.is_completed %}border-secondary opacity-75{% else %}border-primary{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0">{{ race.title }}</h5>
+                    {% if race.is_completed %}
+                        <span class="badge bg-secondary">Завершена</span>
+                    {% else %}
+                        <span class="badge bg-success">Регистрация открыта</span>
+                    {% endif %}
+                </div>
+                <h6 class="card-subtitle mb-3 text-muted">Трасса: {{ race.track }} | {{ race.race_date|date:"d.m.Y" }}</h6>
+                <p class="card-text">{{ race.description|truncatewords:20 }}</p>
+                <a href="{% url 'race_detail' race.id %}" class="btn {% if race.is_completed %}btn-outline-secondary{% else %}btn-primary{% endif %}">
+                    Табло заезда
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">В базе данных пока нет ни одной гонки.</div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- пагинация -->
+{% if is_paginated %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Назад</a></li>
+        {% endif %}
+        
+        <li class="page-item active"><span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span></li>
+        
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Вперед</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

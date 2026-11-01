@@ -1,0 +1,21 @@
+{% extends 'racing_board/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card mt-4 shadow-sm mb-5">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Оставить отзыв о гонке</h3>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Отправить комментарий</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="javascript:history.back()">Отмена</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Список автовладельцев</h2>
+    <ul>
+        {% for owner in owners %}
+            <li><a href="/owner/{{ owner.id }}/">{{ owner.first_name }} {{ owner.last_name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

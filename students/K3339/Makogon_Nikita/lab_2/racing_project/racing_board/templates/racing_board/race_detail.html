@@ -1,0 +1,100 @@
+{% extends 'racing_board/base.html' %}
+
+{% block content %}
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+        <h2 class="card-title">{{ race.title }}</h2>
+
+        {% if user.is_staff %}
+        <div class="alert alert-info py-2 d-flex justify-content-between align-items-center">
+            <span><strong>Панель организатора:</strong> Вы вошли как администратор.</span>
+            <div>
+                <a href="{% url 'admin:racing_board_race_change' race.id %}" class="btn btn-sm btn-warning">Изменить гонку</a>
+                <a href="{% url 'admin:racing_board_raceregistration_changelist' %}?race__id__exact={{ race.id }}" class="btn btn-sm btn-info text-white">Внести результаты заезда</a>
+            </div>
+        </div>
+        {% endif %}
+
+        <h5 class="text-muted mb-4">Трасса: {{ race.track }} | Дата заезда: {{ race.race_date|date:"d.m.Y" }}</h5>
+        <p class="card-text fs-5">{{ race.description }}</p>
+    </div>
+</div>
+
+{% if user.is_authenticated and not race.is_completed %}
+    <div class="mb-3">
+        <a href="{% url 'race_enroll' race.id %}" class="btn btn-success">Подать заявку на участие</a>
+    </div>
+{% elif not user.is_authenticated %}
+    <div class="alert alert-warning">
+        Для подачи заявки на участие необходимо <a href="{% url 'login' %}">войти в систему</a>.
+    </div>
+{% endif %}
+
+<h3 class="mb-3">Табло участников</h3>
+<div class="table-responsive bg-white rounded shadow-sm">
+    <table class="table table-hover mb-0">
+        <thead class="table-dark">
+            <tr>
+                <th>Место</th>
+                <th>№</th>
+                <th>Гонщик</th>
+                <th>Команда</th>
+                <th>Класс</th>
+                <th>Время</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reg in race.registrations.all %}
+            <tr class="{% if reg.result_place == 1 %}table-warning{% elif reg.result_place == 2 %}table-secondary{% elif reg.result_place == 3 %}table-danger{% endif %}">
+                <td><strong>{{ reg.result_place|default:"-" }}</strong></td>
+                <td><span class="badge bg-dark fs-6">{{ reg.car_number }}</span></td>
+                <td>{{ reg.racer.full_name|default:reg.racer.username }}</td>
+                <td>{{ reg.racer.team_name|default:"Индивидуально" }}</td>
+                <td>{{ reg.racer.get_racer_class_display }}</td>
+                <td>{{ reg.race_time|default:"-" }}</td>
+                <td>{{ reg.result_status }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center py-4">На эту гонку пока никто не зарегистрирован.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- отзывы -->
+<h4 class="mt-5 mb-3">Отзывы и комментарии</h4>
+
+{% if user.is_authenticated %}
+    <div class="mb-4">
+        <a href="{% url 'race_comment' race.id %}" class="btn btn-outline-primary">Написать отзыв</a>
+    </div>
+{% endif %}
+
+<div class="row mb-5">
+    {% for comment in race.comments.all %}
+    <div class="col-12 mb-3">
+        <div class="card bg-light">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h6 class="card-subtitle mb-2 text-muted fw-bold">{{ comment.author.full_name|default:comment.author.username }}</h6>
+                    <span class="badge bg-warning text-dark">Оценка: {{ comment.rating }}/10</span>
+                </div>
+                <p class="card-text">{{ comment.text }}</p>
+                <small class="text-muted">{{ comment.get_comment_type_display }} | {{ comment.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <p class="text-muted">Пока нет ни одного отзыва. Будьте первым!</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="mt-4 mb-5">
+    <a href="{% url 'race_list' %}" class="btn btn-outline-secondary">← Назад к списку гонок</a>
+</div>
+{% endblock %}

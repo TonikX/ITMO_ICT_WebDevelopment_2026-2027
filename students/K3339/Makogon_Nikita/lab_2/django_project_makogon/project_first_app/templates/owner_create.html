@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Добавление автовладельца</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать владельца</button>
+    </form>
+    <br>
+    <a href="/owners/">Назад к списку</a>
+</body>
+</html>

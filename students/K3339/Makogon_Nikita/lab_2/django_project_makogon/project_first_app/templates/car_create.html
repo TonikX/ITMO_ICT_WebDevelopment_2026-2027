@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Добавление автомобиля</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Создать автомобиль</button>
+    </form>
+    <br>
+    <a href="/cars/">Назад к списку</a>
+</body>
+</html>

@@ -1,0 +1,19 @@
+site_name: Веб-программирование. Макогон Никита. K3339
+
+theme:
+  name: material
+  language: ru
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - attr_list
+
+nav:
+  - Главная: index.md
+  - ЛР1:
+      - Отчёт: lr1/report.md
+  - ЛР2:
+      - Отчёт: lr2/report.md
