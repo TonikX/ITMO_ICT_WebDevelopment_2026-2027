@@ -1,0 +1,28 @@
+{% extends 'tours/base.html' %}
+
+{% block title %}Удаление резервирования{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <i class="bi bi-exclamation-triangle"></i> Удаление резервирования
+            </div>
+            <div class="card-body">
+                <p>Вы уверены, что хотите удалить резервирование тура
+                    <strong>{{ object.tour.name }}</strong>?
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Да, удалить
+                    </button>
+                    <a href="{% url 'reservation_list' %}" class="btn btn-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

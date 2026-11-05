@@ -1,0 +1,28 @@
+/* ===== Основная палитра ===== */
+:root {
+    --bs-primary: #3b5998;
+    --bs-primary-rgb: 59, 89, 152;
+    --bs-link-color: #3b5998;
+    --bs-link-hover-color: #2f4a80;
+}
+
+body {
+    background: #f4f6fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* Карточка тура — лёгкий hover-эффект */
+.card-tour {
+    transition: transform .2s;
+    height: 100%;
+}
+
+.card-tour:hover {
+    transform: translateY(-3px);
+}

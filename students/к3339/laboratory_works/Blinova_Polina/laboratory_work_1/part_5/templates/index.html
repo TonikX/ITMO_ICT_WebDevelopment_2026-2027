@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h1>Журнал оценок</h1>
+
+    {{MESSAGE}}
+
+    <form action="/add_grade" method="POST">
+        <p>
+            <label for="discipline">Дисциплина:</label>
+            <input type="text" id="discipline" name="discipline" required>
+        </p>
+        <p>
+            <label for="grade">Оценка (1-5):</label>
+            <input type="number" id="grade" name="grade" min="1" max="5" required>
+        </p>
+        <p>
+            <button type="submit">Добавить</button>
+        </p>
+    </form>
+
+    <p><a href="/grades">Посмотреть оценки</a></p>
+</body>
+
+</html>
