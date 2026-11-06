@@ -1,0 +1,756 @@
+[
+{
+  "model": "sessions.session",
+  "pk": "fqdmht3060jg0dnv3908ogr7icf86glo",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSG8BoJL934DmYFBqoYmpV0Z_12bdKHbe865L5FwW1vaBi9pKuIstDj9boT5wX0H5Y79Nss893WZSO6KPOiQ17nw83K4fwcNR_vWMXunwEQiztZRiAUVaY9YA1TnqikEWmEAJsuGAAIGo5jQgvIxWvH-APBAN_I:1xFtTv:ojJ8iwyAgXzpOJlFlOdgJrNywxqcRJxWrdAsvecgawo",
+    "expire_date": "2026-10-25T13:20:51.135Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "t4x5l7axku4t2a381y0fym20w7hmsmpu",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pBOYYC6dO8ZyDBDpGogKe3KeHdt0oVu_3vvv1SkbS1x63mJs6izAnX63RLxI9cdyJ3qrWludV3mpHdFH7Tra5P8vBzu30GhXr61ASM-Aw7BjcZO3spkIXtC4CRMKeGINExGEiNjyA4dg2UQExj96NT7A8nMN2o:1xMiyW:sblyyMdDXqM-IftbTVeMDOwlmIqXg3RiuPh0LFxA6o8",
+    "expire_date": "2026-11-13T09:32:40.460Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "znjr0s9fsvexvbfyv5swbkunb1e1pidq",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQRe_C2pBOYYC6dO8ZyDBDpGogKe3KeHdt0oVu_3vvv1SkbS1x63mJs6izAnX63RLxI9cdyJ3qrWludV3mpHdFH7Tra5P8vBzu30GhXr61ASM-Aw7BjcZO3spkIXtC4CRMKeGINExGEiNjyA4dg2UQExj96NT7A8nMN2o:1xPDfO:4c7WNEEI7ABO4g1KBNIpJlOmIbHOSgul4_gc2weZok8",
+    "expire_date": "2026-11-20T06:43:14.150Z"
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$LGmEqVoSmxdxsrewOfRZ0h$Go45pDCM9zmbxaaXfeQIvIcm2RLk7hraHbgXakT/X4M=",
+    "last_login": "2026-11-06T06:43:14.150Z",
+    "is_superuser": true,
+    "username": "polina",
+    "first_name": "",
+    "last_name": "",
+    "email": "blinovapolina06@yandex.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-10T17:04:34.122Z",
+    "passport_number": "",
+    "home_address": "",
+    "nationality": "",
+    "birth_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$LNX7ho6V6teV3Yl18LFBuc$NE/pvIvmDMwveHDeQjRW/4nXiFaiBvzPIFY39NozxKc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ivanov",
+    "first_name": "Иван",
+    "last_name": "Иванов",
+    "email": "ivanov@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-10T17:05:26.280Z",
+    "passport_number": "1234 567890",
+    "home_address": "г. Москва, ул. Ленина, д. 1",
+    "nationality": "Русский",
+    "birth_date": "1985-05-15",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$8rT7mHcKog22ts6A99wlhc$LfiFvF5S9/UNDDRR/6ax1yZ1TSoaQo+hvoUK/CnvhqQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "petrov",
+    "first_name": "Пётр",
+    "last_name": "Петров",
+    "email": "petrov@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-10T17:05:26.357Z",
+    "passport_number": "2345 678901",
+    "home_address": "г. Санкт-Петербург, ул. Мира, д. 2",
+    "nationality": "Белорус",
+    "birth_date": "1990-08-22",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$pmJQHDdboWMtA4AfND6Olh$YzjemsY6t+SE4VOAx5iMQM4Uo0PcHJn4mDceSZFIgQQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sidorov",
+    "first_name": "Сергей",
+    "last_name": "Сидоров",
+    "email": "sidorov@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-10T17:05:26.420Z",
+    "passport_number": "3456 789012",
+    "home_address": "г. Казань, ул. Победы, д. 3",
+    "nationality": "Татарин",
+    "birth_date": "1978-03-10",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$QOCv74Tuix3ywKdherdfwH$qAwlevmyH635jbBT2CpQXPddtgyEpMlQmTwIDZJfflQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "anna",
+    "first_name": "Анна",
+    "last_name": "Смирнова",
+    "email": "anna@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-30T07:41:06.273Z",
+    "passport_number": "1111 222333",
+    "home_address": "г. Москва, ул. Пушкина, д. 10",
+    "nationality": "Русская",
+    "birth_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$qtQOlgE9oTAEzPEkSkZ7gE$RaLDiASqTC2OsmOZSFCiRYl9yeeONtwo4z9Mgs+FEAQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "dmitry",
+    "first_name": "Дмитрий",
+    "last_name": "Козлов",
+    "email": "dmitry@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-30T07:41:06.350Z",
+    "passport_number": "2222 333444",
+    "home_address": "г. Санкт-Петербург, ул. Лермонтова, д. 5",
+    "nationality": "Русский",
+    "birth_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$PlWFklcB1PIk0RHu5bV7L3$72VFxmayavhn2Rn0364pRdOIZLhpzgp+Smyp/KRa/z8=",
+    "last_login": "2026-10-30T07:46:44.737Z",
+    "is_superuser": false,
+    "username": "test",
+    "first_name": "Test",
+    "last_name": "Testov",
+    "email": "test@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-30T07:46:44.642Z",
+    "passport_number": "1234 445890",
+    "home_address": "Москва",
+    "nationality": "Русский",
+    "birth_date": "1998-04-01",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.user",
+  "fields": {
+    "password": "pbkdf2_sha256$870000$EomEgDuVdbED3OjLZTmbSJ$J/hS28/WghhCJ/mGe32BxUrNkH4zvmCdZBE2SW/ting=",
+    "last_login": "2026-10-30T09:17:18.047Z",
+    "is_superuser": false,
+    "username": "test_new",
+    "first_name": "",
+    "last_name": "",
+    "email": "test@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-10-30T07:53:47.622Z",
+    "passport_number": "",
+    "home_address": "",
+    "nationality": "",
+    "birth_date": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "project_first_app.driverlicense",
+  "pk": 1,
+  "fields": {
+    "owner": [
+      "ivanov"
+    ],
+    "license_number": "AA123456",
+    "category": "B",
+    "issued_date": "2010-05-20"
+  }
+},
+{
+  "model": "project_first_app.driverlicense",
+  "pk": 2,
+  "fields": {
+    "owner": [
+      "petrov"
+    ],
+    "license_number": "BB234567",
+    "category": "C",
+    "issued_date": "2012-08-15"
+  }
+},
+{
+  "model": "project_first_app.driverlicense",
+  "pk": 3,
+  "fields": {
+    "owner": [
+      "sidorov"
+    ],
+    "license_number": "CC345678",
+    "category": "B",
+    "issued_date": "2005-03-10"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 1,
+  "fields": {
+    "state_number": "А123БВ777",
+    "brand": "Toyota",
+    "model": "Camry",
+    "color": "white"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 2,
+  "fields": {
+    "state_number": "В456ЕК199",
+    "brand": "BMW",
+    "model": "X5",
+    "color": "black"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 3,
+  "fields": {
+    "state_number": "С789МН777",
+    "brand": "Kia",
+    "model": "Rio",
+    "color": "red"
+  }
+},
+{
+  "model": "project_first_app.car",
+  "pk": 4,
+  "fields": {
+    "state_number": "Е012ОР199",
+    "brand": "Audi",
+    "model": "A4",
+    "color": "silver"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 1,
+  "fields": {
+    "owner": [
+      "ivanov"
+    ],
+    "car": 1,
+    "start_date": "2018-01-01",
+    "end_date": "2021-06-30"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 2,
+  "fields": {
+    "owner": [
+      "ivanov"
+    ],
+    "car": 2,
+    "start_date": "2019-03-01",
+    "end_date": "2022-12-31"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 3,
+  "fields": {
+    "owner": [
+      "ivanov"
+    ],
+    "car": 3,
+    "start_date": "2020-05-01",
+    "end_date": "2023-04-30"
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 4,
+  "fields": {
+    "owner": [
+      "petrov"
+    ],
+    "car": 1,
+    "start_date": "2021-07-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 5,
+  "fields": {
+    "owner": [
+      "petrov"
+    ],
+    "car": 2,
+    "start_date": "2023-01-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 6,
+  "fields": {
+    "owner": [
+      "petrov"
+    ],
+    "car": 4,
+    "start_date": "2020-01-01",
+    "end_date": null
+  }
+},
+{
+  "model": "project_first_app.ownership",
+  "pk": 7,
+  "fields": {
+    "owner": [
+      "sidorov"
+    ],
+    "car": 3,
+    "start_date": "2023-05-01",
+    "end_date": null
+  }
+},
+{
+  "model": "tours.country",
+  "pk": 1,
+  "fields": {
+    "name": "Турция",
+    "code": "TR"
+  }
+},
+{
+  "model": "tours.country",
+  "pk": 2,
+  "fields": {
+    "name": "Египет",
+    "code": "EG"
+  }
+},
+{
+  "model": "tours.country",
+  "pk": 3,
+  "fields": {
+    "name": "Италия",
+    "code": "IT"
+  }
+},
+{
+  "model": "tours.country",
+  "pk": 4,
+  "fields": {
+    "name": "Испания",
+    "code": "ES"
+  }
+},
+{
+  "model": "tours.country",
+  "pk": 5,
+  "fields": {
+    "name": "Таиланд",
+    "code": "TH"
+  }
+},
+{
+  "model": "tours.touragency",
+  "pk": 1,
+  "fields": {
+    "name": "SunTravel",
+    "address": "г. Москва, ул. Тверская, д. 15",
+    "phone": "+7 495 123-45-67",
+    "email": "info@suntravel.ru",
+    "description": "Ведущее турагентство с 2005 года"
+  }
+},
+{
+  "model": "tours.touragency",
+  "pk": 2,
+  "fields": {
+    "name": "OceanTour",
+    "address": "г. Санкт-Петербург, Невский пр., д. 100",
+    "phone": "+7 812 987-65-43",
+    "email": "info@oceantour.ru",
+    "description": "Морские круизы и пляжный отдых"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 1,
+  "fields": {
+    "name": "Всё включено в Анталии",
+    "agency": 1,
+    "country": 1,
+    "description": "Роскошный отель 5★ на берегу Средиземного моря. Питание \"всё включено\", бассейны, анимация, SPA. Идеально для семейного отдыха.",
+    "start_date": "2026-06-01",
+    "end_date": "2026-06-15",
+    "price": "85000.00",
+    "payment_terms": "full",
+    "max_participants": 20,
+    "image": "",
+    "created_at": "2026-10-30T07:41:06.268Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 2,
+  "fields": {
+    "name": "Пирамиды и Красное море",
+    "agency": 2,
+    "country": 2,
+    "description": "Увлекательная экскурсия к пирамидам Гизы + отдых на курорте Шарм-эль-Шейх. Дайвинг, снорклинг, коралловые рифы.",
+    "start_date": "2026-05-15",
+    "end_date": "2026-05-29",
+    "price": "72000.00",
+    "payment_terms": "half",
+    "max_participants": 15,
+    "image": "",
+    "created_at": "2026-10-30T07:41:06.269Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 3,
+  "fields": {
+    "name": "Римские каникулы",
+    "agency": 1,
+    "country": 3,
+    "description": "Классическая Италия: Рим, Флоренция, Венеция. Колизей, Ватикан, галерея Уффици. Гастрономический тур с дегустацией вин.",
+    "start_date": "2026-07-10",
+    "end_date": "2026-07-20",
+    "price": "120000.00",
+    "payment_terms": "installment",
+    "max_participants": 12,
+    "image": "",
+    "created_at": "2026-10-30T07:41:06.270Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 4,
+  "fields": {
+    "name": "Барселона и Коста-Брава",
+    "agency": 1,
+    "country": 4,
+    "description": "Отдых на побережье Коста-Брава с экскурсиями в Барселону. Саграда Фамилия, парк Гуэль, шопинг на Рамбле.",
+    "start_date": "2026-08-01",
+    "end_date": "2026-08-12",
+    "price": "95000.00",
+    "payment_terms": "post",
+    "max_participants": 18,
+    "image": "",
+    "created_at": "2026-10-30T07:41:06.270Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 5,
+  "fields": {
+    "name": "Экзотический Таиланд",
+    "agency": 2,
+    "country": 5,
+    "description": "Пхукет, Паттайя, Бангкок. Храмы, слоны, тайский массаж, экзотическая кухня. Активный и пляжный отдых.",
+    "start_date": "2026-04-05",
+    "end_date": "2026-04-20",
+    "price": "110000.00",
+    "payment_terms": "full",
+    "max_participants": 25,
+    "image": "",
+    "created_at": "2026-10-30T07:41:06.271Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 6,
+  "fields": {
+    "name": "Стамбул: город двух континентов",
+    "agency": 1,
+    "country": 1,
+    "description": "Экскурсионный тур в Стамбул: Айя-София, Голубая мечеть, дворец Топкапы, круиз по Босфору. Незабываемые впечатления!",
+    "start_date": "2026-09-10",
+    "end_date": "2026-09-17",
+    "price": "65000.00",
+    "payment_terms": "half",
+    "max_participants": 15,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.232Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 7,
+  "fields": {
+    "name": "Хургада: всё включено",
+    "agency": 2,
+    "country": 2,
+    "description": "Отдых в Хургаде: пляж, дайвинг, снорклинг. Отель 4★, всё включено.",
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-10",
+    "price": "60000.00",
+    "payment_terms": "full",
+    "max_participants": 25,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.233Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 8,
+  "fields": {
+    "name": "Венеция и озеро Гарда",
+    "agency": 1,
+    "country": 3,
+    "description": "Романтическое путешествие: гондолы Венеции, озеро Гарда, Верона.",
+    "start_date": "2026-06-20",
+    "end_date": "2026-06-30",
+    "price": "98000.00",
+    "payment_terms": "installment",
+    "max_participants": 14,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.233Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 9,
+  "fields": {
+    "name": "Мадрид и Толедо",
+    "agency": 1,
+    "country": 4,
+    "description": "Экскурсионный тур: королевский дворец, музей Прадо, старинный Толедо.",
+    "start_date": "2026-05-01",
+    "end_date": "2026-05-08",
+    "price": "88000.00",
+    "payment_terms": "post",
+    "max_participants": 20,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.234Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 10,
+  "fields": {
+    "name": "Самуи: райский остров",
+    "agency": 2,
+    "country": 5,
+    "description": "Остров Самуи: белоснежные пляжи, кокосовые пальмы, ночная жизнь.",
+    "start_date": "2026-11-05",
+    "end_date": "2026-11-18",
+    "price": "125000.00",
+    "payment_terms": "full",
+    "max_participants": 20,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.234Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 11,
+  "fields": {
+    "name": "Каппадокия: полёт на воздушном шаре",
+    "agency": 1,
+    "country": 1,
+    "description": "Уникальный тур в Каппадокию: полёт на воздушном шаре над скалами, подземные города.",
+    "start_date": "2026-04-15",
+    "end_date": "2026-04-22",
+    "price": "105000.00",
+    "payment_terms": "half",
+    "max_participants": 12,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.235Z"
+  }
+},
+{
+  "model": "tours.tour",
+  "pk": 12,
+  "fields": {
+    "name": "Шарм-эль-Шейх: коралловые рифы",
+    "agency": 2,
+    "country": 2,
+    "description": "Дайвинг и снорклинг в Шарм-эль-Шейхе. Коралловые рифы, экзотические рыбы.",
+    "start_date": "2026-12-10",
+    "end_date": "2026-12-20",
+    "price": "78000.00",
+    "payment_terms": "full",
+    "max_participants": 18,
+    "image": "",
+    "created_at": "2026-10-30T09:07:29.235Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "anna"
+    ],
+    "tour": 1,
+    "participants_count": 2,
+    "status": "confirmed",
+    "created_at": "2026-10-30T07:41:06.415Z",
+    "updated_at": "2026-10-30T07:41:06.415Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "anna"
+    ],
+    "tour": 3,
+    "participants_count": 1,
+    "status": "pending",
+    "created_at": "2026-10-30T07:41:06.416Z",
+    "updated_at": "2026-10-30T07:41:06.416Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "dmitry"
+    ],
+    "tour": 1,
+    "participants_count": 3,
+    "status": "confirmed",
+    "created_at": "2026-10-30T07:41:06.416Z",
+    "updated_at": "2026-10-30T07:41:06.416Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "dmitry"
+    ],
+    "tour": 2,
+    "participants_count": 2,
+    "status": "confirmed",
+    "created_at": "2026-10-30T07:41:06.417Z",
+    "updated_at": "2026-10-30T07:41:06.417Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "dmitry"
+    ],
+    "tour": 5,
+    "participants_count": 1,
+    "status": "pending",
+    "created_at": "2026-10-30T07:41:06.417Z",
+    "updated_at": "2026-10-30T07:41:06.417Z"
+  }
+},
+{
+  "model": "tours.reservation",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "test_new"
+    ],
+    "tour": 4,
+    "participants_count": 1,
+    "status": "confirmed",
+    "created_at": "2026-10-30T08:06:35.398Z",
+    "updated_at": "2026-10-30T08:06:35.398Z"
+  }
+},
+{
+  "model": "tours.review",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "anna"
+    ],
+    "tour": 1,
+    "text": "Отличный отель, всё включено. Дети в восторге!",
+    "rating": 9,
+    "created_at": "2026-10-30T07:41:06.417Z"
+  }
+},
+{
+  "model": "tours.review",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "dmitry"
+    ],
+    "tour": 1,
+    "text": "Хороший тур, но немного дороговато.",
+    "rating": 8,
+    "created_at": "2026-10-30T07:41:06.418Z"
+  }
+},
+{
+  "model": "tours.review",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "dmitry"
+    ],
+    "tour": 2,
+    "text": "Пирамиды — это что-то невероятное!",
+    "rating": 10,
+    "created_at": "2026-10-30T07:41:06.418Z"
+  }
+},
+{
+  "model": "tours.review",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "test_new"
+    ],
+    "tour": 4,
+    "text": "тестовый отзыв",
+    "rating": 9,
+    "created_at": "2026-10-30T08:12:39.425Z"
+  }
+}
+]
