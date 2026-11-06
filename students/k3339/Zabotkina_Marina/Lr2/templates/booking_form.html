@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование бронирования — RESTO{% endblock %}
+
+{% block content %}
+<style>
+    .field-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #787d77;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .custom-input-box {
+        background-color: var(--input-bg);
+        border: 1.5px solid transparent;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        width: 100%;
+        color: var(--text-dark);
+        margin-bottom: 14px;
+        transition: all 0.2s;
+    }
+    .custom-input-box:focus {
+        background-color: #ffffff;
+        border-color: var(--primary-dark);
+        outline: none;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+        <div class="card-custom p-4 p-md-5">
+            <h3 class="fw-bold mb-1" style="color: var(--primary-dark);">Изменение данных брони</h3>
+            <p class="small text-muted mb-4">
+                {{ object.room.hotel.name }} • Номер №{{ object.room.room_number }} (Заказ #{{ object.id }})
+            </p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <h6 class="fw-bold mb-3 text-dark border-bottom pb-2">1. Даты визита и гости</h6>
+
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="field-title">Дата заезда</label>
+                        <input type="date" name="check_in_date" value="{{ form.check_in_date.value|date:'Y-m-d' }}" class="custom-input-box" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-title">Дата выезда</label>
+                        <input type="date" name="check_out_date" value="{{ form.check_out_date.value|date:'Y-m-d' }}" class="custom-input-box" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="field-title">Количество гостей (чел.)</label>
+                    <input type="number" name="guests_count" min="1" max="{{ object.room.capacity }}" value="{{ form.guests_count.value|default:1 }}" class="custom-input-box" required>
+                </div>
+
+                <h6 class="fw-bold mb-3 mt-4 text-dark border-bottom pb-2">2. Данные основного гостя</h6>
+
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <label class="field-title">Имя гостя</label>
+                        <input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}" class="custom-input-box" placeholder="Иван" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="field-title">Фамилия гостя</label>
+                        <input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}" class="custom-input-box" placeholder="Иванов" required>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="field-title">Контактный телефон</label>
+                    <input type="text" name="phone_number" value="{{ form.phone_number.value|default:'' }}" class="custom-input-box" placeholder="+7 (999) 000-00-00" required>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-dark-residence flex-grow-1 py-3">Сохранить изменения</button>
+                    <a href="/my-bookings/" class="btn btn-light" style="border: 1px solid var(--border-light); border-radius: 12px; padding: 12px 24px; font-weight: 600;">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

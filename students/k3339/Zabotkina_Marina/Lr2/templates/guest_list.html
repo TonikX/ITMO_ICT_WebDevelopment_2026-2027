@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Постояльцы за месяц — RESTO{% endblock %}
+
+{% block content %}
+<div class="card-custom p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h2 class="fw-bold mb-1" style="color: var(--primary-dark);">Список постояльцев</h2>
+            <p class="text-muted small mb-0">Информация о гостях отелей за последние 30 дней</p>
+        </div>
+        {% if user.is_staff %}
+            <span class="badge" style="background-color: var(--primary-dark); font-size: 0.85rem; padding: 8px 16px; border-radius: 50px;">
+                <i class="fa-solid fa-user-shield me-1"></i> Режим администратора
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle" style="border-collapse: separate; border-spacing: 0 8px;">
+            <thead>
+                <tr class="text-uppercase small text-muted" style="letter-spacing: 0.5px;">
+                    <th class="border-0 pb-3 text-center" style="width: 50px;">№</th>
+                    <th class="border-0 pb-3">Гость</th>
+                    <th class="border-0 pb-3">Контакты</th>
+                    <th class="border-0 pb-3">Отель и номер</th>
+                    <th class="border-0 pb-3">Период</th>
+                    <th class="border-0 pb-3 text-end">Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in recent_guests %}
+                    <tr style="background-color: #fbfaf8; box-shadow: 0 2px 5px rgba(0,0,0,0.01);">
+
+                        <td class="rounded-start-3 py-3 border-0 text-center">
+                            <span class="text-muted fw-bold">{{ forloop.counter }}</span>
+                        </td>
+
+                        <td class="py-3 border-0">
+                            <b class="text-dark">{{ b.user.first_name }} {{ b.user.last_name }}</b>
+                            {% if user.is_staff or user.id == b.user.id %}
+                                {% if b.user.passport_number %}
+                                    <div class="small text-muted mt-1">Паспорт: {{ b.user.passport_series }} {{ b.user.passport_number }}</div>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+
+                        <td class="py-3 border-0">
+                            {% if user.is_staff or user.id == b.user.id %}
+                                <div class="text-dark">{{ b.user.phone_number|default:"—" }}</div>
+                                <div class="small text-muted mt-1">{{ b.user.email }}</div>
+                            {% else %}
+                                <div class="small text-muted fst-italic">Скрыто настройками приватности</div>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-3 border-0">
+                            <b class="text-dark">{{ b.room.hotel.name }}</b>
+                            <div class="small text-muted mt-1">№{{ b.room.room_number }} ({{ b.room.get_room_type_display }})</div>
+                        </td>
+
+                        <td class="py-3 border-0 text-dark">
+                            {{ b.check_in_date|date:"d.m.Y" }} <br>
+                            <span class="text-muted small">&rarr; {{ b.check_out_date|date:"d.m.Y" }}</span>
+                        </td>
+
+                        <td class="rounded-end-3 py-3 border-0 text-end">
+                            {% if b.status == 'CHECKED_IN' %}
+                                <span class="badge" style="background-color: #d8e5e0; color: #2d5a47; border-radius: 8px; padding: 6px 10px;">В отеле (Заселен)</span>
+                            {% else %}
+                                <span class="badge" style="background-color: #e8e4dc; color: #787d77; border-radius: 8px; padding: 6px 10px;">Выселен</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted border-0 bg-transparent">
+                            <i class="fa-regular fa-folder-open fa-2x mb-2 d-block opacity-50"></i>
+                            За последний месяц активности постояльцев не зафиксировано.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+        <div class="d-flex justify-content-center gap-2 mt-4">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">&larr; Предыдущая</a>
+            {% endif %}
+            <span class="btn btn-light btn-sm rounded-pill px-3 disabled">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark btn-sm rounded-pill px-3">Следующая &rarr;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
