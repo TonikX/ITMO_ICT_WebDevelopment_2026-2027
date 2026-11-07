@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+
+<body>
+    <h1>Регистрация ученика</h1>
+
+    <form method="post">
+        {{ csrf_input }}
+        {{ form.as_p() }}
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    <a href="{{ url('homework_list') }}">К заданиям</a>
+</body>
+
+{% endblock %}

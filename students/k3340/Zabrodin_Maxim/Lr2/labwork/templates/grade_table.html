@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Оценки{% endblock %}
+{% block content %}
+
+<body>
+    <h1>Оценки учеников</h1>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>Ученик</th>
+                {% for homework in homeworks %}
+                <th>
+                    {{ homework.subject }} — №{{ homework.id }}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>
+                    {{ row.student.get_full_name()
+                    or row.student.username }}
+                </td>
+                {% for grade in row.grades %}
+                <td>{{ grade if grade is not none else "—" }}</td>
+                {% endfor %}
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="{{ homeworks|length + 1 }}">
+                    Учеников пока нет.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url('homework_list') }}">К заданиям</a>
+</body>
+
+{% endblock %}

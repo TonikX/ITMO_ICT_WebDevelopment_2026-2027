@@ -1,0 +1,10 @@
+site_name: "Веб-программирование — Забродин Максим, K3340"
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - Практические работы: practice.md
+  - Лабораторная работа №2: lab2.md

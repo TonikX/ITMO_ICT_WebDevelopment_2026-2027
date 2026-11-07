@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<body>
+    <nav>
+        <a href="{{ url('grade_table') }}">Таблица оценок</a>
+
+        {% if user.is_authenticated %}
+        <span>Вы вошли как {{ user.username }}</span>
+
+        {% if user.is_staff %}
+        <a href="{{ url('homework_create') }}">Создать задание</a>
+        {% endif %}
+
+        <form method="post" action="{{ url('logout') }}">
+            {{ csrf_input }}
+            <button type="submit">Выйти</button>
+        </form>
+        {% else %}
+        <a href="{{ url('login') }}">Войти</a>
+        <a href="{{ url('register') }}">Регистрация</a>
+        {% endif %}
+    </nav>
+
+    <h1>Домашние задания</h1>
+
+    <form method="get">
+        <input type="search" name="q" value="{{ query }}" placeholder="Поиск заданий">
+
+        <select name="subject">
+            <option value="">Все предметы</option>
+
+            {% for subject in subjects %}
+            <option value="{{ subject.name }}" {% if selected_subject==subject.name %}selected{% endif %}>
+                {{ subject.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Найти</button>
+        <a href="{{ url('homework_list') }}">Сбросить</a>
+    </form>
+
+    {% for homework in homeworks %}
+    <article>
+        <h2>{{ homework.subject }}</h2>
+        <p>Преподаватель: {{ homework.teacher }}</p>
+        <p>Выдано: {{ homework.issued_at.strftime("%d.%m.%Y") }}</p>
+        <p>Срок сдачи: {{ homework.deadline.strftime("%d.%m.%Y") }}</p>
+        <p>{{ homework.text }}</p>
+        <p>Штрафы: {{ homework.fine or "Не предусмотрены" }}</p>
+
+        {% if user.is_authenticated and not user.is_staff %}
+        <a href="{{ url('answer_submit', args=[homework.id]) }}">
+            Отправить или изменить ответ
+        </a>
+        {% endif %}
+    </article>
+    <hr>
+    {% else %}
+    <p>Задания не найдены.</p>
+    {% endfor %}
+
+    <nav>
+        {% if page.has_previous() %}
+        <a
+            href="?page={{ page.previous_page_number() }}&q={{ query|urlencode }}&subject={{ selected_subject|urlencode }}">
+            Назад
+        </a>
+        {% endif %}
+
+        <span>
+            Страница {{ page.number }} из {{ page.paginator.num_pages }}
+        </span>
+
+        {% if page.has_next() %}
+        <a href="?page={{ page.next_page_number() }}&q={{ query|urlencode }}&subject={{ selected_subject|urlencode }}">
+            Далее
+        </a>
+        {% endif %}
+    </nav>
+    {% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+
+<body>
+    <h1>Вход</h1>
+
+    <form method="post">
+        {{ csrf_input }}
+        {{ form.as_p() }}
+        <button type="submit">Войти</button>
+    </form>
+
+    <a href="{{ url('register') }}">Регистрация</a>
+    <a href="{{ url('homework_list') }}">К заданиям</a>
+</body>
+
+{% endblock %}
