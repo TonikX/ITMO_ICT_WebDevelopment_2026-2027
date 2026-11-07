@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Автомобиль</title>
+</head>
+
+<body>
+    <h1>{{ car.brand }} {{ car.model }}</h1>
+    <p>
+        <a href="{% url 'car_delete' car.id %}">Удалить</a>
+    </p>
+    <p>Госномер: {{ car.registration_number }}</p>
+    <p>Цвет: {{ car.color|default:"Не указан" }}</p>
+    <p>
+        <a href="{% url 'car_update' car.id %}">Редактировать</a>
+    </p>
+    <a href="{% url 'car_list' %}">К списку автомобилей</a>
+</body>
+
+</html>

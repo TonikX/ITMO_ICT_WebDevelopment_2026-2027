@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Ответ на задание{% endblock %}
+{% block content %}
+
+<body>
+    <h1>{{ homework.subject }}</h1>
+    <p>{{ homework.text }}</p>
+
+    <form method="post">
+        {{ csrf_input }}
+        {{ form.as_p() }}
+        <button type="submit">Отправить ответ</button>
+    </form>
+
+    <a href="{{ url('homework_list') }}">К заданиям</a>
+</body>
+
+{% endblock %}

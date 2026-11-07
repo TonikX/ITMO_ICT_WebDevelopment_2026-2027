@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Доска домашних заданий{% endblock %}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f3f5f8;
+            color: #243047;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 32px auto;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        nav form {
+            margin: 0;
+        }
+
+        a {
+            color: #245ccc;
+        }
+
+        article {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #dce2eb;
+            border-radius: 8px;
+        }
+
+        input,
+        select,
+        textarea,
+        button {
+            font: inherit;
+            padding: 8px 12px;
+            border: 1px solid #bac4d3;
+            border-radius: 6px;
+            max-width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+        }
+
+        button {
+            background: #245ccc;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        label {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #dce2eb;
+            text-align: left;
+        }
+
+        th {
+            background: #edf2fa;
+        }
+
+        .errorlist {
+            color: #b42318;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 12px;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>

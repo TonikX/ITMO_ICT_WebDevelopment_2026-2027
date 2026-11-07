@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Форма автомобиля</title>
+</head>
+
+<body>
+    <h1> Форма автомобиля</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <a href="{% url 'car_list' %}">К списку автомобилей</a>
+</body>
+
+</html>
