@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% from 'racing/macros.html' import fields %}
+{% block title %}Комментарий — APEX{% endblock %}
+{% block content %}<section class="wrap narrow-page"><span class="eyebrow">{{ race.title }} / ПАДДОК</span><h1>Проверьте комментарий.</h1><form method="post" action="{{ url('comment_add', args=[race.slug]) }}"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><div class="form-grid">{{ fields(form) }}</div><button class="button" type="submit">Опубликовать <span>↗</span></button></form></section>{% endblock %}

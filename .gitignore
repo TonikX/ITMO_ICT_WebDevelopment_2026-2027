@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Laboratory work 2 / local runtime and generated documentation
+site/
+staticfiles/
+.env
+!.env.example
+.taste-skill/
+.qa/
+*.zip

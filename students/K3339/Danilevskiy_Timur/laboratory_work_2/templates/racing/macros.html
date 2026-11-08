@@ -1,0 +1,27 @@
+{% macro race_card(race) %}
+<article class="race-card">
+  <a class="race-photo" href="{{ url('race_detail', args=[race.slug]) }}" aria-label="Открыть {{ race.title }}"><img src="{{ static('images/' + race.image.replace('.webp', '-480.webp')) }}" srcset="{{ photo_srcset(race.image) }}" sizes="(max-width: 640px) calc(100vw - 36px), (max-width: 850px) 46vw, 31vw" alt="Гоночный автомобиль GT3 на трассе" loading="lazy" width="1100" height="700" data-source="stand-in" data-subject="GT3 racing"><span class="photo-round">ЭТАП / {{ '%02d'|format(race.round_number) }}</span><span class="photo-arrow" aria-hidden="true">↗</span></a>
+  <div class="card-meta"><span>{{ race.start_date|date('d M') }} — {{ race.end_date|date('d M Y') }}</span><span class="badge {{ race.status }}">{{ race.get_status_display() }}</span></div>
+  <h3><a href="{{ url('race_detail', args=[race.slug]) }}">{{ race.title }}</a></h3>
+  <div class="card-footer"><span>{{ race.track }} / {{ race.location }}</span><span>{{ race.entry_count if race.entry_count is defined else race.entries.count() }} / {{ race.capacity }}</span></div>
+</article>
+{% endmacro %}
+
+{% macro pagination(p, query_url, key='page', anchor='') %}
+{% if p.paginator.num_pages > 1 %}<nav class="pagination" aria-label="Страницы">
+  {% if p.has_previous() %}<a aria-label="Предыдущая страница" href="{{ query_url(**{key:p.previous_page_number()}) }}{{ anchor }}">←</a>{% endif %}
+  {% for n in p.paginator.page_range %}{% if n == 1 or n == p.paginator.num_pages or (n - p.number)|abs <= 2 %}<a class="{{ 'current' if n == p.number else '' }}" {% if n == p.number %}aria-current="page"{% endif %} href="{{ query_url(**{key:n}) }}{{ anchor }}">{{ '%02d'|format(n) }}</a>{% elif (n - p.number)|abs == 3 %}<span>…</span>{% endif %}{% endfor %}
+  {% if p.has_next() %}<a aria-label="Следующая страница" href="{{ query_url(**{key:p.next_page_number()}) }}{{ anchor }}">→</a>{% endif %}
+  <span class="page-count">{{ p.paginator.count }} записей</span>
+</nav>{% endif %}
+{% endmacro %}
+
+{% macro fields(form) %}
+{% if form.non_field_errors() %}<div class="form-errors" role="alert">{{ form.non_field_errors() }}</div>{% endif %}
+{% for field in form %}<div class="field {{ 'field-wide' if field.name in ['bio','text','car','note'] else '' }}">
+  <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required"> *</span>{% endif %}</label>
+  {{ field }}
+  {% if field.help_text %}<div class="help">{{ field.help_text|safe }}</div>{% endif %}
+  {% for error in field.errors %}<p class="field-error" role="alert">{{ error }}</p>{% endfor %}
+</div>{% endfor %}
+{% endmacro %}

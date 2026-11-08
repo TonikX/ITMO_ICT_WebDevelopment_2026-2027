@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}Отменить заявку — APEX{% endblock %}
+{% block content %}<section class="wrap narrow-page"><span class="eyebrow">ЛИЧНЫЙ ПАДДОК</span><h1>Снять заявку?</h1><p>Номер <strong>#{{ entry.number }}</strong> на гонку <strong>{{ entry.race.title }}</strong> станет доступен другим участникам.</p><form method="post"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><div class="form-actions"><button class="button button-orange" type="submit">Да, отменить заявку <span>↗</span></button><a class="text-link" href="{{ url('my_entries') }}">Оставить заявку</a></div></form></section>{% endblock %}

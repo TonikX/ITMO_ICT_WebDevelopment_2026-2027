@@ -1,0 +1,18 @@
+APEX — учебный проект, лабораторная работа № 2, вариант 6.
+Данные чемпионата, заявки, участники, отзывы и результаты вымышлены.
+Фотографии служат иллюстрациями автоспорта, а не фотографиями указанных учебных событий.
+
+Фотографии / Unsplash License: https://unsplash.com/license
+race-orange.webp — Boris Debusscher — https://unsplash.com/photos/ZmCHTylNVro
+race-yellow.webp — Benoit Fraikin — https://unsplash.com/photos/YT8wt7Ek35o
+race-blue.webp — Rui Alves — https://unsplash.com/photos/Mx2iwSs98rA
+
+Шрифты Golos Text и Oswald: SIL Open Font License 1.1.
+https://github.com/google/fonts/tree/main/ofl/golostext
+https://github.com/google/fonts/tree/main/ofl/oswald
+Тексты лицензий находятся в static/fonts/.
+
+GSAP 3.13.0 — https://gsap.com/standard-license/
+Локальная копия: static/js/gsap.min.js (оригинальный заголовок сохранён).
+
+Дизайн и исходный код приложения созданы для лабораторной работы.

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru" data-type="software">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}APEX — табло автогонок{% endblock %}</title>
+  <meta name="description" content="APEX — календарь автогонок, гонщики и результаты каждого заезда. Заявки на участие и гоночные протоколы.">
+  <meta name="theme-color" content="#f2f1eb"><meta name="page-type" content="software"><meta name="site-kind" content="software">
+  <link rel="icon" href="{{ static('images/favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ static('fonts/golos.css') }}"><link rel="stylesheet" href="{{ static('fonts/oswald.css') }}">
+  <link rel="stylesheet" href="{{ static('css/main.css') }}">
+  <script src="{{ static('js/gsap.min.js') }}" defer></script><script src="{{ static('js/app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <header class="header wrap">
+    <a class="wordmark" href="{{ url('home') }}" aria-label="APEX — главная"><span class="logo-symbol" aria-hidden="true">///</span>APEX</a>
+    <button class="menu-toggle" aria-label="Открыть меню" aria-expanded="false" aria-controls="navigation">Меню <span aria-hidden="true">＋</span></button>
+    <nav id="navigation" aria-label="Основная навигация">
+      <a class="nav-link {{ 'active' if request.path.startswith('/races/') else '' }}" href="{{ url('races') }}">Календарь гонок</a>
+      <a class="nav-link {{ 'active' if request.path == '/drivers/' else '' }}" href="{{ url('drivers') }}">Гонщики</a>
+      {% if request.user.is_authenticated %}
+        <a class="nav-link {{ 'active' if request.path == '/account/entries/' else '' }}" href="{{ url('my_entries') }}">Мои заявки</a>
+        {% if request.user.is_staff or request.user.is_superuser %}<a class="staff-link" href="{{ url('control') }}">Race control <span aria-hidden="true">↗</span></a>{% endif %}
+        <form method="post" action="{{ url('logout') }}"><input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}"><button class="login-link" type="submit">Выйти <span aria-hidden="true">↗</span></button></form>
+      {% else %}<a class="login-link" href="{{ url('login') }}">Войти <span aria-hidden="true">↗</span></a>{% endif %}
+    </nav>
+  </header>
+  {% for message in get_messages(request) %}<div role="status" class="flash wrap"><span class="status-dot"></span>{{ message }}<button type="button" aria-label="Закрыть уведомление" data-dismiss>×</button></div>{% endfor %}
+  <main id="main">{% block content %}{% endblock %}</main>
+  <footer class="footer">
+    <div class="wrap footer-top"><a class="wordmark" href="{{ url('home') }}"><span class="logo-symbol" aria-hidden="true">///</span>APEX</a><p>Гонки заканчиваются.<br>Результаты остаются.</p><a class="text-link" href="{{ url('races') }}">Найти свою гонку <span aria-hidden="true">↗</span></a></div>
+    <div class="wrap footer-bottom"><span>© 2026 APEX / Учебный проект</span><span>Данилевский Тимур · K3339</span><a href="{{ static('credits.txt') }}">Фотографии: Unsplash · Лицензии</a></div>
+  </footer>
+</body>
+</html>
