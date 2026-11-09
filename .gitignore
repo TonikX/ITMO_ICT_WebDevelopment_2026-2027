@@ -216,3 +216,24 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Виртуальные окружения
+.venv/
+venv/
+env/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Данные и сборка
+site/
+grades.json
+
+# IDE и редакторы
+.idea/
+.vscode/
+*.swp
+*.swo

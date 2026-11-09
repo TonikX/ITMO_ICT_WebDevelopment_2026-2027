@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        form { margin-top: 30px; padding: 20px; border: 1px solid #ddd; }
+        input { padding: 8px; margin: 5px; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Журнал оценок</h1>
+    <h2>Список оценок по дисциплинам</h2>
+
+    {{GRADES_TABLE}}
+
+    <h2>Добавить оценку</h2>
+    <form method="POST" action="/">
+        <label>Дисциплина: <input type="text" name="subject" required></label><br>
+        <label>Оценка: <input type="text" name="grade" required></label><br>
+        <button type="submit">Добавить</button>
+    </form>
+</body>
+</html>

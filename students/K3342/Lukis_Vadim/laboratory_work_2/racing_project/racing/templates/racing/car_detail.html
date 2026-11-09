@@ -1,0 +1,21 @@
+{% extends 'racing/base.html' %}
+{% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
+
+{% block content %}
+<h1>{{ car.brand }} {{ car.model }}</h1>
+<div class="card mt-3">
+    <div class="card-body">
+        <p><strong>Номер:</strong> {{ car.license_plate }}</p>
+        <p><strong>Марка:</strong> {{ car.brand }}</p>
+        <p><strong>Модель:</strong> {{ car.model }}</p>
+        <p><strong>Цвет:</strong> {{ car.get_color_display }}</p>
+        <p><strong>Год выпуска:</strong> {{ car.year }}</p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'car_update' car.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'car_delete' car.pk %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'car_list' %}" class="btn btn-secondary">← Назад к списку</a>
+</div>
+{% endblock %}

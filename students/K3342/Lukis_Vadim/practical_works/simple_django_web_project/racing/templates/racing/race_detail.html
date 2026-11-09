@@ -1,0 +1,106 @@
+{% extends 'racing/base.html' %}
+{% block title %}{{ race.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ race.name }}</h1>
+<div class="card mt-3">
+    <div class="card-body">
+        <p><strong>Дата и время:</strong> {{ race.race_date|date:"d.m.Y H:i" }}</p>
+        <p><strong>Место:</strong> {{ race.track_location }}</p>
+        <p><strong>Описание:</strong> {{ race.description|default:"—" }}</p>
+    </div>
+</div>
+
+<div class="mt-4 mb-4">
+    {% if user.is_authenticated %}
+        {% if user_registered %}
+            <div class="alert alert-success d-flex justify-content-between align-items-center">
+                <span>Вы зарегистрированы на эту гонку!</span>
+                <form method="post" action="{% url 'race_unregister' race.pk %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Отменить регистрацию?')">
+                        Отменить регистрацию
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <a href="{% url 'race_register' race.pk %}" class="btn btn-success">
+                Зарегистрироваться на гонку
+            </a>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning">
+            <a href="{% url 'login' %}?next={{ request.path }}">Войдите</a>, чтобы зарегистрироваться на гонку.
+        </div>
+    {% endif %}
+</div>
+
+<h3 class="mt-4">Участники ({{ registrations.count }})</h3>
+{% if registrations %}
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Гонщик</th>
+            <th>Команда</th>
+            <th>Опыт</th>
+            <th>Дата регистрации</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reg in registrations %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ reg.racer.last_name }} {{ reg.racer.first_name }}</td>
+            <td>{{ reg.racer.team_name }}</td>
+            <td>{{ reg.racer.experience }} лет</td>
+            <td>{{ reg.registration_date|date:"d.m.Y H:i" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-muted">Пока нет зарегистрированных участников.</p>
+{% endif %}
+
+<h3 class="mt-4">Отзывы ({{ reviews.count }})</h3>
+{% if user.is_authenticated %}
+    <a href="{% url 'review_create' race.pk %}" class="btn btn-primary btn-sm mb-3">Написать отзыв</a>
+{% endif %}
+
+{% if reviews %}
+    {% for review in reviews %}
+    <div class="card mb-2">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <strong>{{ review.author.username }}</strong>
+                <span class="badge bg-
+                    {% if review.rating >= 8 %}success
+                    {% elif review.rating >= 5 %}warning
+                    {% else %}danger{% endif %}">
+                    {{ review.rating }}/10
+                </span>
+            </div>
+            <small class="text-muted">
+                Тип: {{ review.get_comment_type_display }} | {{ review.created_at|date:"d.m.Y H:i" }}
+            </small>
+            <p class="mt-2 mb-1">{{ review.comment_text }}</p>
+            {% if user == review.author %}
+            <form method="post" action="{% url 'review_delete' review.pk %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm"
+                        onclick="return confirm('Удалить отзыв?')">Удалить</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<p class="text-muted">Пока нет отзывов.</p>
+{% endif %}
+
+<div class="mt-4">
+    <a href="{% url 'race_results' race.pk %}" class="btn btn-info">Таблица результатов</a>
+    <a href="{% url 'race_list' %}" class="btn btn-secondary">← Назад к списку</a>
+</div>
+{% endblock %}
