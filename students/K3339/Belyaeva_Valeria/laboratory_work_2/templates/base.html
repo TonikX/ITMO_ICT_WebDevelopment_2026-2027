@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Nordline — ближе к вашему следующему путешествию{% endblock %}</title>
+  <meta name="theme-color" content="#111d3d">
+  <link rel="stylesheet" href="{{ static('css/style.css') }}">
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="header"><div class="container topbar">
+  <a class="brand" href="{{ url('flight_list') }}" aria-label="Nordline — главная"><span class="brand-mark">↗</span>nordline<span class="brand-dot">.</span></a>
+  <span class="brand-caption">ОТКРОЙТЕ СВОЙ ГОРИЗОНТ</span>
+  <div class="account"><span class="locale">RU · ₽</span>
+  {% if request.user.is_authenticated %}<a href="{{ url('bookings') }}" class="user-link">{{ request.user.first_name or request.user.username }}</a><form method="post" action="{{ url('logout') }}">{{ csrf_input }}<button class="text-button">Выйти</button></form>
+  {% else %}<a class="login-link" href="{{ url('login') }}">Войти <span>↗</span></a>{% endif %}</div>
+</div><nav class="container navigation" aria-label="Основная навигация">
+  <a class="{{ 'active' if request.resolver_match.url_name == 'flight_list' else '' }}" href="{{ url('flight_list') }}">Рейсы и билеты</a>
+  <a class="{{ 'active' if request.resolver_match.url_name == 'bookings' else '' }}" href="{{ url('bookings') }}">Мои бронирования</a>
+  {% if request.user.is_staff %}<a href="{{ url('admin:index') }}">Управление</a>{% endif %}
+  <span class="nav-caption">Путешествие начинается здесь</span>
+</nav></header>
+{% if messages %}<div class="container messages" role="status">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+<main id="main">{% block content %}{% endblock %}</main>
+<footer class="footer"><div class="container footer-inner"><a class="brand" href="{{ url('flight_list') }}">nordline.</a><span>Больше впечатлений. Ближе к миру.</span><span class="muted">Учебный проект · 2026</span></div></footer>
+</body></html>

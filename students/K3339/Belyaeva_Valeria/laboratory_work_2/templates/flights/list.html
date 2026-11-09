@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="container hero-wrap"><div class="hero">
+  <div class="hero-copy"><span class="eyebrow light">ЕСТЬ МЕСТА, КОТОРЫЕ СТОИТ УВИДЕТЬ</span><h1>Мир ближе,<br>чем кажется.</h1><p>Найдите свой рейс.<br>Остальное — прекрасные воспоминания.</p><a href="#schedule" class="hero-link">Выбрать направление <span>↘</span></a></div>
+  <div class="hero-location"><span class="location-dot"></span> Альпийское озеро <span>ВДОХНОВЕНИЕ ДЛЯ ПУТЕШЕСТВИЙ</span></div>
+</div></section>
+<section class="container search-section" aria-label="Поиск рейсов">
+ <form method="get" action="{{ url('flight_list') }}#schedule" class="search-panel">
+  <div class="search-heading"><span class="eyebrow">ВАШ СЛЕДУЮЩИЙ МАРШРУТ</span><span class="muted">Прямые рейсы. Новые впечатления.</span></div>
+  <div class="search-grid"><div class="search-field">{{ form.origin.label_tag() }}{{ form.origin }}</div><span class="swap" aria-hidden="true">⇄</span><div class="search-field">{{ form.destination.label_tag() }}{{ form.destination }}</div><div class="search-field">{{ form.date.label_tag() }}{{ form.date }}</div><button class="button search-button" type="submit">Найти рейс <span>↗</span></button></div>
+  <details class="search-more" {{ 'open' if request.GET.get('q') or request.GET.get('status') or request.GET.get('kind') else '' }}><summary>Номер рейса, авиакомпания и статус <span>+</span></summary><div class="advanced-grid">{% for field in [form.q, form.kind, form.status] %}<div>{{ field.label_tag() }}{{ field }}</div>{% endfor %}</div></details>
+  {% if form.errors %}<div class="form-errors">{{ form.errors }}</div>{% endif %}
+ </form>
+</section>
+<section class="container schedule" id="schedule">
+ <div class="section-heading"><div><span class="eyebrow">ПЛАНИРУЙТЕ С ЛЁГКОСТЬЮ</span><h2>Табло рейсов<span class="heading-dot">.</span></h2></div><span class="schedule-date">{{ today.strftime('%d.%m.%Y') }} <span class="live-dot"></span> {{ total }} рейсов</span></div>
+ <div class="schedule-tools"><div class="tabs"><a class="{{ 'selected' if not request.GET.get('kind') else '' }}" href="?{{ tabs_query }}#schedule">Все рейсы</a><a class="{{ 'selected' if request.GET.get('kind') == 'departure' else '' }}" href="?{{ tabs_query }}&kind=departure#schedule">Вылет ↗</a><a class="{{ 'selected' if request.GET.get('kind') == 'arrival' else '' }}" href="?{{ tabs_query }}&kind=arrival#schedule">Прилёт ↙</a></div><a class="subtle-link" href="{{ url('flight_list') }}#schedule">Сбросить фильтры ↻</a></div>
+ <div class="flight-list">
+ {% for flight in page %}<article class="flight-card">
+  <div class="flight-airline"><div class="airline-symbol">↗</div><div><strong>{{ flight.airline }}</strong><span>{{ flight.number }} · {{ flight.aircraft }}</span></div></div>
+  <div class="flight-route"><div><strong>{{ flight.departure_at|date('H:i') }}</strong><span>{{ flight.origin }}</span><small>{{ flight.origin_code }} · {{ flight.departure_at|date('d M') }}</small></div><div class="route-line"><span>{{ flight.duration }}</span><div>───────── <b>✈</b></div><small>Без пересадок</small></div><div><strong>{{ flight.arrival_at|date('H:i') }}</strong><span>{{ flight.destination }}</span><small>{{ flight.destination_code }} · {{ flight.arrival_at|date('d M') }}</small></div></div>
+  <div class="flight-info"><span class="status {{ flight.status }}">{{ flight.get_status_display() }}</span><small>{{ flight.get_kind_display() }} · Гейт {{ flight.gate }}</small></div>
+  <div class="flight-action"><span>от <strong>{{ flight.price|money }} ₽</strong></span><a class="button button-outline" href="{{ url('flight_detail', args=[flight.pk]) }}">Выбрать <span>↗</span></a></div>
+ </article>{% else %}<div class="empty"><span class="empty-icon">↗</span><h3>Пока нет подходящих рейсов</h3><p>Попробуйте другую дату или направление.</p><a class="button" href="{{ url('flight_list') }}#schedule">Показать все рейсы</a></div>{% endfor %}
+ </div>
+ {% include 'pagination.html' %}
+ <div class="travel-note"><div class="note-icon">✧</div><div><h3>Ваши планы могут меняться.</h3><p>Управляйте местом и данными пассажира в разделе «Мои бронирования».</p></div><a href="{{ url('bookings') }}">К бронированиям <span>↗</span></a></div>
+</section>
+{% endblock %}
