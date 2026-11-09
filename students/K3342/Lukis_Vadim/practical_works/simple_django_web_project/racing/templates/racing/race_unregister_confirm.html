@@ -1,0 +1,16 @@
+{% extends 'racing/base.html' %}
+{% block title %}Отмена регистрации{% endblock %}
+
+{% block content %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h2 class="card-title text-warning">Отмена регистрации</h2>
+        <p>Вы уверены, что хотите отменить регистрацию на гонку <strong>"{{ race.name }}"</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Да, отменить</button>
+            <a href="{% url 'race_detail' race.pk %}" class="btn btn-secondary">Нет, вернуться</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'racing/base.html' %}
+{% block title %}Удаление отзыва{% endblock %}
+
+{% block content %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h2 class="card-title text-danger">Удалить отзыв?</h2>
+        <p><strong>Гонка:</strong> {{ review.race.name }}</p>
+        <p><strong>Ваш отзыв:</strong> <em>{{ review.comment_text|truncatewords:20 }}</em></p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Да, удалить</button>
+            <a href="{% url 'race_detail' review.race.pk %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

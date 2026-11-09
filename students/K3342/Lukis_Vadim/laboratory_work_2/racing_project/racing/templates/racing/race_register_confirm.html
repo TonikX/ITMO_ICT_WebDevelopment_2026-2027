@@ -1,0 +1,22 @@
+{% extends 'racing/base.html' %}
+{% block title %}Регистрация на гонку{% endblock %}
+
+{% block content %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h2 class="card-title">Подтверждение регистрации</h2>
+        <p class="card-text">Вы хотите зарегистрироваться на гонку:</p>
+        <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item"><strong>Гонка:</strong> {{ race.name }}</li>
+            <li class="list-group-item"><strong>Дата:</strong> {{ race.race_date|date:"d.m.Y H:i" }}</li>
+            <li class="list-group-item"><strong>Место:</strong> {{ race.track_location }}</li>
+            <li class="list-group-item"><strong>Ваш профиль:</strong> {{ racer.last_name }} {{ racer.first_name }} ({{ racer.team_name }})</li>
+        </ul>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+            <a href="{% url 'race_detail' race.pk %}" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

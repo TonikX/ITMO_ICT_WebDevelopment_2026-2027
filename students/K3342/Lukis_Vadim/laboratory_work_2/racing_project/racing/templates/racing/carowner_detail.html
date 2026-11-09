@@ -1,0 +1,32 @@
+{% extends 'racing/base.html' %}
+{% block title %}{{ owner.last_name }} {{ owner.first_name }}{% endblock %}
+
+{% block content %}
+<h1>{{ owner.last_name }} {{ owner.first_name }}</h1>
+<div class="card mt-3">
+    <div class="card-body">
+        <p><strong>Дата рождения:</strong> {{ owner.birth_date|date:"d.m.Y"|default:"—" }}</p>
+        <p><strong>Паспорт:</strong> {{ owner.passport_number }}</p>
+        <p><strong>Адрес:</strong> {{ owner.address|default:"—" }}</p>
+    </div>
+</div>
+
+<h3 class="mt-4">Автомобили во владении:</h3>
+{% if owner.cars.all %}
+<ul class="list-group">
+    {% for car in owner.cars.all %}
+    <li class="list-group-item">
+        <a href="{% url 'car_detail' car.pk %}">{{ car.brand }} {{ car.model }} ({{ car.license_plate }})</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">Нет автомобилей.</p>
+{% endif %}
+
+<div class="mt-4">
+    <a href="{% url 'car_owner_update' owner.pk %}" class="btn btn-warning">Редактировать</a>
+    <a href="{% url 'car_owner_delete' owner.pk %}" class="btn btn-danger">Удалить</a>
+    <a href="{% url 'car_owner_list' %}" class="btn btn-secondary">← Назад к списку</a>
+</div>
+{% endblock %}
