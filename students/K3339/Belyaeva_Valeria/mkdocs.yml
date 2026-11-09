@@ -9,6 +9,7 @@ nav:
   - ЛР2:
       - Отчёт: lr2/report.md
       - Практики 2.1–2.3: lr2/practices.md
+      - LeetCode: lr2/leetcode.md
 markdown_extensions:
   - admonition
   - tables
