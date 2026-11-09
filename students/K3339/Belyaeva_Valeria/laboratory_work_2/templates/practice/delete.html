@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<div class="container page-content"><h1 class="page-title">Удалить автомобиль?</h1><div class="panel"><p>{{ object }}</p><form method="post">{{ csrf_input }}<button class="button danger">Да, удалить</button> <a class="button button-outline" href="{{ url('car_list') }}">Отмена</a></form></div></div>{% endblock %}
