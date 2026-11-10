@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Автомобиль</title>
+</head>
+<body>
+    <h1>{{ object.brand }} {{ object.model }}</h1>
+    <p>Государственный номер: {{ object.state_number }}</p>
+    <p>Цвет: {{ object.color|default:"не указан" }}</p>
+    <p>Владельцы:</p>
+    <ul>
+        {% for ownership in object.ownership_set.all %}
+        <li>
+            {{ ownership.owner }}
+            (с {{ ownership.start_date }} по {{ ownership.end_date|default:"настоящее время" }})
+        </li>
+        {% empty %}
+        <li>Владельцев нет.</li>
+        {% endfor %}
+    </ul>
+    <p><a href="/cars/{{ object.pk }}/update/">Изменить</a> | <a href="/cars/">К списку</a></p>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Оценки — Доска домашних заданий{% endblock %}
+
+{% block content %}
+<h1>Оценки класса</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Ученик</th>
+            {% for homework in homeworks %}
+            <th>
+                <a href="{% url 'homework_detail' homework.pk %}" title="{{ homework.text|truncatechars:120 }}">
+                    {{ homework.subject.name }}<br>{{ homework.issued|date:"d.m.Y" }}
+                </a>
+            </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for student, cells in table %}
+        <tr>
+            <td>{{ student.last_name }} {{ student.first_name }}</td>
+            {% for grade in cells %}
+            <td class="grade">{% if grade %}{{ grade }}{% else %}—{% endif %}</td>
+            {% endfor %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="{{ homeworks|length|add:1 }}">Нет учеников</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
