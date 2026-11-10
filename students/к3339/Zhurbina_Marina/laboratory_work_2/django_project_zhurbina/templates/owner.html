@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Владелец автомобиля</title>
+</head>
+<body>
+    <h1>Владелец автомобиля</h1>
+    <p>Имя: {{ owner.first_name }}</p>
+    <p>Фамилия: {{ owner.last_name }}</p>
+    <p>Дата рождения: {{ owner.birth_date|default:"не указана" }}</p>
+    <p>Номер паспорта: {{ owner.passport_number|default:"не указан" }}</p>
+    <p>Домашний адрес: {{ owner.home_address|default:"не указан" }}</p>
+    <p>Национальность: {{ owner.nationality|default:"не указана" }}</p>
+    <h2>Автомобили</h2>
+    <ul>
+        {% for car in owner.cars.all %}
+            <li><a href="{% url 'car_detail' car.id %}">{{ car }}</a></li>
+        {% empty %}
+            <li>Автомобилей нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

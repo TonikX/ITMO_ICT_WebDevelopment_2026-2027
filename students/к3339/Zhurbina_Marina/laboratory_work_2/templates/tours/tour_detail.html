@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ tour.name }} — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>{{ tour.name }}</h1>
+    <p><b>Страна:</b> {{ tour.country }}</p>
+    <p><b>Турагентство:</b> {{ tour.agency.name }} ({{ tour.agency.city }})</p>
+    <p><b>Период проведения:</b> {{ tour.date_start|date:"d.m.Y" }} — {{ tour.date_end|date:"d.m.Y" }}</p>
+    <p><b>Цена:</b> {{ tour.price }} руб.</p>
+    <p><b>Условия оплаты:</b> {{ tour.payment_terms }}</p>
+
+    <h2>Описание</h2>
+    <p>{{ tour.description }}</p>
+
+    {% if user.is_authenticated %}
+        {% if my_reservation %}
+            <p class="message">Вы забронировали этот тур ({{ my_reservation.guests }} мест(а),
+            статус: {{ my_reservation.get_status_display }}).
+            <a href="{% url 'my_reservations' %}">Управлять бронью</a></p>
+        {% else %}
+            <form method="post" action="{% url 'tour_reserve' tour.id %}">
+                {% csrf_token %}
+                <input type="submit" class="btn" value="Забронировать тур">
+            </form>
+        {% endif %}
+    {% else %}
+        <p>Чтобы забронировать тур, <a href="{% url 'login' %}">войдите</a>
+        или <a href="{% url 'register' %}">зарегистрируйтесь</a>.</p>
+    {% endif %}
+
+    <p><a href="{% url 'tour_list' %}">К списку туров</a></p>
+
+    <h2>Отзывы</h2>
+    {% for review in reviews %}
+        <p>
+            <b>{{ review.author.username }}</b>, {{ review.created_at|date:"d.m.Y" }} —
+            оценка {{ review.rating }}/10
+            (тур проходил {{ review.tour_date_start|date:"d.m.Y" }} —
+            {{ review.tour_date_end|date:"d.m.Y" }})
+        </p>
+        <p>{{ review.text }}</p>
+        <hr>
+    {% empty %}
+        <p>Отзывов пока нет.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        {% if my_review %}
+            <p class="message">Ваш отзыв на этот тур уже опубликован.</p>
+        {% else %}
+            <h2>Оставить отзыв</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="btn" value="Отправить отзыв">
+            </form>
+        {% endif %}
+    {% else %}
+        <p>Оставлять отзывы могут только <a href="{% url 'login' %}">вошедшие</a> пользователи.</p>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <h2>Брони этого тура</h2>
+        {% if tour_reservations %}
+            <table>
+                <tr>
+                    <th>Пользователь</th>
+                    <th>Мест</th>
+                    <th>Статус</th>
+                    <th>Дата брони</th>
+                </tr>
+                {% for r in tour_reservations %}
+                    <tr>
+                        <td>{{ r.user.username }}</td>
+                        <td>{{ r.guests }}</td>
+                        <td><span class="status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                        <td>{{ r.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <p><a href="/admin/tours/reservation/?status__exact=pending">
+                Подтвердить брони в админке</a></p>
+        {% else %}
+            <p>Броней пока нет.</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}

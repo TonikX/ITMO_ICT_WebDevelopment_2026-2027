@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Список туров — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>Наши туры</h1>
+
+    <form method="get">
+        <p>
+            <label for="id_country">Страна:</label>
+            <select name="country" id="id_country">
+                <option value="">— все страны —</option>
+                {% for c in countries %}
+                    <option value="{{ c }}" {% if request.GET.country == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="id_agency">Турагентство:</label>
+            <select name="agency" id="id_agency">
+                <option value="">— все агентства —</option>
+                {% for a in agencies %}
+                    <option value="{{ a.id }}" {% if request.GET.agency == a.id|stringformat:"s" %}selected{% endif %}>{{ a.name }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="id_q">Поиск по названию:</label>
+            <input type="text" name="q" id="id_q" value="{{ request.GET.q|default:'' }}">
+        </p>
+        <p><input type="submit" class="btn" value="Показать"></p>
+    </form>
+
+    {% if tours %}
+        <table>
+            <tr>
+                <th>Название</th>
+                <th>Страна</th>
+                <th>Агентство</th>
+                <th>Даты</th>
+                <th>Цена</th>
+            </tr>
+            {% for tour in tours %}
+                <tr>
+                    <td><a href="{% url 'tour_detail' tour.id %}">{{ tour.name }}</a></td>
+                    <td>{{ tour.country }}</td>
+                    <td>{{ tour.agency.name }}</td>
+                    <td>{{ tour.date_start|date:"d.m.Y" }} — {{ tour.date_end|date:"d.m.Y" }}</td>
+                    <td>{{ tour.price }} руб.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>По вашему запросу туров не найдено.</p>
+    {% endif %}
+
+    {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">&laquo; назад</a>
+            {% endif %}
+            {% for n in page_obj.paginator.page_range %}
+                {% if n == page_obj.number %}
+                    <span class="current">{{ n }}</span>
+                {% else %}
+                    <a href="?{{ querystring }}&page={{ n }}">{{ n }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">вперёд &raquo;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

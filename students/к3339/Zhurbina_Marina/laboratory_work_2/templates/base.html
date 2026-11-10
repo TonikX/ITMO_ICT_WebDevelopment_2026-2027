@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Турфирма «Восход»{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div id="header">
+    <div class="wrap">
+        <a id="logo" href="{% url 'tour_list' %}">Турфирма «Восход»</a>
+        <div id="menu">
+            <a href="{% url 'tour_list' %}">Туры</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_reservations' %}">Мои брони</a>
+                {% if user.is_staff %}
+                    <a href="{% url 'sales' %}">Продажи</a>
+                {% endif %}
+                <span class="hello">{{ user.username }}</span>
+                <form method="post" action="{% url 'logout' %}" class="logout">
+                    {% csrf_token %}
+                    <input type="submit" value="Выйти">
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Войти</a>
+                <a href="{% url 'register' %}">Регистрация</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div id="content" class="wrap">
+    {% block content %}{% endblock %}
+</div>
+<div id="footer" class="wrap">
+    <p>ООО «Восход».</p>
+</div>
+</body>
+</html>

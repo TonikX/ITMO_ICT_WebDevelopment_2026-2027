@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Изменение брони — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>Изменение брони</h1>
+    <p>Тур: <b>{{ object.tour }}</b></p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn" value="Сохранить">
+    </form>
+    <p><a href="{% url 'my_reservations' %}">К моим броням</a></p>
+{% endblock %}
