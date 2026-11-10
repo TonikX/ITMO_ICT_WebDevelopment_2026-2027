@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Мои брони — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>Мои брони</h1>
+
+    {% if reservations %}
+        <table>
+            <tr>
+                <th>Тур</th>
+                <th>Даты</th>
+                <th>Мест</th>
+                <th>Статус</th>
+                <th></th>
+            </tr>
+            {% for r in reservations %}
+                <tr>
+                    <td><a href="{% url 'tour_detail' r.tour.id %}">{{ r.tour.name }}</a>
+                        ({{ r.tour.country }})</td>
+                    <td>{{ r.tour.date_start|date:"d.m.Y" }} — {{ r.tour.date_end|date:"d.m.Y" }}</td>
+                    <td>{{ r.guests }}</td>
+                    <td><span class="status-{{ r.status }}">{{ r.get_status_display }}</span></td>
+                    <td><a href="{% url 'reservation_edit' r.id %}">изменить</a> |
+                        <a href="{% url 'reservation_delete' r.id %}">отменить</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>У вас пока нет броней. <a href="{% url 'tour_list' %}">Выберите тур</a>.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Отмена брони — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>Отмена бронирования</h1>
+    <p>Вы уверены, что хотите отменить бронь на тур «{{ object.tour }}»?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn" value="Да, отменить">
+    </form>
+    <p><a href="{% url 'my_reservations' %}">Нет, вернуться к броням</a></p>
+{% endblock %}

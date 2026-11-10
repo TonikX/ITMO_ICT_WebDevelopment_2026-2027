@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Продажи по странам — Турфирма «Восход»{% endblock %}
+
+{% block content %}
+    <h1>Проданные туры по странам</h1>
+    <p>Учитываются только подтверждённые резервирования.</p>
+
+    {% if user.is_staff %}
+        <p class="message">Ожидают подтверждения: {{ pending_count }}.
+            <a href="/admin/tours/reservation/?status__exact=pending">Подтвердить в админке</a></p>
+    {% endif %}
+
+    {% if rows %}
+        <table>
+            <tr>
+                <th>Страна</th>
+                <th>Продано туров</th>
+                <th>Туристов</th>
+                <th>Выручка, руб.</th>
+            </tr>
+            {% for r in rows %}
+                <tr>
+                    <td>{{ r.country }}</td>
+                    <td>{{ r.tours_sold }}</td>
+                    <td>{{ r.tourists }}</td>
+                    <td>{{ r.revenue }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Подтверждённых броней пока нет.</p>
+    {% endif %}
+{% endblock %}
