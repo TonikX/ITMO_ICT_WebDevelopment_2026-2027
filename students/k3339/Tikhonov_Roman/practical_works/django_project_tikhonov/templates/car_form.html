@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Автомобиль</title>
+</head>
+<body>
+    <h1>Автомобиль</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Сохранить">
+    </form>
+    <p><a href="/cars/">К списку автомобилей</a></p>
+</body>
+</html>

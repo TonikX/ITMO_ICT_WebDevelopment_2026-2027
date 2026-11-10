@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Владельцы автомобилей</title>
+</head>
+<body>
+    <h1>Владельцы</h1>
+    <p><a href="/owners/create/">Добавить владельца</a></p>
+    <ul>
+        {% for owner in dataset %}
+        <li>
+            <a href="/owner/{{ owner.pk }}/">{{ owner.last_name }} {{ owner.first_name }}</a>,
+            дата рождения: {{ owner.birth_date|default:"не указана" }}
+        </li>
+        {% empty %}
+        <li>Владельцев пока нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

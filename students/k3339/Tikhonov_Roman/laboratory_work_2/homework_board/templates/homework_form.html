@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Новое задание — Доска домашних заданий{% endblock %}
+
+{% block content %}
+<h1>Новое задание</h1>
+<form method="post" class="card form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Создать</button>
+</form>
+{% endblock %}

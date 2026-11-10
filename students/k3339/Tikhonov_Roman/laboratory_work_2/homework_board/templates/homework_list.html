@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Задания — Доска домашних заданий{% endblock %}
+
+{% block content %}
+<h1>Домашние задания</h1>
+
+<form method="get" class="filters">
+    <select name="subject">
+        <option value="">Все предметы</option>
+        {% for subject in subjects %}
+        <option value="{{ subject.pk }}" {% if subject.pk|stringformat:"s" == subject_id %}selected{% endif %}>{{ subject.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="search" name="q" value="{{ query }}" placeholder="Поиск по тексту задания или предмету">
+    <button type="submit">Найти</button>
+    {% if query or subject_id %}
+    <a class="btn-link" href="{% url 'homework_list' %}">Сбросить</a>
+    {% endif %}
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Предмет</th>
+            <th>Учитель</th>
+            <th>Выдано</th>
+            <th>Срок</th>
+            <th>Задание</th>
+            {% if user.is_staff %}
+            <th>Сдачи</th>
+            {% else %}
+            <th>Моя сдача</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for homework, submission in rows %}
+        <tr>
+            <td>{{ homework.subject.name }}</td>
+            <td>{{ homework.teacher.last_name }} {{ homework.teacher.first_name }}</td>
+            <td>{{ homework.issued|date:"d.m.Y" }}</td>
+            <td>{{ homework.due|date:"d.m.Y" }}</td>
+            <td><a href="{% url 'homework_detail' homework.pk %}">{{ homework.text|truncatechars:70 }}</a></td>
+            {% if user.is_staff %}
+            <td><a href="{% url 'homework_submissions' homework.pk %}">{{ homework.submissions_count }}</a></td>
+            {% else %}
+            <td>
+                {% if submission %}
+                    {% if submission.grade %}Оценка: {{ submission.grade }}{% else %}Сдано{% endif %}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">Задания не найдены</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+    <a class="step" href="{{ page_query }}page={{ page_obj.previous_page_number }}">Назад</a>
+    {% endif %}
+    {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+        <span class="current">{{ num }}</span>
+        {% else %}
+        <a class="page-num" href="{{ page_query }}page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+    <a class="step" href="{{ page_query }}page={{ page_obj.next_page_number }}">Вперёд</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
