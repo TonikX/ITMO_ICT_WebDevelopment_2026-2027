@@ -1,0 +1,8 @@
+site_name: "Веб-программирование — Кондилеев Егор Юрьевич, K3339"
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Лабораторная работа №1: index.md
