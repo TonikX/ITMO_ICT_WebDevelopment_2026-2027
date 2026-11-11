@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Журнал оценок</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #3456a3;
+            color: white;
+        }
+
+        a {
+            color: #3456a3;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Журнал оценок</h1>
+
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>Ученик</th>
+
+                {% for homework in homeworks %}
+                    <th>
+                        {{ homework.subject.name }}
+                        <br>
+                        Задание №{{ homework.id }}
+                    </th>
+                {% endfor %}
+            </tr>
+
+            {% for row in rows %}
+                <tr>
+                    <td>{{ row.student.username }}</td>
+
+                    {% for grade in row.grades %}
+                        <td>{{ grade }}</td>
+                    {% endfor %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">Учеников пока нет</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <p>
+        <a href="{% url 'homework_list' %}">
+            Назад к домашним заданиям
+        </a>
+    </p>
+</main>
+</body>
+</html>

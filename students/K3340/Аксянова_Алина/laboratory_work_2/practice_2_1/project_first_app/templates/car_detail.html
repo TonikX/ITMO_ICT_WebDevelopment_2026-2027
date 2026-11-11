@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об автомобиле</title>
+</head>
+<body>
+    <h1>Информация об автомобиле</h1>
+
+    <p>Марка: {{ object.brand }}</p>
+    <p>Модель: {{ object.model_name }}</p>
+    <p>Госномер: {{ object.plate_number }}</p>
+    <p>Цвет: {{ object.color }}</p>
+
+    <h2>История владения</h2>
+
+    <ul>
+        {% for ownership in object.ownership_records.all %}
+            <li>
+                {{ ownership.owner.first_name }}
+                {{ ownership.owner.last_name }}
+
+                — с {{ ownership.start_date|date:"d.m.Y" }}
+
+                {% if ownership.end_date %}
+                    по {{ ownership.end_date|date:"d.m.Y" }}
+                {% else %}
+                    по настоящее время
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>Нет записей о владении</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'car_update' object.id %}">Редактировать</a>
+
+    <p><a href="{% url 'car_list' %}">Назад к списку</a></p>
+</body>
+</html>

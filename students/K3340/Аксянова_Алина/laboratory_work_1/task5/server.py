@@ -2,33 +2,26 @@ import socket
 from urllib.parse import parse_qs
 
 HOST = "localhost"
-PORT = 8084
+PORT = 8085
 
-# словарь для хранения оценок по дисциплинам
 grades = {}
 
-# создаем сокет по протоколу TCP
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# привязываем сокет к адресу и порту
 server_socket.bind((HOST, PORT))
 
-# начинаем слушать входящие подключения
 server_socket.listen(5)
 
 print(f"Веб-сервер запущен на http://{HOST}:{PORT}")
 
 
-# формируем HTML-страницу
 def create_html():
     grades_html = ""
 
-    # добавляем дисциплины и оценки на страницу
     for subject, subject_grades in grades.items():
         grades_string = ", ".join(subject_grades)
         grades_html += f"<li><b>{subject}</b>: {grades_string}</li>"
 
-    # если оценок еще нет
     if not grades_html:
         grades_html = "<li>Оценок пока нет</li>"
 
@@ -70,11 +63,9 @@ def create_html():
 """
 
 
-# получаем HTTP-запрос от клиента
 def receive_request(client_connection):
     request = b""
 
-    # получаем данные, пока не получим все HTTP-заголовки
     while b"\r\n\r\n" not in request:
         data = client_connection.recv(4096)
 
@@ -83,10 +74,8 @@ def receive_request(client_connection):
 
         request += data
 
-    # разделяем заголовки и тело запроса
     headers, _, body = request.partition(b"\r\n\r\n")
 
-    # определяем длину тела запроса
     content_length = 0
 
     for header in headers.decode("utf-8").split("\r\n"):
@@ -106,44 +95,33 @@ def receive_request(client_connection):
 
 
 while True:
-    # принимаем подключение от клиента
     client_connection, client_address = server_socket.accept()
 
-    # получаем HTTP-запрос
     headers, body = receive_request(client_connection)
 
-    # получаем первую строку HTTP-запроса
     request_line = headers.split("\r\n")[0]
 
-    # определяем HTTP-метод
     method = request_line.split()[0]
 
     print(f"Получен запрос: {request_line}")
 
-    # обрабатываем POST-запрос
     if method == "POST":
-        # разбираем данные формы
         form_data = parse_qs(body)
 
         subject = form_data.get("subject", [""])[0]
         grade = form_data.get("grade", [""])[0]
 
-        # сохраняем полученную оценку
         if subject and grade:
-            # если дисциплины еще нет, создаем для нее список
             if subject not in grades:
                 grades[subject] = []
 
-            # добавляем оценку к дисциплине
             grades[subject].append(grade)
 
             print(f"Добавлена оценка: {subject} — {grade}")
 
-    # формируем HTML-страницу
     html_content = create_html()
     html_bytes = html_content.encode("utf-8")
 
-    # формируем HTTP-ответ
     http_headers = (
         "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/html; charset=UTF-8\r\n"
@@ -152,10 +130,8 @@ while True:
         "\r\n"
     )
 
-    # отправляем HTTP-ответ клиенту
     client_connection.sendall(
         http_headers.encode() + html_bytes
     )
 
-    # закрываем соединение с клиентом
     client_connection.close()

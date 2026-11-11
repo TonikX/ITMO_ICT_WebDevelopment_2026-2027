@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        main {
+            max-width: 450px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        input {
+            padding: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3456a3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Вход в систему</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Войти</button>
+    </form>
+
+    <p>Нет аккаунта?
+        <a href="{% url 'register' %}">Зарегистрироваться</a>
+    </p>
+
+    <p><a href="{% url 'homework_list' %}">На главную</a></p>
+</main>
+</body>
+</html>

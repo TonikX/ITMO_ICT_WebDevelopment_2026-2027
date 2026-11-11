@@ -1,0 +1,23 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+<h1>Выставление оценки</h1>
+
+<p><b>Ученик:</b> {{ submission.student.username }}</p>
+<p><b>Предмет:</b> {{ submission.homework.subject.name }}</p>
+<p><b>Задание:</b> {{ submission.homework.description }}</p>
+<p><b>Ответ:</b> {{ submission.answer_text }}</p>
+
+<form method="post">
+    {{ csrf_input }}
+    {{ form.as_p() | safe }}
+
+    <button type="submit">Сохранить оценку</button>
+</form>
+
+<p>
+    <a href="{{ url('teacher_submissions') }}">
+        Назад к работам
+    </a>
+</p>
+{% endblock %}

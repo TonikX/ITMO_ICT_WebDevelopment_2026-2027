@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сдача домашнего задания</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        main {
+            max-width: 650px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+        }
+
+        button {
+            background: #3456a3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        a {
+            color: #3456a3;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Сдача домашнего задания</h1>
+
+    <h2>{{ homework.subject.name }}</h2>
+
+    <p><b>Задание:</b> {{ homework.description }}</p>
+    <p><b>Срок сдачи:</b> {{ homework.due_date }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Отправить работу</button>
+    </form>
+
+    <p>
+        <a href="{% url 'homework_list' %}">Назад к заданиям</a>
+    </p>
+</main>
+</body>
+</html>
