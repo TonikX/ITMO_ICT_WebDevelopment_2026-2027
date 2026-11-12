@@ -1,32 +1,32 @@
 {
-  "math": [
+  "information technology": [
     {
       "student_name": "Nam",
       "student_id": "415149",
       "grade": 5
     },
     {
-      "student_name": "Hao",
-      "student_id": "415442",
+      "student_name": "Dat",
+      "student_id": "415149",
       "grade": 5
     }
   ],
-  "history": [
+  "math": [
     {
-      "student_name": "John",
-      "student_id": "345789",
-      "grade": 4
+      "student_name": "Loga",
+      "student_id": "415142",
+      "grade": 5
     },
     {
-      "student_name": "Phong",
-      "student_id": "123321",
-      "grade": 4
+      "student_name": "Nam",
+      "student_id": "415149",
+      "grade": 5
     }
   ],
-  "chemistry": [
+  "english": [
     {
-      "student_name": "Anna",
-      "student_id": "345345",
+      "student_name": "Dat",
+      "student_id": "111111",
       "grade": 4
     }
   ]

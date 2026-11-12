@@ -1,6 +1,5 @@
 import json
 import socket
-from html import escape
 from pathlib import Path
 from urllib.parse import parse_qs
 
@@ -31,10 +30,10 @@ def make_page():
             if not isinstance(record, dict):
                 record = {"grade": record}
 
-            student_id = escape(record.get("student_id", "") or "—")
-            student_name = escape(record.get("student_name", "") or "—")
-            subject_name = escape(subject)
-            mark = escape(str(record["grade"]))
+            student_id = record.get("student_id", "") or "—"
+            student_name = record.get("student_name", "") or "—"
+            subject_name = subject
+            mark = str(record["grade"])
             rows += (
                 "<tr>"
                 f"<td>{student_id}</td>"
@@ -103,12 +102,11 @@ def send_response(connection, status, text="", content_type="text/html; charset=
     headers += "\r\n"
 
     try:
-        connection.sendall(headers.encode("ascii") + body)
+        connection.sendall(headers.encode() + body)
     except OSError:
         print("Client disconnected before receiving.")
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server:
-    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind(("localhost", 8080))
     server.listen(10)
     server.settimeout(1.0)
