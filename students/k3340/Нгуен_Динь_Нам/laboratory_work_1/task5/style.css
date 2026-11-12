@@ -1,0 +1,168 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f6f8;
+  color: #222;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 35px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  margin: 0 0 25px;
+  font-size: 30px;
+}
+
+h2 {
+  margin: 0 0 18px;
+  font-size: 20px;
+}
+
+section {
+  margin-bottom: 25px;
+  padding: 24px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* Các ô nhập nằm ngang trên màn hình rộng. */
+form {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.4fr)
+    minmax(80px, 0.6fr)
+    minmax(0, 1.4fr)
+    minmax(0, 1fr)
+    auto;
+  align-items: end;
+  gap: 15px;
+}
+
+.field {
+  min-width: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+input,
+button {
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  background: white;
+  color: #222;
+}
+
+button {
+  border-color: #245cc5;
+  background: #245cc5;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #194ba7;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 2px solid #245cc5;
+  outline-offset: 2px;
+}
+
+.hint {
+  margin: 12px 0 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+}
+
+thead {
+  background: #f0f2f5;
+}
+
+tbody th {
+  width: 30%;
+}
+
+.marks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.marks li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.marks li:last-child {
+  margin-bottom: 0;
+}
+
+.mark {
+  min-width: 30px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #edf3ff;
+  color: #194ba7;
+  font-weight: bold;
+  text-align: center;
+}
+
+.empty {
+  padding: 25px;
+  color: #666;
+  text-align: center;
+}
+
+form {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.4fr)
+    minmax(0, 1fr)
+    minmax(0, 1.4fr)
+    80px
+    auto;
+  align-items: end;
+  gap: 15px;
+}

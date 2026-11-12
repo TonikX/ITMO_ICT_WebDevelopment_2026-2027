@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Журнал оценок</title>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+    <main class="container">
+        <h1>Журнал оценок</h1>
+        <section>
+            <h2>Добавить оценку</h2>
+
+            <form method="post" action="/grades" accept-charset="utf-8">
+                <div class="field">
+                    <label for="student-name">Имя студента</label>
+                    <input
+                    id="student-name"
+                    name="student_name"
+                    placeholder="Фамилия и имя"
+                    />
+                </div>
+
+                <div class="field">
+                    <label for="student-id">Номер ИСУ</label>
+                    <input
+                    id="student-id"
+                    name="student_id"
+                    type="text"
+                    placeholder="123456"
+                    />
+                </div>
+
+                <div class="field">
+                    <label for="subject">Предмет *</label>
+                    <input
+                    id="subject"
+                    name="subject"
+                    placeholder="Математика"
+                    required
+                    />
+                </div>
+
+                <div class="field">
+                    <label for="grade">Оценка *</label>
+                    <input
+                    id="grade"
+                    name="grade"
+                    type="number"
+                    min="1"
+                    max="5"
+                    step="1"
+                    placeholder="1–5"
+                    required
+                    />
+                </div>
+
+                <button type="submit">Добавить</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Оценки по предметам</h2>
+
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">Номер ИСУ</th>
+                        <th scope="col">Имя студента</th>
+                        <th scope="col">Предмет</th>
+                        <th scope="col">Оценка</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {{rows}}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
