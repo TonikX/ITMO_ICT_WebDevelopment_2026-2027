@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>task 3</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      .task_3 {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .description {
+        font-size: 16px;
+        line-height: 1.5;
+        color: #555;
+      }
+
+      .practice {
+        padding: 10px;
+        border: 3px solid red;
+      }
+
+      .practice h2 {
+        color: #444;
+      }
+
+      .practice p {
+        font-size: 14px;
+        line-height: 1.5;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="task_3">
+      <h1>Практическое задание 3. Раздача HTML-страницы по HTTP</h1>
+      <p class="description">
+        HTTP-ответ — обычный текст, оформленный по строгому формату: строка
+        статуса, заголовки, пустая строка и тело. Серверу достаточно прочитать
+        содержимое index.html, посчитать его длину для заголовка Content-Length
+        и отправить всё одним пакетом через тот же сокет, что принял
+        подключение.
+      </p>
+      <div class="practice">
+        <h2>Практическая часть</h2>
+        <p>
+          Реализовать серверную часть приложения. Клиент подключается к серверу
+          и в ответ получает HTTP-сообщение, содержащее HTML-страницу, которую
+          сервер подгружает из файла index.html.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

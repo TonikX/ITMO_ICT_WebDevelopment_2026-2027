@@ -1,0 +1,33 @@
+{
+  "information technology": [
+    {
+      "student_name": "Nam",
+      "student_id": "415149",
+      "grade": 5
+    },
+    {
+      "student_name": "Dat",
+      "student_id": "415149",
+      "grade": 5
+    }
+  ],
+  "math": [
+    {
+      "student_name": "Loga",
+      "student_id": "415142",
+      "grade": 5
+    },
+    {
+      "student_name": "Nam",
+      "student_id": "415149",
+      "grade": 5
+    }
+  ],
+  "english": [
+    {
+      "student_name": "Dat",
+      "student_id": "111111",
+      "grade": 4
+    }
+  ]
+}
