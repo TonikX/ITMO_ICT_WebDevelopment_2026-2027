@@ -1,0 +1,21 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+<h1>Вход в систему</h1>
+
+<form method="post">
+    {{ csrf_input }}
+    {{ form.as_p() | safe }}
+
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+
+    <button type="submit">Войти</button>
+</form>
+
+<p>
+    Нет аккаунта?
+    <a href="{{ url('register') }}">Зарегистрироваться</a>
+</p>
+{% endblock %}

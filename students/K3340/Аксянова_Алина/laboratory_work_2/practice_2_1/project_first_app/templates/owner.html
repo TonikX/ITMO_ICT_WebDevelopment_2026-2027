@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об автовладельце</title>
+</head>
+<body>
+    <h1>Информация об автовладельце</h1>
+
+    <p>Логин: {{ owner.username }}</p>
+    <p>Имя: {{ owner.first_name }}</p>
+    <p>Фамилия: {{ owner.last_name }}</p>
+    <p>Дата рождения: {{ owner.birth_date|date:"d.m.Y" }}</p>
+
+    <h2>Дополнительные данные</h2>
+
+    <p>Номер паспорта: {{ owner.passport_number }}</p>
+    <p>Домашний адрес: {{ owner.home_address }}</p>
+    <p>Национальность: {{ owner.nationality }}</p>
+
+    <h2>Автомобили владельца</h2>
+
+    <ul>
+        {% for ownership in owner.ownership_records.all %}
+            <li>
+                {{ ownership.car.brand }}
+                {{ ownership.car.model_name }}
+                ({{ ownership.car.plate_number }})
+            </li>
+        {% empty %}
+            <li>Автомобилей нет</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'owner_list' %}">К списку владельцев</a></p>
+</body>
+</html>

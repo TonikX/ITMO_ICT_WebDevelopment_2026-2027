@@ -1,0 +1,41 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+<h1>Проверка домашних заданий</h1>
+
+<div style="overflow-x: auto;">
+    <table>
+        <tr>
+            <th>Ученик</th>
+            <th>Предмет</th>
+            <th>Ответ</th>
+            <th>Дата сдачи</th>
+            <th>Оценка</th>
+            <th>Действие</th>
+        </tr>
+
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.student.username }}</td>
+                <td>{{ submission.homework.subject.name }}</td>
+                <td>{{ submission.answer_text }}</td>
+                <td>
+                    {{ submission.submitted_at.strftime('%d.%m.%Y %H:%M') }}
+                </td>
+                <td>
+                    {{ submission.grade if submission.grade is not none else 'Не выставлена' }}
+                </td>
+                <td>
+                    <a href="{{ url('grade_submission', args=[submission.id]) }}">
+                        Оценить
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Сданных работ пока нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

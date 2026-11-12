@@ -1,0 +1,17 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+<h1>Регистрация</h1>
+
+<form method="post">
+    {{ csrf_input }}
+    {{ form.as_p() | safe }}
+
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<p>
+    Уже есть аккаунт?
+    <a href="{{ url('login') }}">Войти</a>
+</p>
+{% endblock %}

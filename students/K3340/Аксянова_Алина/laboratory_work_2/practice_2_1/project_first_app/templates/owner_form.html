@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление автовладельца</title>
+</head>
+<body>
+    <h1>Добавить автовладельца</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Сохранить</button>
+    </form>
+
+    <p><a href="{% url 'owner_list' %}">Назад к списку</a></p>
+</body>
+</html>

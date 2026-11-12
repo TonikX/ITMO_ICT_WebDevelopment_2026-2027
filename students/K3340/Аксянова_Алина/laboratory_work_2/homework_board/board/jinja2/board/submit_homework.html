@@ -1,0 +1,21 @@
+{% extends 'board/base.html' %}
+
+{% block content %}
+<h1>Сдача домашнего задания</h1>
+
+<h2>{{ homework.subject.name }}</h2>
+
+<p><b>Задание:</b> {{ homework.description }}</p>
+
+<p>
+    <b>Срок сдачи:</b>
+    {{ homework.due_date.strftime('%d.%m.%Y') }}
+</p>
+
+<form method="post">
+    {{ csrf_input }}
+    {{ form.as_p() | safe }}
+
+    <button type="submit">Отправить работу</button>
+</form>
+{% endblock %}

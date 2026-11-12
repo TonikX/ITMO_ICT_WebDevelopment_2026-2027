@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка работ</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #3456a3;
+            color: white;
+        }
+
+        a {
+            color: #3456a3;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Проверка домашних заданий</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <table>
+        <tr>
+            <th>Ученик</th>
+            <th>Предмет</th>
+            <th>Ответ</th>
+            <th>Дата сдачи</th>
+            <th>Оценка</th>
+            <th>Действие</th>
+        </tr>
+
+        {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.student.username }}</td>
+                <td>{{ submission.homework.subject.name }}</td>
+                <td>{{ submission.answer_text }}</td>
+                <td>{{ submission.submitted_at|date:"d.m.Y H:i" }}</td>
+                <td>
+                    {{ submission.grade|default_if_none:"Не выставлена" }}
+                </td>
+                <td>
+                    <a href="{% url 'grade_submission' submission.id %}">
+                        Оценить
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">Сданных работ пока нет</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p>
+        <a href="{% url 'homework_list' %}">На главную</a>
+    </p>
+</main>
+</body>
+</html>
