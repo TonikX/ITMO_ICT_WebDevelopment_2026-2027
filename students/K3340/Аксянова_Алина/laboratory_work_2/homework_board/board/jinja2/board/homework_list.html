@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Доска домашних заданий</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .homework {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        input, select, button {
+            padding: 9px;
+            margin: 5px;
+        }
+
+        a {
+            color: #3456a3;
+            margin-right: 12px;
+        }
+    </style>
+    <link rel="stylesheet" href="{{ static('board/style.css') }}">
+</head>
+<body>
+<main>
+    <h1>Доска домашних заданий</h1>
+
+    {% for message in get_messages(request) %}
+        <p>{{ message }}</p>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+        <p>Вы вошли как: {{ request.user.username }}</p>
+
+        {% if request.user.is_staff %}
+            <a href="{{ url('grade_list') }}">Журнал оценок</a>
+        {% else %}
+            <a href="{{ url('grade_list') }}">Мои оценки</a>
+        {% endif %}
+
+        {% if request.user.is_staff %}
+            <a href="{{ url('teacher_submissions') }}">
+                Проверка работ
+            </a>
+
+            <a href="{{ url('admin:index') }}">
+                Административная панель
+            </a>
+        {% endif %}
+
+        <form method="post" action="{{ url('logout') }}">
+            {{ csrf_input }}
+            <button type="submit">Выйти</button>
+        </form>
+    {% else %}
+        <a href="{{ url('login') }}">Войти</a>
+        <a href="{{ url('register') }}">Регистрация</a>
+    {% endif %}
+
+    <h2>Домашние задания</h2>
+
+    <form method="get" class="search-form">
+        <input type="text"
+               name="search"
+               placeholder="Поиск заданий"
+               value="{{ search }}">
+
+        <select name="subject">
+            <option value="">Все предметы</option>
+
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}"
+                    {% if subject_id == subject.id|string %}
+                        selected
+                    {% endif %}>
+                    {{ subject.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Найти</button>
+    </form>
+
+    {% for homework in page_obj %}
+        <div class="homework">
+            <h2>{{ homework.subject.name }}</h2>
+
+            <p>Преподаватель: {{ homework.teacher.username }}</p>
+            <p>Дата выдачи: {{ homework.assigned_date.strftime('%d.%m.%Y') }}</p>
+            <p>Начало выполнения: {{ homework.start_date.strftime('%d.%m.%Y') }}</p>
+            <p>Срок сдачи: {{ homework.due_date.strftime('%d.%m.%Y') }}</p>
+            <p>Задание: {{ homework.description }}</p>
+            <p>Штрафы: {{ homework.penalty_info or 'Нет' }}</p>
+
+            {% if request.user.is_authenticated and not request.user.is_staff %}
+                <a href="{{ url('submit_homework', args=[homework.id]) }}">
+                    Сдать работу
+                </a>
+            {% elif not request.user.is_authenticated %}
+                <a href="{{ url('login') }}">
+                    Войти, чтобы сдать работу
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Задания не найдены</p>
+    {% endfor %}
+
+    <div class="pagination">
+        {% if page_obj.has_previous() %}
+            <a href="?page={{ page_obj.previous_page_number() }}&amp;search={{ search|urlencode }}&amp;subject={{ subject_id }}">
+                Назад
+            </a>
+        {% endif %}
+
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+
+        {% if page_obj.has_next() %}
+            <a href="?page={{ page_obj.next_page_number() }}&amp;search={{ search|urlencode }}&amp;subject={{ subject_id }}">
+                Далее
+            </a>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>

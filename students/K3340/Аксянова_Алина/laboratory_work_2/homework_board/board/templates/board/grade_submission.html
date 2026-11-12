@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Выставление оценки</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+        }
+
+        main {
+            max-width: 600px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #3456a3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Выставление оценки</h1>
+
+    <p><b>Ученик:</b> {{ submission.student.username }}</p>
+    <p><b>Предмет:</b> {{ submission.homework.subject.name }}</p>
+    <p><b>Задание:</b> {{ submission.homework.description }}</p>
+    <p><b>Ответ:</b> {{ submission.answer_text }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Сохранить оценку</button>
+    </form>
+
+    <p>
+        <a href="{% url 'teacher_submissions' %}">
+            Назад к работам
+        </a>
+    </p>
+</main>
+</body>
+</html>
