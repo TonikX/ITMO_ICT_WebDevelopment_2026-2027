@@ -95,7 +95,10 @@ def register(request):
 
 @login_required
 def grade_list(request):
-    students = User.objects.filter(is_staff=False).order_by('username')
+    if request.user.is_staff:
+        students = User.objects.filter(is_staff=False).order_by('username')
+    else:
+        students = User.objects.filter(id=request.user.id)
     homeworks = list(Homework.objects.select_related('subject').order_by('id'))
 
     submissions = Submission.objects.all()

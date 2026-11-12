@@ -48,7 +48,11 @@
     {% if request.user.is_authenticated %}
         <p>Вы вошли как: {{ request.user.username }}</p>
 
-        <a href="{{ url('grade_list') }}">Журнал оценок</a>
+        {% if request.user.is_staff %}
+            <a href="{{ url('grade_list') }}">Журнал оценок</a>
+        {% else %}
+            <a href="{{ url('grade_list') }}">Мои оценки</a>
+        {% endif %}
 
         {% if request.user.is_staff %}
             <a href="{{ url('teacher_submissions') }}">
