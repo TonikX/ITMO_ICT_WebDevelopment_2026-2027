@@ -1,0 +1,11 @@
+site_name: ЛР2 — Список туров туристической фирмы
+site_description: Вариант 4. Django, PostgreSQL, Jinja2.
+nav:
+  - Отчёт: index.md
+  - Модель и архитектура: architecture.md
+  - Интерфейсы: interfaces.md
+  - Практики 2.1–2.3: practices.md
+  - Проверка: testing.md
+theme:
+  name: mkdocs
+  locale: ru
