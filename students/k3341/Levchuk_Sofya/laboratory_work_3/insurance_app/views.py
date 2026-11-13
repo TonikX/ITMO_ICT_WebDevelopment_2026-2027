@@ -2,6 +2,7 @@ from datetime import date
 
 from django.db.models import Count, Q, Sum
 from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -45,11 +46,13 @@ class AgentDetailView(generics.RetrieveUpdateDestroyAPIView):
 class EmploymentContractListCreateView(generics.ListCreateAPIView):
     queryset = EmploymentContract.objects.all()
     serializer_class = EmploymentContractSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class EmploymentContractDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = EmploymentContract.objects.all()
     serializer_class = EmploymentContractSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 
