@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Журнал оценок</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin-top: 28px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #aaa;
+            padding: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        input {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            flex: 1 1 140px;
+            min-width: 0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #5b8c5b;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background: #5b8c5b;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+
+        button:hover {
+            background: #4a7a4a;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            input, button {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Журнал оценок</h1>
+
+        <table>
+            <thead>
+                <tr><th>Дисциплина</th><th>Оценки</th></tr>
+            </thead>
+            <tbody>
+                {%ROWS%}
+            </tbody>
+        </table>
+
+        <h2>Добавить оценку</h2>
+        <form method="POST" action="/">
+            <input type="text" name="subject" placeholder="Дисциплина" required>
+            <input type="number" name="grade" placeholder="Оценка" min="2" max="5" required>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+</body>
+</html>

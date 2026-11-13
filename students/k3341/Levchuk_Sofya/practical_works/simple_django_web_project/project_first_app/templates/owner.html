@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Владелец {{ owner.first_name }} {{ owner.last_name }}</title>
+</head>
+<body>
+    <h1>Информация о владельце</h1>
+
+    <p><strong>Username:</strong> {{ owner.username }}</p>
+    <p><strong>Имя:</strong> {{ owner.first_name }}</p>
+    <p><strong>Фамилия:</strong> {{ owner.last_name }}</p>
+    <p><strong>Email:</strong> {{ owner.email|default:"не указан" }}</p>
+    <p><strong>Дата рождения:</strong> {{ owner.birth_date|default:"не указана" }}</p>
+    <p><strong>Паспорт:</strong> {{ owner.passport|default:"не указан" }}</p>
+    <p><strong>Адрес:</strong> {{ owner.address|default:"не указан" }}</p>
+    <p><strong>Национальность:</strong> {{ owner.nationality|default:"не указана" }}</p>
+
+    <p><a href="{% url 'owner_list' %}">← Ко всем владельцам</a></p>
+</body>
+</html>
