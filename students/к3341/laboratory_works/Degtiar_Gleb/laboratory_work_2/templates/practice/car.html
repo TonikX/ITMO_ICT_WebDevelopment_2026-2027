@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<a href="{{ url('cars') }}">← Автомобили</a><h1>{{ object }}</h1><p>Цвет: {{ object.color }}</p><a class="button" href="{{ url('car_edit',kwargs={'pk':object.pk}) }}">Редактировать</a>{% endblock %}
