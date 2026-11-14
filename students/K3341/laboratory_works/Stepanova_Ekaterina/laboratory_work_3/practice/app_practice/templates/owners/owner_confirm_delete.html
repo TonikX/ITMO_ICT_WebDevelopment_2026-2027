@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %} Удаление автовладельца {% endblock %}
+{% block content %}
+<h1> Удаление автовладельца</h1>
+    <form method="post">
+      {% csrf_token %}
+        <p>Вы уверены, что хотите удалить {{owner.last_name}} {{owner.first_name}}?</p>
+      <button type="submit">Удалить</button>
+    </form>
+
+    <a href="{% url 'owners_list' %}">Отмена и возврат к списку</a>
+
+{% endblock %}

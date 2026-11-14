@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Бронирование места
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h1 class="h3 mb-4">
+                    Бронирование места
+                </h1>
+
+                <div class="alert alert-light border">
+                    <strong>
+                        {{ flight.flight_number }}
+                    </strong>
+
+                    <br>
+
+                    {{ flight.airline }}
+
+                    <br>
+
+                    {{ flight.departure }}
+                    →
+                    {{ flight.arrival }}
+
+                    <br>
+
+                    <span class="text-muted">
+                        {{ flight.departure_time|date:"d.m.Y H:i" }}
+                    </span>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label
+                            for="seat_number"
+                            class="form-label"
+                        >
+                            Номер места
+                        </label>
+
+                        <input
+                            type="text"
+                            id="seat_number"
+                            name="seat_number"
+                            value="{{ seat_number|default:'' }}"
+                            class="form-control"
+                            placeholder="Например, 12A"
+                            maxlength="10"
+                            required
+                        >
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Забронировать
+                        </button>
+
+                        <a
+                            href="{% url 'flight_detail' flight.id %}"
+                            class="btn btn-outline-secondary"
+                        >
+                            Отмена
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

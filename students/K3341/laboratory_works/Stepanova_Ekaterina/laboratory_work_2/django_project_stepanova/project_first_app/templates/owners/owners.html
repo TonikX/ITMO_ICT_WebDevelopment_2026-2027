@@ -1,0 +1,24 @@
+<!doctype html>
+{% extends 'base.html' %}
+{% block title %} {{owner.first_name}} {{owner.last_name}} {% endblock %}
+{% block content %}
+
+<h1>
+    Список автовладельцев
+</h1>
+<ul>
+    {% for owner in owners %}
+    <li> {{owner.last_name}} {{owner.first_name}}
+        <a href="{% url 'owner_detail' owner.pk %}">Подробнее</a>
+
+
+    </li>
+    {% empty %}
+    <li>Автовладельцы не найдены</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'owner_create' %}"> Создать </a>
+
+{% endblock %}
+

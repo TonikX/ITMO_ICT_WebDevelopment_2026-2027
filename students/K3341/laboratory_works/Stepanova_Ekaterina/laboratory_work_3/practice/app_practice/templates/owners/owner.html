@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %} {{owner.first_name}} {{owner.last_name}} {% endblock %}
+{% block content %}
+<h1>Автовладелец</h1>
+<p>Имя: {{owner.first_name}} </p>
+<p>Фамилия: {{owner.last_name}} </p>
+<p> Дата рождения: {{owner.birthday}}</p>
+<p>Паспорт: {{owner.passport}}</p>
+<p> Домашний адрес: {{owner.home_address}}</p>
+<p> Национальность: {{owner.nationality}}</p>
+<div class="action-buttons" style="display: flex; gap: 10px; margin-top: 20px;">
+    <a href="{% url 'owner_update' owner.pk %}" class="btn btn-edit">Изменить</a>
+    <a href="{% url 'owner_delete' owner.pk %}" class="btn btn-delete">Удалить</a>
+    <a href="{% url 'owners_list' %}" class="btn btn-back">Возврат к списку</a>
+</div>
+
+{% endblock %}
+

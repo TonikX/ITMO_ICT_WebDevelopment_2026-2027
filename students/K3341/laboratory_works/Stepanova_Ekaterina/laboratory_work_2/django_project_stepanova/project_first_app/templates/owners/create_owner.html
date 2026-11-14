@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Добавление автовладельца {% endblock %}
+{% block content %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Сохранить</button>
+    </form>
+
+    <a href="{% url 'owners_list' %}">Отмена и возврат к списку</a>
+
+{% endblock %}
