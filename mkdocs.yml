@@ -1,0 +1,20 @@
+site_name: Отчеты по Web-программированию Шитарев Андрей
+site_description: Выполнил студент группы K3340 Шитарев Андрей
+
+theme:
+  name: material  
+  language: ru    
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+
+extra_css:
+  - theme/css/custom.css
+
+nav:
+  - Информация: index.md
+  - Лабораторная работа 1: Lab1.md
+  - Лабораторная работа 2: Lab2.md
+  - Лабораторная работа 3: Lab3.md
+  - Заключение: conclusion.md

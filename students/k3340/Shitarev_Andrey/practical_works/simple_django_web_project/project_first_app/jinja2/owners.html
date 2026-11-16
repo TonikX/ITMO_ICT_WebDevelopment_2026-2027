@@ -1,0 +1,1 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>Владельцы</title><h1>Владельцы</h1>{% for owner in owners %}<p><a href="/owner/{{ owner.pk }}">{{ owner.first_name }} {{ owner.last_name }}</a> — {{ owner.username }}, {{ owner.passport_number }}, {{ owner.home_address }}, {{ owner.nationality }}</p>{% endfor %}<a href="/owners/new/">Добавить</a></html>
