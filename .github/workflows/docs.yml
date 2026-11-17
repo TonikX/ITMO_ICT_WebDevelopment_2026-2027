@@ -1,0 +1,64 @@
+name: Publish lab reports
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - uses: actions/configure-pages@v5
+      - name: Install MkDocs
+        run: pip install mkdocs
+      - name: Build reports
+        run: |
+          mkdir -p "$RUNNER_TEMP/pages"
+          mkdocs build --strict \
+            --config-file students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_1/report/mkdocs.yml \
+            --site-dir "$RUNNER_TEMP/pages/lab1"
+          mkdocs build --strict \
+            --config-file students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_2/report/mkdocs.yml \
+            --site-dir "$RUNNER_TEMP/pages/lab2"
+      - name: Add reports index
+        run: |
+          cat > "$RUNNER_TEMP/pages/index.html" <<'EOF'
+          <!doctype html>
+          <html lang="ru">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Лабораторные работы — Илхом Солиев</title>
+          </head>
+          <body>
+            <h1>Лабораторные работы — Илхом Солиев, К3339</h1>
+            <ul>
+              <li><a href="./lab1/">Лабораторная 1 — Сокеты</a></li>
+              <li><a href="./lab2/">Лабораторная 2 — Сайт туристической фирмы</a></li>
+            </ul>
+          </body>
+          </html>
+          EOF
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
