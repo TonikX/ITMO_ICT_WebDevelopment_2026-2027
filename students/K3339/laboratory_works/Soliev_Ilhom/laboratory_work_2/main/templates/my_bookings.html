@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Мои бронирования{% endblock %}
+{% block content %}
+<h1>Мои бронирования</h1>
+{% for booking in bookings %}
+    <article class="panel">
+        <div class="review-heading">
+            <h2><a href="{{ url('tour_detail', args=[booking.tour_id]) }}">{{ booking.tour.title }}</a></h2>
+            <span class="badge">{{ booking.get_status_display() }}</span>
+        </div>
+        <p>{{ booking.tour.country.name }} · {{ booking.tour.start_date|date }} — {{ booking.tour.end_date|date }}</p>
+        <p>Туристов: {{ booking.travelers }} · К оплате: <strong>{{ booking.total_price|money }} ₽</strong></p>
+        <p>Телефон: {{ booking.phone }}</p>
+        {% if booking.comment %}<p class="multiline">{{ booking.comment }}</p>{% endif %}
+        <div class="actions">
+            <a href="{{ url('booking_edit', args=[booking.pk]) }}">Изменить</a>
+            <a class="danger-link" href="{{ url('booking_delete', args=[booking.pk]) }}">Удалить</a>
+        </div>
+    </article>
+{% else %}
+    <div class="panel"><p>У вас пока нет бронирований.</p><a href="{{ url('tour_list') }}">Выбрать тур</a></div>
+{% endfor %}
+{% endblock %}

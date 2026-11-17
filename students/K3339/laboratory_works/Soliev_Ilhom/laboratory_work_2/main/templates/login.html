@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>Вход</h1>
+    <form method="post">
+        {{ csrf_input }}
+        <input type="hidden" name="next" value="{{ next or '' }}">
+        {% include 'fields.html' %}
+        <button type="submit">Войти</button>
+    </form>
+    <p>Нет аккаунта? <a href="{{ url('register') }}">Зарегистрироваться</a></p>
+</section>
+{% endblock %}

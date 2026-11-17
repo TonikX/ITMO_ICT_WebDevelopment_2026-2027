@@ -5,7 +5,7 @@ from pathlib import Path
 from urllib.parse import parse_qs
 
 HOST = "127.0.0.1"
-PORT = 8081
+PORT = 8082
 DIRECTORY = Path(__file__).parent
 
 def read_request(connection):
