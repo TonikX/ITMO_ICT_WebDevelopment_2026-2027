@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Туры</h1>
+<p class="muted">Выберите направление и подходящие даты.</p>
+<form method="get" class="filters panel">
+    <div>
+        <label for="search">Поиск</label>
+        <input id="search" name="q" value="{{ query }}" placeholder="Название тура или агентство">
+    </div>
+    <div>
+        <label for="country">Страна</label>
+        <select id="country" name="country">
+            <option value="">Все страны</option>
+            {% for country in countries %}
+                <option value="{{ country.pk }}" {% if selected_country == country.pk|string %}selected{% endif %}>{{ country.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit">Найти</button>
+    <a href="{{ url('tour_list') }}">Сбросить</a>
+</form>
+<div class="tour-grid">
+    {% for tour in page %}
+        <article class="panel tour-card">
+            <span class="muted">{{ tour.country.name }}</span>
+            <h2><a href="{{ url('tour_detail', args=[tour.pk]) }}">{{ tour.title }}</a></h2>
+            <p>{{ tour.start_date|date }} — {{ tour.end_date|date }}</p>
+            <p>{{ tour.description|truncate(150) }}</p>
+            <p class="muted">{{ tour.agency.name }}</p>
+            <div class="card-bottom">
+                <strong>{{ tour.price|money }} ₽ <small>/ человек</small></strong>
+                <a href="{{ url('tour_detail', args=[tour.pk]) }}">Подробнее →</a>
+            </div>
+        </article>
+    {% else %}
+        <p class="panel empty">Туры не найдены. Попробуйте выбрать другую страну или изменить запрос.</p>
+    {% endfor %}
+</div>
+{% if page.has_other_pages() %}
+    <nav class="pagination" aria-label="Страницы каталога">
+        {% if page.has_previous() %}<a href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page.previous_page_number() }}">← Назад</a>{% endif %}
+        <span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+        {% if page.has_next() %}<a href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page.next_page_number() }}">Дальше →</a>{% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

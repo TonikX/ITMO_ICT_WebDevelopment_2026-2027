@@ -1,0 +1,16 @@
+<h1>Автомобили</h1>
+
+<a href="{% url 'car_create' %}">Добавить автомобиль</a>
+<a href="{% url 'owner_list' %}">Автовладельцы</a>
+
+<ul>
+    {% for car in cars %}
+        <li>
+            <a href="{% url 'car_detail' car.pk %}">
+                {{ car.brand }} {{ car.model }} — {{ car.registration_number }}
+            </a>
+        </li>
+    {% empty %}
+        <li>Автомобилей пока нет.</li>
+    {% endfor %}
+</ul>

@@ -4,6 +4,8 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_1/report/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_2/2_1and2_2/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_2/2_3/.venv" />
     </content>
     <orderEntry type="jdk" jdkName="~/PycharmProjects/ITMO_ICT_WebDevelopment_2026-2027/.venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

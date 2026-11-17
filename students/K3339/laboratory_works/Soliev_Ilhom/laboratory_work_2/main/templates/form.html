@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="panel form-panel">
+    <h1>{{ title }}</h1>
+    {% if note %}<p class="muted">{{ note }}</p>{% endif %}
+    <form method="post">
+        {{ csrf_input }}
+        {% include 'fields.html' %}
+        <div class="actions">
+            <button type="submit">{{ button }}</button>
+            <a href="{{ url('tour_list') }}">К списку туров</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

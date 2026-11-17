@@ -1,0 +1,7 @@
+site_name: Лабораторная работа 2 — Список туров
+site_author: Солиев Илхом
+theme:
+  name: mkdocs
+  locale: ru
+nav:
+  - Отчёт: index.md
