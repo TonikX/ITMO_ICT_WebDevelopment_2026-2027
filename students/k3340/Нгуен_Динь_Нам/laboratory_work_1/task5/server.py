@@ -26,28 +26,47 @@ def make_page():
     rows = ""
 
     for subject, records in grades.items():
-        for record in records:
-            if not isinstance(record, dict):
-                record = {"grade": record}
+        students = {}
 
-            student_id = record.get("student_id", "") or "—"
-            student_name = record.get("student_name", "") or "—"
+        for index, record in enumerate(records):
+            student_id = record.get("student_id", "").strip()
+            student_name = record.get("student_name", "").strip()
+
+            if student_id:
+                key = ("id", student_id)
+            elif student_name:
+                key = ("name", student_name.casefold())
+            else:
+                key = ("anonymous", index)
+
+            if key not in students:
+                students[key] = {
+                    "student_id": student_id,
+                    "student_name": student_name,
+                    "marks": [],
+                }
+
+            students[key]["marks"].append(record["grade"])
+
+        for student in students.values():
+            student_id = student["student_id"] or "—"
+            student_name = student["student_name"] or "—"
             subject_name = subject
-            mark = str(record["grade"])
+            marks = ", ".join(str(mark) for mark in student["marks"])
+
             rows += (
                 "<tr>"
                 f"<td>{student_id}</td>"
                 f"<td>{student_name}</td>"
                 f"<td>{subject_name}</td>"
-                f"<td>{mark}</td>"
+                f"<td>{marks}</td>"
                 "</tr>"
             )
 
     if not rows:
-        rows = '<tr><td colspan="4">Добавьте первую оценку.</td></tr>'
+        rows = '<tr><td colspan="4" class="empty">Добавьте первую оценку.</td></tr>'
 
     template = (BASE_DIR / "index.html").read_text(encoding="utf-8")
-
     return template.replace("{{rows}}", rows)
 
 def read_request(connection):
