@@ -27,7 +27,7 @@ jobs:
           python-version: "3.x"
       - uses: actions/configure-pages@v5
       - name: Install MkDocs
-        run: pip install mkdocs
+        run: pip install mkdocs mkdocs-material
       - name: Build reports
         run: |
           mkdir -p "$RUNNER_TEMP/pages"
@@ -37,6 +37,9 @@ jobs:
           mkdocs build --strict \
             --config-file students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_2/report/mkdocs.yml \
             --site-dir "$RUNNER_TEMP/pages/lab2"
+          mkdocs build --strict \
+            --config-file students/K3339/laboratory_works/Soliev_Ilhom/laboratory_work_3/mkdocs.yml \
+            --site-dir "$RUNNER_TEMP/pages/lab3"
       - name: Add reports index
         run: |
           cat > "$RUNNER_TEMP/pages/index.html" <<'EOF'
@@ -52,6 +55,7 @@ jobs:
             <ul>
               <li><a href="./lab1/">Лабораторная 1 — Сокеты</a></li>
               <li><a href="./lab2/">Лабораторная 2 — Сайт туристической фирмы</a></li>
+              <li><a href="./lab3/">Лабораторная 3 — REST API птицефабрики</a></li>
             </ul>
           </body>
           </html>
