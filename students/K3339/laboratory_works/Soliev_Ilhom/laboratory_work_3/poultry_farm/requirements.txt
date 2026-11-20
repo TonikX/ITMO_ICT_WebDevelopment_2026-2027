@@ -1,0 +1,7 @@
+Django>=5.2,<6.0
+djangorestframework>=3.16,<4.0
+djoser>=2.3,<3.0
+psycopg[binary]>=3.2,<4.0
+python-dotenv>=1.0,<2.0
+mkdocs>=1.6,<2.0
+mkdocs-material>=9.6,<10.0
