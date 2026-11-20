@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Проданные туры{% endblock %}
+{% block content %}
+<h1>Проданные туры по странам</h1>
+<p class="muted">Здесь учитываются только подтверждённые бронирования.</p>
+<div class="panel table-wrap">
+    <table>
+        <thead><tr><th>Страна</th><th>Бронирований</th><th>Туристов</th><th>Сумма</th></tr></thead>
+        <tbody>
+        {% for row in countries %}
+            <tr><td>{{ row.tour__country__name }}</td><td>{{ row.bookings_count }}</td><td>{{ row.travelers_count }}</td><td>{{ row.total|money }} ₽</td></tr>
+        {% else %}
+            <tr><td colspan="4">Проданных туров пока нет.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<h2>Все проданные туры</h2>
+<div class="panel table-wrap">
+    <table>
+        <thead><tr><th>Страна</th><th>Тур</th><th>Даты</th><th>Бронирований</th><th>Туристов</th><th>Сумма</th></tr></thead>
+        <tbody>
+        {% for row in sold_tours %}
+            <tr>
+                <td>{{ row.tour__country__name }}</td>
+                <td><a href="{{ url('tour_detail', args=[row.tour_id]) }}">{{ row.tour__title }}</a></td>
+                <td>{{ row.tour__start_date|date }} — {{ row.tour__end_date|date }}</td>
+                <td>{{ row.bookings_count }}</td><td>{{ row.travelers_count }}</td><td>{{ row.total|money }} ₽</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">Туры появятся после подтверждения бронирований.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

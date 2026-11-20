@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Управление заявками{% endblock %}
+{% block content %}
+<h1>Управление заявками</h1>
+<p class="muted">Проверьте данные бронирования перед подтверждением.</p>
+<div class="panel table-wrap">
+    <table>
+        <thead><tr><th>Тур</th><th>Пользователь</th><th>Контакты и пожелания</th><th>Туристов</th><th>Сумма</th><th>Статус</th><th>Действие</th></tr></thead>
+        <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td><a href="{{ url('tour_detail', args=[booking.tour_id]) }}">{{ booking.tour.title }}</a><br><small>{{ booking.tour.country.name }}</small></td>
+                <td>{{ booking.user.get_full_name() or booking.user.username }}<br><small>{{ booking.user.email }}</small></td>
+                <td>{{ booking.phone }}{% if booking.comment %}<p class="multiline">{{ booking.comment }}</p>{% endif %}</td>
+                <td>{{ booking.travelers }}</td><td>{{ booking.total_price|money }} ₽</td>
+                <td>{{ booking.get_status_display() }}</td>
+                <td>{% if booking.status == 'pending' %}
+                    <form method="post" action="{{ url('booking_confirm', args=[booking.pk]) }}">
+                        {{ csrf_input }}<button type="submit">Подтвердить</button>
+                    </form>
+                {% else %}—{% endif %}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7">Заявок пока нет.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

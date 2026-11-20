@@ -1,0 +1,17 @@
+<h1>{{ car.brand }} {{ car.model }}</h1>
+
+<p>Госномер: {{ car.registration_number }}</p>
+<p>Цвет: {{ car.color }}</p>
+
+<p>Владельцы:
+    {% for owner in car.owners.all %}
+        {{ owner.first_name }} {{ owner.last_name }}{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        пока не указаны
+    {% endfor %}
+</p>
+
+<a href="{% url 'car_update' car.pk %}">Редактировать автомобиль</a>
+
+<a href="{% url 'car_delete' car.pk %}">Удалить автомобиль</a>
+<a href="{% url 'car_list' %}">К списку автомобилей</a>

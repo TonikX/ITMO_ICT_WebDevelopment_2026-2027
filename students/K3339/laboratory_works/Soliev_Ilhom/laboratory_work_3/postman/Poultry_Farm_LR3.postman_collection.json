@@ -1,0 +1,1577 @@
+{
+  "info": {
+    "name": "Птицефабрика — ЛР3, вариант 7",
+    "description": "Импортируемая коллекция API. base_url по умолчанию http://127.0.0.1:8000. Выполни «Авторизация → Получить токен»; запросы API используют сохранённую переменную token. Для CRUD сначала создай связанные записи и обнови переменные *_id при необходимости.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "Token {{token}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "month",
+      "value": "2026-01",
+      "type": "string"
+    },
+    {
+      "key": "date_from",
+      "value": "2026-01-01",
+      "type": "string"
+    },
+    {
+      "key": "date_to",
+      "value": "2026-01-31",
+      "type": "string"
+    },
+    {
+      "key": "workshop_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "cage_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "breed_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "diet_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "employee_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "contract_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "employee_assignment_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "chicken_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "chicken_cage_assignment_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "weight_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "egg_record_id",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "breed_season_diet_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Авторизация",
+      "item": [
+        {
+          "name": "Регистрация",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/auth/users/",
+            "description": "Зарегистрировать worker-аккаунт.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"worker_example\",\n  \"email\": \"worker@example.com\",\n  \"password\": \"ChangeThisPassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить токен",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/auth/token/login/",
+            "description": "Войти. Токен из ответа auth_token автоматически сохраняется в переменную коллекции token.",
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"worker_example\",\n  \"password\": \"ChangeThisPassword123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (data.auth_token) pm.collectionVariables.set('token', data.auth_token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Текущий пользователь",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/auth/users/me/",
+            "description": "Получить данные текущего пользователя и его роль."
+          }
+        },
+        {
+          "name": "Выйти",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{base_url}}/auth/token/logout/",
+            "description": "Удалить текущий токен."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Цехи",
+      "description": "CRUD цехов; ответ GET списка содержит клетки.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/workshops/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/workshops/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop_number\": 1,\n  \"name\": \"Цех № 1\",\n  \"capacity_cages\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/workshops/{{workshop_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/workshops/{{workshop_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop_number\": 1,\n  \"name\": \"Цех № 1\",\n  \"capacity_cages\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/workshops/{{workshop_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop_number\": 1,\n  \"name\": \"Цех № 1\",\n  \"capacity_cages\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/workshops/{{workshop_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Клетки",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/cages/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/cages/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop\": \"{{workshop_id}}\",\n  \"row_number\": 1,\n  \"cage_number\": 1,\n  \"capacity_chickens\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/cages/{{cage_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/cages/{{cage_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop\": \"{{workshop_id}}\",\n  \"row_number\": 1,\n  \"cage_number\": 1,\n  \"capacity_chickens\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/cages/{{cage_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workshop\": \"{{workshop_id}}\",\n  \"row_number\": 1,\n  \"cage_number\": 1,\n  \"capacity_chickens\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/cages/{{cage_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Породы",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/breeds/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breeds/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Леггорн\",\n  \"average_eggs_per_month\": 25,\n  \"average_weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/breeds/{{breed_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breeds/{{breed_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Леггорн\",\n  \"average_eggs_per_month\": 25,\n  \"average_weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breeds/{{breed_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Леггорн\",\n  \"average_eggs_per_month\": 25,\n  \"average_weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/breeds/{{breed_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Диеты",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/diets/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/diets/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diet_number\": \"DIET-001\",\n  \"content\": \"Зерно, белковая добавка, минеральная смесь\",\n  \"daily_cost_per_chicken\": \"5.25\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/diets/{{diet_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/diets/{{diet_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diet_number\": \"DIET-001\",\n  \"content\": \"Зерно, белковая добавка, минеральная смесь\",\n  \"daily_cost_per_chicken\": \"5.25\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/diets/{{diet_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diet_number\": \"DIET-001\",\n  \"content\": \"Зерно, белковая добавка, минеральная смесь\",\n  \"daily_cost_per_chicken\": \"5.25\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/diets/{{diet_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Работники",
+      "description": "Создание, изменение и удаление доступны директору/superuser. Серия и номер паспорта — только для записи; ответы их не возвращают.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/employees/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employees/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Иван Петров\",\n  \"passport_series\": \"1234\",\n  \"passport_number\": \"567890\",\n  \"passport_issued_by\": \"ОВД\",\n  \"passport_issued_at\": \"2020-01-10\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/employees/{{employee_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employees/{{employee_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Иван Петров\",\n  \"passport_series\": \"1234\",\n  \"passport_number\": \"567890\",\n  \"passport_issued_by\": \"ОВД\",\n  \"passport_issued_at\": \"2020-01-10\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employees/{{employee_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Иван Петров\",\n  \"passport_series\": \"1234\",\n  \"passport_number\": \"567890\",\n  \"passport_issued_by\": \"ОВД\",\n  \"passport_issued_at\": \"2020-01-10\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/employees/{{employee_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Трудовые договоры",
+      "description": "Изменение договоров доступно директору/superuser.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/contracts/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/contracts/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"contract_number\": \"CTR-001\",\n  \"signed_at\": \"2024-12-20\",\n  \"started_at\": \"2025-01-01\",\n  \"ended_at\": null,\n  \"salary\": \"50000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/contracts/{{contract_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/contracts/{{contract_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"contract_number\": \"CTR-001\",\n  \"signed_at\": \"2024-12-20\",\n  \"started_at\": \"2025-01-01\",\n  \"ended_at\": null,\n  \"salary\": \"50000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/contracts/{{contract_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"contract_number\": \"CTR-001\",\n  \"signed_at\": \"2024-12-20\",\n  \"started_at\": \"2025-01-01\",\n  \"ended_at\": null,\n  \"salary\": \"50000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/contracts/{{contract_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Закрепления работников за клетками",
+      "description": "Перед размещением кур закрепи за клеткой хотя бы одного работника.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/employee-cage-assignments/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employee-cage-assignments/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"assigned_from\": \"2026-01-01\",\n  \"assigned_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/employee-cage-assignments/{{employee_assignment_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employee-cage-assignments/{{employee_assignment_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"assigned_from\": \"2026-01-01\",\n  \"assigned_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employee-cage-assignments/{{employee_assignment_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"employee\": \"{{employee_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"assigned_from\": \"2026-01-01\",\n  \"assigned_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/employee-cage-assignments/{{employee_assignment_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Куры",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/chickens/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chickens/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"birth_date\": \"2024-09-01\",\n  \"arrived_at\": \"2025-01-01\",\n  \"removed_at\": null,\n  \"removal_reason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/chickens/{{chicken_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chickens/{{chicken_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"birth_date\": \"2024-09-01\",\n  \"arrived_at\": \"2025-01-01\",\n  \"removed_at\": null,\n  \"removal_reason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chickens/{{chicken_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"birth_date\": \"2024-09-01\",\n  \"arrived_at\": \"2025-01-01\",\n  \"removed_at\": null,\n  \"removal_reason\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/chickens/{{chicken_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Назначения кур в клетки",
+      "description": "Создание проверяет вместимость клетки и наличие закреплённого работника.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/chicken-cage-assignments/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chicken-cage-assignments/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"valid_from\": \"2026-01-01\",\n  \"valid_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/chicken-cage-assignments/{{chicken_cage_assignment_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chicken-cage-assignments/{{chicken_cage_assignment_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"valid_from\": \"2026-01-01\",\n  \"valid_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chicken-cage-assignments/{{chicken_cage_assignment_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"cage\": \"{{cage_id}}\",\n  \"valid_from\": \"2026-01-01\",\n  \"valid_to\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/chicken-cage-assignments/{{chicken_cage_assignment_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Измерения веса",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/weights/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/weights/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"measured_at\": \"2026-01-10\",\n  \"weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/weights/{{weight_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/weights/{{weight_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"measured_at\": \"2026-01-10\",\n  \"weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/weights/{{weight_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"measured_at\": \"2026-01-10\",\n  \"weight_grams\": \"2000.00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/weights/{{weight_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Записи о яйцах",
+      "description": "Для записи яиц у курицы должно быть назначение в клетку на эту дату.",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/egg-records/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/egg-records/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"production_date\": \"2026-01-15\",\n  \"eggs_count\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/egg-records/{{egg_record_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/egg-records/{{egg_record_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"production_date\": \"2026-01-15\",\n  \"eggs_count\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/egg-records/{{egg_record_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chicken\": \"{{chicken_id}}\",\n  \"production_date\": \"2026-01-15\",\n  \"eggs_count\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/egg-records/{{egg_record_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Диеты пород по сезонам",
+      "description": "",
+      "item": [
+        {
+          "name": "Список",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/breed-season-diets/",
+            "description": "Получить список записей."
+          }
+        },
+        {
+          "name": "Создать",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breed-season-diets/",
+            "description": "Создать запись.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"diet\": \"{{diet_id}}\",\n  \"season\": \"winter\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Получить по ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/breed-season-diets/{{breed_season_diet_id}}/",
+            "description": "Получить запись по ID."
+          }
+        },
+        {
+          "name": "Полностью изменить",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breed-season-diets/{{breed_season_diet_id}}/",
+            "description": "Заменить запись целиком.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"diet\": \"{{diet_id}}\",\n  \"season\": \"winter\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Частично изменить",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/breed-season-diets/{{breed_season_diet_id}}/",
+            "description": "Изменить отдельные поля.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"breed\": \"{{breed_id}}\",\n  \"diet\": \"{{diet_id}}\",\n  \"season\": \"winter\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Удалить",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/api/breed-season-diets/{{breed_season_diet_id}}/",
+            "description": "Удалить запись по ID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Операции с персоналом и курами",
+      "item": [
+        {
+          "name": "Вывести курицу из учёта",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/chickens/{{chicken_id}}/remove/",
+            "description": "Установить дату и причину выбытия; текущее назначение клетки закроется автоматически.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"removed_at\": \"2026-01-31\",\n  \"removal_reason\": \"sold\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Уволить работника",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": "{{base_url}}/api/employees/{{employee_id}}/dismiss/",
+            "description": "Закрыть текущий договор и закрепления работника. Занятая клетка должна остаться закреплённой за другим работником.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ended_at\": \"2026-01-31\",\n  \"dismissal_reason\": \"Увольнение по собственному желанию\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Аналитика и отчёты",
+      "item": [
+        {
+          "name": "Яйца по курицам",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/chicken-eggs/?month={{month}}&breed_id={{breed_id}}&weight_min=1500&weight_max=2300&age_min=1&age_max=3",
+            "description": "Число яиц по каждой курице за месяц; фильтры по породе, весу и возрасту."
+          }
+        },
+        {
+          "name": "Цех с наибольшим числом кур породы",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/top-workshop/?breed_id={{breed_id}}",
+            "description": "Вернуть цех или цехи с максимумом кур указанной породы на сегодня."
+          }
+        },
+        {
+          "name": "Среднее число яиц на работника",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/worker-egg-average/?date_from={{date_from}}&date_to={{date_to}}",
+            "description": "Среднее число яиц на закреплённый рабочий день работника. Если параметры опущены, берётся предыдущий месяц."
+          }
+        },
+        {
+          "name": "Число кур по породам и цехам",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/breed-workshop-counts/",
+            "description": "Текущее число кур каждой породы в каждом цехе."
+          }
+        },
+        {
+          "name": "Показатели пород и фабрики",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/breed-comparison/?month={{month}}",
+            "description": "Сравнить показатели пород со средними фактическими показателями фабрики."
+          }
+        },
+        {
+          "name": "Месячный отчёт",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/analytics/monthly-report/?month={{month}}",
+            "description": "Яйца и число кур по породам и цехам, итоги по фабрике."
+          }
+        }
+      ]
+    }
+  ]
+}

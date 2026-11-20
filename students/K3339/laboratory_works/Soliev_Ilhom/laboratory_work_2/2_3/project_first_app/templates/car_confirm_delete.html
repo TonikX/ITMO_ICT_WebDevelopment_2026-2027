@@ -1,0 +1,9 @@
+<h1>Удалить автомобиль?</h1>
+
+<p>{{ object.brand }} {{ object.model }} — {{ object.registration_number }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+    <a href="{% url 'car_detail' object.pk %}">Отмена</a>
+</form>

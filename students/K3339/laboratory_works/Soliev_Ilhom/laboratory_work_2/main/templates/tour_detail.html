@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ tour.title }}{% endblock %}
+{% block content %}
+<a href="{{ url('tour_list') }}">← Все туры</a>
+<section class="panel tour-detail">
+    <p class="muted">{{ tour.country.name }} · {{ tour.agency.name }}</p>
+    <h1>{{ tour.title }}</h1>
+    <p>{{ tour.start_date|date }} — {{ tour.end_date|date }}</p>
+    <p class="multiline">{{ tour.description }}</p>
+    <h2>Стоимость и оплата</h2>
+    <p><strong>{{ tour.price|money }} ₽ за человека</strong></p>
+    <p class="multiline">{{ tour.payment_terms }}</p>
+    <p class="muted">Связаться с агентством: {{ tour.agency.phone }}, {{ tour.agency.email }}</p>
+    {% if booking %}
+        <p>Ваше бронирование: <span class="badge">{{ booking.get_status_display() }}</span></p>
+        <a class="button" href="{{ url('my_bookings') }}">Мои бронирования</a>
+    {% elif can_book %}
+        <a class="button" href="{{ url('booking_create', args=[tour.pk]) }}">Забронировать</a>
+        {% if not user.is_authenticated %}<p class="muted">Для бронирования нужно войти в аккаунт.</p>{% endif %}
+    {% else %}
+        <p class="muted">Бронирование закрыто: тур уже начался.</p>
+    {% endif %}
+</section>
+<h2>Отзывы</h2>
+{% for review in reviews %}
+    <article class="panel review">
+        <div class="review-heading">
+            <strong>{{ review.user.get_full_name() or review.user.username }}</strong>
+            <span class="badge">{{ review.rating }}/10</span>
+        </div>
+        <p class="muted">Даты тура: {{ review.start_date|date }} — {{ review.end_date|date }}</p>
+        <p class="multiline">{{ review.text }}</p>
+        <small class="muted">{{ review.created_at|date }}</small>
+    </article>
+{% else %}
+    <p class="muted">У этого тура пока нет отзывов.</p>
+{% endfor %}
+{% if user.is_authenticated %}
+    <section class="panel form-panel">
+        <h2>Оставить отзыв</h2>
+        <form method="post" action="{{ url('review_create', args=[tour.pk]) }}">
+            {{ csrf_input }}
+            {% with form=review_form %}{% include 'fields.html' %}{% endwith %}
+            <button type="submit">Отправить отзыв</button>
+        </form>
+    </section>
+{% else %}
+    <p><a href="{{ url('login') }}?next={{ request.path|urlencode }}">Войдите</a>, чтобы оставить отзыв.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,6 @@
+/site/
+poultry_farm/.env
+poultry_farm/.venv/
+poultry_farm/db.sqlite3
+__pycache__/
+*.py[cod]
