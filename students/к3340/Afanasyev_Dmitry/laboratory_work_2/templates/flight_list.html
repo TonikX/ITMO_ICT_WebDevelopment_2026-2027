@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Табло авиаперелётов</h1>
+<form method="get" class="filters">
+  {% for field in form %}
+    <div><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</div>
+  {% endfor %}
+  <button>Найти</button>
+  <a href="{{ url('flight_list') }}">Сбросить</a>
+</form>
+{% if user.is_staff or user.is_superuser %}<p><a href="{{ url('flight_create') }}">Добавить рейс</a></p>{% endif %}
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Рейс</th><th>Авиакомпания</th><th>Вылет</th><th>Прилёт</th><th>Тип</th><th>Гейт</th></tr></thead>
+  <tbody>
+    {% for flight in page %}
+      <tr>
+        <td><a href="{{ flight.get_absolute_url() }}">{{ flight.number }}</a></td>
+        <td>{{ flight.airline.name }}</td>
+        <td>{{ flight.origin }}<br>{{ flight.departure_at|datetime }}</td>
+        <td>{{ flight.destination }}<br>{{ flight.arrival_at|datetime }}</td>
+        <td>{{ flight.get_direction_display() }}</td><td>{{ flight.gate }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6">Рейсы не найдены.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% if page.previous_cursor or page.next_cursor %}
+<nav aria-label="Страницы рейсов">
+  {% if page.previous_cursor %}<a href="?{% if query %}{{ query }}&amp;{% endif %}cursor={{ page.previous_cursor|urlencode }}">Назад</a>{% endif %}
+  {% if page.next_cursor %}<a href="?{% if query %}{{ query }}&amp;{% endif %}cursor={{ page.next_cursor|urlencode }}">Далее</a>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

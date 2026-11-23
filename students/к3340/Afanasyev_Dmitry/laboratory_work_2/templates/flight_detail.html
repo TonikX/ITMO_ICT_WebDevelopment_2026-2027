@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Рейс {{ flight.number }}{% endblock %}
+{% block content %}
+<h1>Рейс {{ flight.number }}</h1>
+<dl>
+  <dt>Авиакомпания</dt><dd>{{ flight.airline.name }}</dd>
+  <dt>Вылет</dt><dd>{{ flight.origin }}, {{ flight.departure_at|datetime }}</dd>
+  <dt>Прилёт</dt><dd>{{ flight.destination }}, {{ flight.arrival_at|datetime }}</dd>
+  <dt>Тип рейса</dt><dd>{{ flight.get_direction_display() }}</dd>
+  <dt>Гейт</dt><dd>{{ flight.gate }}</dd>
+  <dt>Статус</dt><dd>{{ flight.get_status_display() }}</dd>
+  <dt>Свободные места</dt><dd>{{ free }}</dd>
+</dl>
+{% if booking %}
+  <p>Ваше место: {{ booking.seat }}. <a href="{{ url('booking_list') }}">Мои бронирования</a></p>
+  {% if not reviewed %}<p><a href="{{ url('review_create', args=[flight.pk]) }}">Оставить отзыв</a></p>{% endif %}
+{% elif flight.is_bookable and free > 0 %}
+  <p><a href="{{ url('booking_create', args=[flight.pk]) }}">Забронировать место</a></p>
+{% else %}<p>Бронирование закрыто.</p>{% endif %}
+{% if user.is_staff or user.is_superuser %}
+  <p><a href="{{ url('passengers', args=[flight.pk]) }}">Пассажиры рейса</a></p>
+  <p><a href="{{ url('flight_edit', args=[flight.pk]) }}">Редактировать рейс</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,21 @@
+site_name: 'ЛР2 · Табло авиаперелётов · Афанасьев Дмитрий'
+theme:
+  name: material
+  language: ru
+  palette:
+    primary: blue
+nav:
+  - Главная: index.md
+  - Лабораторная работа: report.md
+  - Модель и архитектура: architecture.md
+  - Практики 2.1–2.3: practices.md
+  - Проверка и защита: verification.md
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
