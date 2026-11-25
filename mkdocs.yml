@@ -8,6 +8,8 @@ nav:
       - Отчёт: lab1/report.md
   - ЛР2:
       - Отчёт: lab2/report.md
+  - ЛР3:
+      - Отчёт: lab3/report.md
 
 theme:
   name: material
