@@ -1,0 +1,9 @@
+site_name: Web-программирование. Павлов Виталий. K3339
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - ЛР1. Сокеты: lab1.md
