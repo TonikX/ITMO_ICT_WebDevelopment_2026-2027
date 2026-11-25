@@ -3,6 +3,7 @@ site/
 .venv/
 __pycache__/
 .idea/
+.idea
 beta/
 
 # Byte-compiled / optimized / DLL files
