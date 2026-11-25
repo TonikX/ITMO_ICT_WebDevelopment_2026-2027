@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Матч | {{ match.home_team.name }} vs {{ match.away_team.name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&display=swap'); body { font-family: 'Oswald', sans-serif; }</style>
+</head>
+<body class="bg-neutral-900 text-white min-h-screen">
+
+    <nav class="bg-neutral-950 border-b-2 border-red-600 p-4 shadow-lg mb-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{% url 'basketball:match_list' %}" class="text-3xl font-bold tracking-widest uppercase italic">NBA <span class="text-red-600">Матч</span></a>
+            <a href="{% url 'basketball:match_list' %}" class="text-sm text-gray-400 hover:text-white uppercase tracking-widest transition">&larr; Ко всем матчам</a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-4xl">
+        {% if user.is_staff %}
+            <div class="bg-blue-950 border border-blue-800 p-4 rounded-sm mb-6">
+                <h4 class="text-blue-400 text-sm uppercase tracking-widest mb-2">Панель администратора</h4>
+                <form method="post" class="flex items-center space-x-2">
+                    {% csrf_token %}
+                    {{ status_form.status }}
+                    {{ status_form.home_score }}
+                    {{ status_form.away_score }}
+                    <button type="submit" name="submit_status" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 text-sm uppercase font-bold transition">Обновить</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <!-- Табло матча -->
+        <div class="bg-neutral-800 border border-neutral-700 rounded-sm p-8 shadow-2xl mb-8 text-center relative">
+            <p class="text-gray-400 uppercase tracking-widest mb-6">{{ match.date|date:"l, d F Y - H:i" }} | {{ match.location }}</p>
+
+            <div class="flex items-center justify-between">
+                <div class="w-1/3">
+                    <h2 class="text-3xl md:text-4xl font-bold uppercase">{{ match.home_team.name }}</h2>
+                </div>
+
+                <div class="w-1/3">
+                    {% if match.status == 'finished' %}
+                        <div class="text-5xl md:text-6xl font-bold text-red-600">{{ match.home_score }} - {{ match.away_score }}</div>
+                    {% else %}
+                        <div class="text-3xl md:text-4xl font-bold text-gray-500 italic">VS</div>
+                    {% endif %}
+                </div>
+
+                <div class="w-1/3">
+                    <h2 class="text-3xl md:text-4xl font-bold uppercase">{{ match.away_team.name }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Левая колонка: Прогнозы -->
+            <div class="md:col-span-1">
+                <div class="bg-neutral-800 border border-neutral-700 p-6 rounded-sm">
+                    <h3 class="text-xl uppercase tracking-wider border-l-4 border-red-600 pl-3 mb-4">Ваш прогноз</h3>
+
+                    {% if user.is_authenticated %}
+                        <form method="post" class="space-y-4">
+                            {% csrf_token %}
+                            <div class="flex space-x-2 items-center justify-center">
+                                <div class="text-center">
+                                    <label class="block text-gray-400 text-xs uppercase mb-1">{{ match.home_team.name }}</label>
+                                    {{ prediction_form.predicted_home_score }}
+                                </div>
+                                <span class="text-gray-500 font-bold mt-4">:</span>
+                                <div class="text-center">
+                                    <label class="block text-gray-400 text-xs uppercase mb-1">{{ match.away_team.name }}</label>
+                                    {{ prediction_form.predicted_away_score }}
+                                </div>
+                            </div>
+                            <button type="submit" name="submit_prediction" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 uppercase tracking-widest transition mt-2">
+                                {% if user_prediction %}Изменить{% else %}Сделать прогноз{% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <p class="text-gray-400 text-sm">Войдите, чтобы оставить прогноз.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Правая колонка: Отзывы и комментарии -->
+            <div class="md:col-span-2">
+                <div class="bg-neutral-800 border border-neutral-700 p-6 rounded-sm mb-6">
+                    <h3 class="text-xl uppercase tracking-wider border-l-4 border-red-600 pl-3 mb-4">Оставить отзыв</h3>
+
+                    {% if user.is_authenticated %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label class="block text-gray-400 text-xs uppercase mb-1">{{ comment_form.text.label }}</label>
+                                {{ comment_form.text }}
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="w-1/2">
+                                    <label class="block text-gray-400 text-xs uppercase mb-1">{{ comment_form.rating.label }}</label>
+                                    {{ comment_form.rating }}
+                                </div>
+                                <div class="w-1/2 flex items-end">
+                                    <button type="submit" name="submit_comment" class="w-full bg-neutral-700 hover:bg-red-600 text-white font-bold py-3 px-4 uppercase tracking-widest transition">Отправить</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <p class="text-gray-400 text-sm">Войдите, чтобы оставить отзыв.</p>
+                    {% endif %}
+                </div>
+
+                <h3 class="text-xl uppercase tracking-wider border-l-4 border-red-600 pl-3 mb-4">Отзывы ({{ comments|length }})</h3>
+                <div class="space-y-4">
+                    {% for comment in comments %}
+                        <div class="bg-neutral-800 border border-neutral-700 p-4 rounded-sm">
+                            <div class="flex justify-between items-center mb-2 border-b border-neutral-700 pb-2">
+                                <span class="font-bold text-gray-300">{{ comment.user.username }}</span>
+                                <span class="text-red-500 font-bold bg-neutral-900 px-2 py-1 rounded-sm text-sm">Оценка: {{ comment.rating }}/10</span>
+                            </div>
+                            <p class="text-gray-400 text-sm">{{ comment.text }}</p>
+                            <p class="text-neutral-600 text-xs mt-2 text-right">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-500 italic">Пока нет отзывов.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
