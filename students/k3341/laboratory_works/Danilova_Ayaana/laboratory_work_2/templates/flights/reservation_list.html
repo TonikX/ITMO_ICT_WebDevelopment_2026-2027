@@ -1,0 +1,95 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Мои бронирования{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-1">Мои бронирования</h1>
+        <p class="text-muted small mb-0">Управление билетами вашей семьи</p>
+    </div>
+    <a href="{% url 'flights:passenger_create' %}" class="btn btn-primary">
+        + Добавить члена семьи (пассажира)
+    </a>
+</div>
+
+{% for reservation in reservations %}
+    <div class="card p-4 mb-3">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+            <div>
+                <h5 class="mb-1">
+                    <a href="{% url 'flights:flight_detail' reservation.flight.pk %}" class="text-decoration-none" style="color: inherit;">
+                        {{ reservation.flight }}
+                    </a>
+                </h5>
+                <small class="text-muted mono-code">
+                    Гейт: {{ reservation.flight.gate }} · Оформлено: {{ reservation.created_at|date:"d.m.Y H:i" }}
+                </small>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'flights:reservation_update' reservation.pk %}" class="btn btn-sm btn-outline-primary">
+                    ✎ Изменить места / состав
+                </a>
+                <a href="{% url 'flights:reservation_delete' reservation.pk %}" class="btn btn-sm btn-outline-secondary">
+                    ✕ Отменить бронь
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Пассажир</th>
+                        <th>Место</th>
+                        <th>Статус регистрации</th>
+                        <th>Номер билета</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in reservation.tickets.all %}
+                    <tr>
+                        <td class="fw-semibold">{{ ticket.passenger.last_name }} {{ ticket.passenger.first_name }}</td>
+                        <td class="mono-code fw-bold">Место {{ ticket.seat_number }}</td>
+                        <td>
+                            {% if ticket.is_checked_in %}
+                                <span class="badge bg-success">Зарегистрирован на рейс</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Бронь оформлена</span>
+                            {% endif %}
+                        </td>
+                        <td class="mono-code">{{ ticket.ticket_number|default:"Выдается на стойке" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-muted">В бронировании нет активных билетов.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% empty %}
+    <div class="card p-5 text-center">
+        <h5 class="mb-2">У вас пока нет активных бронирований</h5>
+        <p class="text-muted mb-3">Перейдите к расписанию рейсов, чтобы выбрать направление и места.</p>
+        <div>
+            <a href="{% url 'flights:flight_list' %}" class="btn btn-primary">Перейти к расписанию рейсов</a>
+        </div>
+    </div>
+{% endfor %}
+
+{% if is_paginated %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">← Назад</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд →</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

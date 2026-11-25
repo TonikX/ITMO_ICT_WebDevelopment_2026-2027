@@ -1,0 +1,252 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Рейс {{ flight.flight_number }} | Авиатерминал{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'flights:flight_list' %}" class="text-decoration-none text-muted fw-semibold">
+        <i class="bi bi-arrow-left me-1"></i>Назад к табло рейсов
+    </a>
+</div>
+
+<!-- Карточка с основной информацией о рейсе -->
+<div class="glass-card p-4 mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+                <h1 class="h2 mb-0">{{ flight.flight_number }}</h1>
+                {% if flight.flight_type == 'DEP' %}
+                    <span class="badge-dep"><i class="bi bi-airplane-fill me-1"></i>Отлёт</span>
+                {% else %}
+                    <span class="badge-arr"><i class="bi bi-airplane-Inbound me-1"></i>Прилёт</span>
+                {% endif %}
+                <span class="text-muted fw-semibold fs-5">{{ flight.airline }}</span>
+            </div>
+
+            <div class="row g-3 mt-2">
+                <div class="col-sm-3">
+                    <div class="text-muted small">Время вылета</div>
+                    <div class="fw-bold fs-5">{{ flight.departure|date:"d.m.Y H:i" }}</div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="text-muted small">Время прилёта</div>
+                    <div class="fw-bold fs-5">{{ flight.arrival|date:"d.m.Y H:i" }}</div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="text-muted small">Выход (Gate)</div>
+                    <div class="fw-bold fs-5">{{ flight.gate }}</div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="text-muted small">Свободно мест</div>
+                    <div class="fw-bold fs-5">
+                        {{ seats_available }} <span class="text-muted fs-6">из {{ flight.capacity }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 text-lg-end">
+            {% if user.is_authenticated %}
+                <div class="d-flex flex-column gap-2 align-items-lg-end">
+                    {% if seats_available > 0 %}
+                        <a href="{% url 'flights:reservation_create' flight.pk %}" class="btn btn-theme w-100">
+                            <i class="bi bi-ticket-detailed me-2"></i>Забронировать места
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary w-100" disabled>Свободных мест нет</button>
+                    {% endif %}
+
+                    {% if user_reservation %}
+                        <div class="d-flex gap-2 w-100">
+                            <a href="{% url 'flights:reservation_update' user_reservation.pk %}" class="btn btn-sm btn-outline-theme flex-grow-1">
+                                <i class="bi bi-pencil me-1"></i>Изменить бронь
+                            </a>
+                            <a href="{% url 'flights:reservation_delete' user_reservation.pk %}" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-theme">
+                    Войдите для бронирования
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Таблица пассажиров рейса -->
+<div class="glass-card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h2 class="h4 mb-0">
+            <i class="bi bi-people-fill me-2"></i>
+            {% if user.is_staff %}
+                Список всех пассажиров рейса ({{ user_tickets_count }})
+            {% elif user.is_authenticated %}
+                Мои пассажиры на рейсе ({{ user_tickets_count }})
+            {% else %}
+                Пассажиры рейса
+            {% endif %}
+        </h2>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span class="badge rounded-pill px-3 py-2" style="background: var(--badge-dep-bg); color: var(--badge-dep-text); font-size: 0.9rem;">
+                <i class="bi bi-check2-circle me-1"></i>Свободно мест: {{ seats_available }} из {{ flight.capacity }}
+            </span>
+            {% if user.is_staff %}
+                <span class="badge bg-danger bg-opacity-75">
+                    Режим сотрудника: регистрация и билеты
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not user.is_authenticated %}
+        <p class="text-muted mb-0">
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fw-bold text-decoration-none" style="color: var(--accent-primary);">Войдите в систему</a>, чтобы увидеть список ваших пассажиров на этом рейсе.
+        </p>
+    {% elif tickets %}
+        <div class="table-responsive">
+            <table class="table table-custom align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Пассажир</th>
+                        <th>Место</th>
+                        <th>Номер билета</th>
+                        <th>Статус регистрации</th>
+                        {% if user.is_staff %}
+                            <th class="text-end">Управление (Staff)</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td class="fw-semibold">
+                                {{ ticket.passenger.last_name }} {{ ticket.passenger.first_name }}
+                            </td>
+                            <td>
+                                <span class="badge rounded-pill bg-secondary bg-opacity-25 text-reset px-3 py-2">
+                                    Место {{ ticket.seat_number }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if ticket.ticket_number %}
+                                    <code>{{ ticket.ticket_number }}</code>
+                                {% else %}
+                                    <span class="text-muted small">Не присвоен</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ticket.is_checked_in %}
+                                    <span class="badge bg-success bg-opacity-75">
+                                        <i class="bi bi-check-circle me-1"></i>Зарегистрирован
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark bg-opacity-75">
+                                        <i class="bi bi-clock me-1"></i>Ожидает регистрации
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            {% if user.is_staff %}
+                                <td>
+                                    <form method="post" action="{% url 'flights:staff_ticket_checkin' ticket.pk %}" class="row g-2 align-items-center justify-content-end">
+                                        {% csrf_token %}
+                                        <div class="col-auto" style="width: 90px;">
+                                            {{ ticket.staff_form.seat_number }}
+                                        </div>
+                                        <div class="col-auto" style="width: 170px;">
+                                            {{ ticket.staff_form.ticket_number }}
+                                        </div>
+                                        <div class="col-auto">
+                                            <div class="form-check form-switch mb-0">
+                                                {{ ticket.staff_form.is_checked_in }}
+                                                <label class="form-check-label small">Рег.</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-sm btn-theme" title="Сохранить">
+                                                <i class="bi bi-check2"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted mb-0">
+            {% if user.is_staff %}
+                На этот рейс пока не зарегистрировано ни одного пассажира.
+            {% else %}
+                У вас пока нет забронированных пассажиров на этот рейс.
+            {% endif %}
+        </p>
+    {% endif %}
+</div>
+
+<!-- Секция отзывов -->
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="glass-card p-4 h-100">
+            <h3 class="h5 mb-3"><i class="bi bi-star-fill me-2 text-warning"></i>Оставить отзыв о рейсе</h3>
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'flights:review_create' flight.pk %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ review_form.rating.label }}</label>
+                        {{ review_form.rating }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ review_form.flight_date.label }}</label>
+                        {{ review_form.flight_date }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ review_form.text.label }}</label>
+                        {{ review_form.text }}
+                    </div>
+                    <button type="submit" class="btn btn-theme w-100">Опубликовать отзыв</button>
+                </form>
+            {% else %}
+                <p class="text-muted mb-0">Авторизуйтесь, чтобы поделиться впечатлениями о перелёте.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="glass-card p-4 h-100">
+            <h3 class="h5 mb-3"><i class="bi bi-chat-heart-fill me-2"></i>Отзывы пассажиров ({{ reviews|length }})</h3>
+            {% if reviews %}
+                <div class="d-flex flex-column gap-3">
+                    {% for review in reviews %}
+                        <div class="p-3 rounded-4" style="background: var(--input-bg); border: 1px solid var(--card-border);">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <span class="fw-bold">{{ review.author.username }}</span>
+                                    {% if review.flight_date %}
+                                        <span class="text-muted small ms-2">(дата полёта: {{ review.flight_date|date:"d.m.Y" }})</span>
+                                    {% endif %}
+                                </div>
+                                <span class="badge rounded-pill px-3 py-1" style="background: var(--accent-primary); color: #fff;">
+                                    ★ {{ review.rating }} / 10
+                                </span>
+                            </div>
+                            <p class="mb-1">{{ review.text|default:"Без текстового комментария" }}</p>
+                            <div class="text-muted" style="font-size: 0.75rem;">
+                                Опубликовано: {{ review.created_at|date:"d.m.Y H:i" }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted mb-0">Отзывов пока нет. Будьте первым!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

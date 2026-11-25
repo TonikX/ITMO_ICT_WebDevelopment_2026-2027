@@ -1,0 +1,78 @@
+<div class="landscape-frame" aria-hidden="true">
+<svg class="landscape" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" focusable="false">
+    <defs>
+        <linearGradient id="sky-{{ uid }}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#9fc3e6"/>
+            <stop offset=".55" stop-color="#c9ddee"/>
+            <stop offset="1" stop-color="#efeadb"/>
+        </linearGradient>
+        <filter id="grain-{{ uid }}" x="0" y="0" width="100%" height="100%">
+            <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" stitchTiles="stitch"/>
+            <feColorMatrix type="saturate" values="0"/>
+        </filter>
+        <filter id="brush-{{ uid }}" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency=".012 .22" numOctaves="3" seed="9" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="soft-{{ uid }}" x="-20%" y="-50%" width="140%" height="200%">
+            <feGaussianBlur stdDeviation="7"/>
+        </filter>
+    </defs>
+
+    <!-- Небо -->
+    <rect width="1200" height="675" fill="url(#sky-{{ uid }})"/>
+
+    <!-- Облака -->
+    <g fill="#fbf5e6" opacity=".85" filter="url(#soft-{{ uid }})">
+        <ellipse cx="210" cy="130" rx="150" ry="26"/>
+        <ellipse cx="300" cy="112" rx="90" ry="26"/>
+        <ellipse cx="760" cy="90" rx="190" ry="24"/>
+        <ellipse cx="850" cy="72" rx="100" ry="24"/>
+        <ellipse cx="1030" cy="220" rx="140" ry="20"/>
+        <ellipse cx="520" cy="270" rx="130" ry="16"/>
+    </g>
+
+    <!-- Холмы, озеро, луга -->
+    <g filter="url(#brush-{{ uid }})">
+        <path fill="#a8bccb" d="M0 470 C120 430 220 440 330 462 C450 486 520 410 650 418 C790 428 860 470 980 452 C1080 438 1150 444 1200 458 V520 H0Z"/>
+        <path fill="#8fa6b6" d="M0 492 C140 470 260 486 380 480 C520 472 600 450 740 466 C880 482 1000 470 1200 488 V540 H0Z"/>
+        <path fill="#b9d2de" d="M300 502 C420 492 600 494 780 502 C640 518 440 518 300 502Z"/>
+        <path fill="#a8ad72" d="M0 522 C200 502 380 516 560 510 C760 504 980 500 1200 516 V600 H0Z"/>
+        <path fill="#8d9a5b" d="M0 562 C220 542 480 568 700 554 C900 542 1060 554 1200 548 V640 H0Z"/>
+        <path fill="#737f45" d="M0 612 C260 592 520 622 800 606 C960 598 1100 606 1200 602 V675 H0Z"/>
+    </g>
+
+    <!-- Блики на воде -->
+    <g stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity=".5">
+        <path d="M380 504 H450"/><path d="M520 507 H620"/><path d="M660 504 H730"/>
+    </g>
+
+    <!-- Деревья слева внизу -->
+    <g filter="url(#brush-{{ uid }})">
+        <rect x="118" y="548" width="7" height="46" fill="#4f5a30"/>
+        <ellipse cx="121" cy="522" rx="36" ry="46" fill="#5d6b38"/>
+        <ellipse cx="106" cy="534" rx="22" ry="30" fill="#6f7d3f"/>
+        <rect x="190" y="566" width="6" height="40" fill="#4f5a30"/>
+        <ellipse cx="193" cy="546" rx="28" ry="38" fill="#66733a"/>
+        <ellipse cx="203" cy="554" rx="16" ry="24" fill="#7b8947"/>
+        <rect x="48" y="580" width="5" height="34" fill="#4f5a30"/>
+        <ellipse cx="50" cy="562" rx="22" ry="30" fill="#5d6b38"/>
+    </g>
+
+    <!-- Мазки травы и неба -->
+    <g fill="none" stroke-linecap="round">
+        <g stroke="#5e6a3a" stroke-width="2" opacity=".5">
+            <path d="M320 650 q4 -14 10 -22"/><path d="M360 640 q3 -12 9 -20"/>
+            <path d="M700 654 q5 -14 12 -22"/><path d="M880 640 q3 -12 8 -18"/>
+            <path d="M1010 656 q4 -14 11 -21"/><path d="M560 632 q3 -10 8 -17"/>
+        </g>
+        <g stroke="#ffffff" stroke-width="3" opacity=".25">
+            <path d="M60 60 q60 -8 130 0"/><path d="M420 180 q70 -10 150 -2"/>
+            <path d="M900 150 q60 -8 140 0"/><path d="M640 330 q60 -6 120 0"/>
+        </g>
+    </g>
+
+    <!-- Бумажное зерно -->
+    <rect width="1200" height="675" filter="url(#grain-{{ uid }})" opacity=".28" style="mix-blend-mode: overlay"/>
+</svg>
+</div>

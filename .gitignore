@@ -2,7 +2,8 @@
 site/
 .venv/
 __pycache__/
-.idea/c
+.idea/
+beta/
 
 # Byte-compiled / optimized / DLL files
 *.py[codz]

@@ -1,0 +1,8 @@
+{% if object %}
+    <p><strong>ID:</strong> {{ object.pk }}</p>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+</form>
