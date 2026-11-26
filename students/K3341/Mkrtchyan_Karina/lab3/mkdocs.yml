@@ -1,0 +1,6 @@
+site_name: ЛР3 — API библиотеки
+nav:
+  - Запуск: index.md
+  - Авторизация: auth.md
+  - Ресурсы API: resources.md
+  - Аналитика: reports.md

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4d213c23-2deb-4a54-bc61-3f5550f6d398" name="Changes" comment="lab2 done" />
+    <list default="true" id="4d213c23-2deb-4a54-bc61-3f5550f6d398" name="Changes" comment="lab3 db">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,11 +67,15 @@
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;lab3&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/PycharmProjects/ITMO_ICT_WebDevelopment_2026-2027/students/K3341/Mkrtchyan_Karina/lab3/db_schema&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\ITMO_ICT_WebDevelopment_2026-2027\students\K3341\Mkrtchyan_Karina\lab3\db_schema" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\ITMO_ICT_WebDevelopment_2026-2027\students\K3341\Mkrtchyan_Karina\lab2" />
       <recent name="C:\Users\User\PycharmProjects\ITMO_ICT_WebDevelopment_2026-2027\students\K3341\Mkrtchyan_Karina\lab2\homework_project" />
@@ -270,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793957948538</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="lab3 db">
+      <option name="closed" value="true" />
+      <created>1793962361700</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1793962361700</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -291,6 +305,7 @@
     <MESSAGE value="lab1 done" />
     <MESSAGE value="started doing lab2" />
     <MESSAGE value="lab2 done" />
-    <option name="LAST_COMMIT_MESSAGE" value="lab2 done" />
+    <MESSAGE value="lab3 db" />
+    <option name="LAST_COMMIT_MESSAGE" value="lab3 db" />
   </component>
 </project>
