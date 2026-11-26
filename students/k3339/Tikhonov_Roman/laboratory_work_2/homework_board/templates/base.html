@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Доска домашних заданий{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'board.css' %}">
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a class="brand" href="/">Доска домашних заданий</a>
+            <nav>
+                <a href="{% url 'homework_list' %}">Задания</a>
+                <a href="{% url 'grades' %}">Оценки</a>
+                {% if user.is_staff %}
+                <a href="{% url 'homework_create' %}">Новое задание</a>
+                <a href="/admin/">Админка</a>
+                {% endif %}
+            </nav>
+            <div class="user">
+                {% if user.is_authenticated %}
+                <span>{{ user.last_name }} {{ user.first_name }}</span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+                {% else %}
+                <a href="{% url 'login' %}">Вход</a>
+                <a href="{% url 'register' %}">Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

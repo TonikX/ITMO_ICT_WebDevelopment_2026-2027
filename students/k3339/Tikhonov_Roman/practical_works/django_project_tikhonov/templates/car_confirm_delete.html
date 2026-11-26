@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление автомобиля</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <p>Удалить автомобиль "{{ object }}"?</p>
+        <input type="submit" value="Удалить">
+    </form>
+    <p><a href="/cars/">Отмена</a></p>
+</body>
+</html>

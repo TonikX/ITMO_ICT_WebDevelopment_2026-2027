@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Сдачи — Доска домашних заданий{% endblock %}
+
+{% block content %}
+<h1>Сдачи: {{ homework.subject.name }} от {{ homework.issued|date:"d.m.Y" }}</h1>
+<p><a href="{% url 'homework_detail' homework.pk %}">К заданию</a></p>
+
+{% for submission in submissions %}
+<div class="card">
+    <p class="meta">
+        <strong>{{ submission.student.last_name }} {{ submission.student.first_name }}</strong> ·
+        {{ submission.submitted_at|date:"d.m.Y H:i" }}
+    </p>
+    <p>{{ submission.text|urlize|linebreaksbr }}</p>
+    <form method="post" action="{% url 'submission_grade' submission.pk %}" class="grade-form">
+        {% csrf_token %}
+        <label for="grade-{{ submission.pk }}">Оценка</label>
+        <input id="grade-{{ submission.pk }}" type="number" name="grade" min="1" max="5" value="{{ submission.grade|default_if_none:'' }}">
+        <button type="submit">Сохранить</button>
+        {% if submission.grade %}
+        <span class="meta">текущая: {{ submission.grade }}</span>
+        {% endif %}
+    </form>
+</div>
+{% empty %}
+<p>Сдач пока нет.</p>
+{% endfor %}
+{% endblock %}

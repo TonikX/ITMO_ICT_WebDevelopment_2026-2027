@@ -1,0 +1,292 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #34302b;
+    background: #fffdf7;
+}
+
+header {
+    border-bottom: 3px double #e8590c;
+}
+
+.header-inner {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 1rem 1rem 0.75rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+}
+
+.brand {
+    color: #34302b;
+    font-size: 1.25rem;
+    font-weight: bold;
+    font-variant: small-caps;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+}
+
+header nav {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+header nav a {
+    color: #d9480f;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+.user {
+    margin-left: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+}
+
+.user form {
+    margin: 0;
+}
+
+main {
+    max-width: 940px;
+    margin: 1.75rem auto 3rem;
+    padding: 0 1rem;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-variant: small-caps;
+    letter-spacing: 0.02em;
+    margin: 0 0 1.1rem;
+}
+
+h2 {
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+}
+
+a {
+    color: #d9480f;
+}
+
+a:hover {
+    color: #b73a0a;
+}
+
+.card {
+    border-top: 2px solid #e8590c;
+    padding: 0.85rem 0.25rem 0.25rem;
+    margin-bottom: 1.4rem;
+}
+
+.meta {
+    color: #8a7f76;
+    font-style: italic;
+    margin: 0 0 0.75rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+th {
+    border-bottom: 2px solid #e8590c;
+    text-align: left;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.6rem;
+}
+
+td {
+    border-bottom: 1px solid #ead9c9;
+    padding: 0.5rem 0.6rem;
+    vertical-align: top;
+}
+
+tbody tr:hover {
+    background: #fff3e9;
+}
+
+th a {
+    color: inherit;
+    text-decoration: none;
+}
+
+td.grade {
+    text-align: center;
+}
+
+.filters {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filters select,
+.filters input[type="search"] {
+    width: auto;
+}
+
+input,
+select,
+textarea {
+    font: inherit;
+    padding: 0.35rem 0.45rem;
+    border: 1px solid #e3d5c6;
+    background: #ffffff;
+    border-radius: 0;
+    width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #e8590c;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    font: inherit;
+    background: #e8590c;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    padding: 0.4rem 1.1rem;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #d9480f;
+}
+
+.user button {
+    background: transparent;
+    color: #d9480f;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.user button:hover {
+    background: transparent;
+    color: #b73a0a;
+}
+
+.form {
+    max-width: 540px;
+}
+
+.narrow {
+    max-width: 400px;
+}
+
+.form p {
+    margin: 0 0 0.7rem;
+}
+
+.form label {
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.errorlist {
+    color: #c92a2a;
+    list-style: none;
+    padding: 0;
+    margin: 0.2rem 0 0;
+    font-size: 0.9em;
+}
+
+.pagination {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1.1rem;
+}
+
+.pagination a {
+    text-decoration: none;
+}
+
+.pagination .page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: #ffe8d9;
+    color: #d9480f;
+}
+
+.pagination a.page-num:hover {
+    background: #e8590c;
+    color: #ffffff;
+}
+
+.pagination .current {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    background: #e8590c;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.pagination .step {
+    padding: 0 0.3rem;
+    color: #d9480f;
+    text-decoration: underline;
+}
+
+.pagination .step:hover {
+    color: #b73a0a;
+}
+
+.grade-form {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin-top: 0.5rem;
+}
+
+.grade-form label {
+    font-weight: bold;
+}
+
+.grade-form input {
+    width: 4.5rem;
+}
+
+.btn-link {
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}

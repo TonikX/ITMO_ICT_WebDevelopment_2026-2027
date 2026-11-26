@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Автомобили</title>
+</head>
+<body>
+    <h1>Автомобили</h1>
+    <p><a href="/cars/create/">Добавить автомобиль</a></p>
+    <ul>
+        {% for car in object_list %}
+        <li>
+            <strong>{{ car.brand }} {{ car.model }}</strong>
+            ({{ car.state_number }}, {{ car.color|default:"цвет не указан" }})
+            <a href="/cars/{{ car.pk }}/">Подробнее</a> |
+            <a href="/cars/{{ car.pk }}/update/">Изменить</a> |
+            <a href="/cars/{{ car.pk }}/delete/">Удалить</a>
+        </li>
+        {% empty %}
+        <li>Автомобилей пока нет.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
