@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
-from .models import User, DriverProfile, Registration, Comment
+from .models import User, DriverProfile, Registration, Comment, Team, Car
 
 
 class RegistrationForm(UserCreationForm):
@@ -16,7 +16,6 @@ class RegistrationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
@@ -26,18 +25,24 @@ class RegistrationForm(UserCreationForm):
         user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
         user.phone = self.cleaned_data['phone']
-
         if commit:
             user.save()
             DriverProfile.objects.get_or_create(user=user)
-
         return user
 
 
 class RaceRegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
-        fields = []
+        fields = ['comment']
+        labels = {'comment': 'Комментарий к заявке (необязательно)'}
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Можно оставить пустым',
+            }),
+        }
 
 
 class CommentForm(forms.ModelForm):
@@ -55,9 +60,7 @@ class CommentForm(forms.ModelForm):
                 'rows': 4,
                 'placeholder': 'Напишите ваш отзыв о гонке...',
             }),
-            'comment_type': forms.Select(attrs={
-                'class': 'form-select',
-            }),
+            'comment_type': forms.Select(attrs={'class': 'form-select'}),
             'rating': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'min': 1,
@@ -65,9 +68,57 @@ class CommentForm(forms.ModelForm):
             }),
         }
 
+
+class DriverProfileForm(forms.ModelForm):
+    class Meta:
+        model = DriverProfile
+        fields = [
+            'team',
+            'car',
+            'description',
+            'experience_years',
+            'driver_class',
+        ]
+        labels = {
+            'team': 'Команда',
+            'car': 'Автомобиль',
+            'description': 'Описание участника',
+            'experience_years': 'Опыт (лет)',
+            'driver_class': 'Класс',
+        }
+        widgets = {
+            'team': forms.Select(attrs={'class': 'form-select'}),
+            'car': forms.Select(attrs={'class': 'form-select'}),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Расскажите о себе...',
+            }),
+            'experience_years': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+            }),
+            'driver_class': forms.Select(attrs={'class': 'form-select'}),
+        }
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['team'].queryset = Team.objects.all().order_by('name')
+        self.fields['car'].queryset = Car.objects.all().order_by('brand', 'model')
+        self.fields['team'].required = False
+        self.fields['car'].required = False
 
-        for name, field in self.fields.items():
-            if name not in ('text', 'comment_type', 'rating'):
-                field.widget.attrs['class'] = 'form-control'
+
+class RegistrationEditForm(forms.ModelForm):
+    """Редактирование своей заявки (только комментарий, пока статус pending)."""
+
+    class Meta:
+        model = Registration
+        fields = ['comment']
+        labels = {'comment': 'Комментарий к заявке'}
+        widgets = {
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+            }),
+        }
