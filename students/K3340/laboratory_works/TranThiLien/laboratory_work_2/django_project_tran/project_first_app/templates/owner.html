@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ owner }}{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ owner.last_name }} {{ owner.first_name }}</h1>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Логин</dt><dd class="col-sm-9">{{ owner.username }}</dd>
+      <dt class="col-sm-3">Дата рождения</dt><dd class="col-sm-9">{{ owner.birth_date|date:"d.m.Y"|default:"—" }}</dd>
+      <dt class="col-sm-3">Номер паспорта</dt><dd class="col-sm-9">{{ owner.passport_number|default:"—" }}</dd>
+      <dt class="col-sm-3">Домашний адрес</dt><dd class="col-sm-9">{{ owner.home_address|default:"—" }}</dd>
+      <dt class="col-sm-3">Национальность</dt><dd class="col-sm-9">{{ owner.nationality|default:"—" }}</dd>
+    </dl>
+  </div>
+</div>
+
+<h2 class="h5">Водительские удостоверения</h2>
+<ul class="list-group mb-4">
+  {% for license in owner.licenses.all %}
+    <li class="list-group-item">{{ license.number }} — {{ license.get_type_display }}, выдано {{ license.issue_date|date:"d.m.Y" }}</li>
+  {% empty %}
+    <li class="list-group-item text-muted">Нет удостоверений</li>
+  {% endfor %}
+</ul>
+
+<h2 class="h5">Автомобили</h2>
+<table class="table table-bordered bg-white">
+  <thead><tr><th>Автомобиль</th><th>Начало владения</th><th>Конец владения</th></tr></thead>
+  <tbody>
+  {% for own in owner.ownerships.all %}
+    <tr>
+      <td><a href="{% url 'car_detail' own.car.id %}">{{ own.car }}</a></td>
+      <td>{{ own.start_date|date:"d.m.Y" }}</td>
+      <td>{{ own.end_date|date:"d.m.Y"|default:"по настоящее время" }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3" class="text-muted">Нет автомобилей</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a href="{% url 'owner_list' %}">← Ко всем владельцам</a>
+{% endblock %}

@@ -1,0 +1,7 @@
+site_name: Р1. Работа с сокетами
+
+theme:
+  name: material
+
+nav:
+  - Главная: index.md

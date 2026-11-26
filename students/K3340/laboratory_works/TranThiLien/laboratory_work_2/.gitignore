@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Môi trường ảo
+tutorial-env/
+venv/
+env/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+
+# MkDocs
+site/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Media / Static
+media/
+staticfiles/

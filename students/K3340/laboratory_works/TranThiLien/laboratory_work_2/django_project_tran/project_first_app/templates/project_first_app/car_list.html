@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Автомобили{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Автомобили</h1>
+  <a class="btn btn-primary" href="{% url 'car_create' %}">Добавить автомобиль</a>
+</div>
+<table class="table table-striped bg-white">
+  <thead><tr><th>Гос. номер</th><th>Марка</th><th>Модель</th><th>Цвет</th><th></th></tr></thead>
+  <tbody>
+  {% for car in object_list %}
+    <tr>
+      <td><a href="{% url 'car_detail' car.id %}">{{ car.license_plate }}</a></td>
+      <td>{{ car.brand }}</td>
+      <td>{{ car.model }}</td>
+      <td>{{ car.color|default:"—" }}</td>
+      <td class="text-end">
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'car_update' car.id %}">Редактировать</a>
+        <a class="btn btn-sm btn-outline-danger" href="{% url 'car_delete' car.id %}">Удалить</a>
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5" class="text-muted">Автомобилей пока нет.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
