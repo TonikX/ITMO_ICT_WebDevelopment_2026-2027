@@ -20,3 +20,10 @@ nav:
       - Практика 2.2. Представления и формы: lr2/pract22.md
       - Практика 2.3. Модель пользователя: lr2/pract23.md
       - Доска домашних заданий: lr2/lab2.md
+  - ЛР3:
+      - Практика 3.1. ORM-запросы: lr3/pract31.md
+      - Практика 3.2. Django REST Framework: lr3/pract32.md
+      - Модели: lr3/models.md
+      - Операции: lr3/operations.md
+      - Запросы и отчёты: lr3/endpoints.md
+      - Вывод: lr3/conclusion.md
