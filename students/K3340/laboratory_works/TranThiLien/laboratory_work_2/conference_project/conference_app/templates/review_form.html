@@ -31,7 +31,7 @@
         <a href="{% url 'conference_list' %}">🏠 Главная</a> |
         <a href="{% url 'conference_detail' conference.id %}">← К конференции</a>
         {% if user.is_authenticated %}
-            <span class="user-info">👤 <strong>{{ user.username }}</strong> | <a href="{% url 'logout' %}">Выйти</a></span>
+            <span class="user-info">👤 <strong>{{ user.username }}</strong> | <form method="post" action="{% url 'logout' %}" style="display:inline">{% csrf_token %}<button type="submit" style="background:none;border:none;color:inherit;text-decoration:underline;cursor:pointer;padding:0;font:inherit">Выйти</button></form></span>
         {% endif %}
     </nav>
 

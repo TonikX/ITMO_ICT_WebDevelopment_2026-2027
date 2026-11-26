@@ -13,9 +13,6 @@ class ConferenceAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_date'
 
 
-# ============================================================
-# Registration Admin — với actions duyệt hàng loạt (Bài 2.3)
-# ============================================================
 @admin.register(Registration)
 class RegistrationAdmin(admin.ModelAdmin):
     list_display  = ('report_title', 'conference', 'author', 'status', 'recommended', 'created_at')
@@ -23,19 +20,19 @@ class RegistrationAdmin(admin.ModelAdmin):
     search_fields = ('report_title', 'author__username')
     actions       = ['mark_recommended', 'mark_not_recommended', 'mark_approved', 'mark_rejected']
 
-    @admin.action(description='✅ Предлагаемое объявление')
+    @admin.action(description='✅ Рекомендовать к публикации')
     def mark_recommended(self, request, queryset):
         queryset.update(recommended=True, status='approved')
 
-    @admin.action(description='❌ Не рекомендуется')
+    @admin.action(description='❌ Не рекомендовать к публикации')
     def mark_not_recommended(self, request, queryset):
         queryset.update(recommended=False, status='rejected')
 
-    @admin.action(description='Утвеждать')
+    @admin.action(description='Утвердить заявку')
     def mark_approved(self, request, queryset):
         queryset.update(status='approved')
 
-    @admin.action(description='Отклонить')
+    @admin.action(description='Отклонить заявку')
     def mark_rejected(self, request, queryset):
         queryset.update(status='rejected')
 
