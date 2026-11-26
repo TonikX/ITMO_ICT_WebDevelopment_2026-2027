@@ -65,31 +65,19 @@
 
 ## 2. Диаграмма связей
 
+```text
 User (стандартная модель Django)
-
-│
-
-├─ author ─────► Registration ◄───── conference ──── Conference
-
-│ │
-
-└─ author ─────► Review ◄─────── conference ─────────┤
-
-│
-
-topics │ M2M
-
-▼
-
-ConferenceTopic ──── Topic
-
-│
-
-venue │ FK
-
-▼
-
-Venue
+ │
+ ├─ author ──► Registration ◄── conference ──┐
+ │                                           │
+ └─ author ──► Review ◄──────── conference ──┤
+                                             │
+                                        Conference
+                                         │      │
+                               topics M2M│      │venue_ref FK
+                                         ▼      ▼
+                          ConferenceTopic ── Topic   Venue
+```
 
 ## 3. Реализованные интерфейсы
 
@@ -142,7 +130,35 @@ Venue
 
 Стандартная форма аутентификации Django.
 
-## 4. Admin actions
+## 4. Аутентификация
+
+Регистрация и вход реализованы встроенными средствами Django (`django.contrib.auth`).
+
+**settings.py**:
+
+```python
+LOGIN_REDIRECT_URL  = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL           = '/accounts/login/'
+```
+
+**urls.py проекта** — подключение стандартных маршрутов:
+
+```python
+path('accounts/', include('django.contrib.auth.urls')),
+```
+
+Django предоставляет:
+
+- `/accounts/login/` — вход;
+- `/accounts/logout/` — выход;
+- `/accounts/password_change/` — смена пароля.
+
+Регистрация нового пользователя — форма `UserRegisterForm` (на основе `UserCreationForm`)
+и представление, которое после сохранения сразу выполняет вход (`login(request, user)`)
+и перенаправляет на главную страницу.
+
+## 5. Admin actions
 
 Администратор может массово изменять статус заявок:
 
@@ -151,7 +167,7 @@ Venue
 - Утвердить заявку;
 - Отклонить заявку.
 
-## 5. Соответствие требованиям
+## 6. Соответствие требованиям
 
 | # | Требование | Реализация |
 |---|------------|-----------|
@@ -163,7 +179,7 @@ Venue
 | 6 | Указание результатов администратором | Admin actions |
 | 7 | Таблица участников | `/participants/` |
 
-## 6. Безопасность
+## 7. Безопасность
 
 - Все POST-запросы защищены `{% csrf_token %}`.
 - Редактирование/удаление заявок ограничено владельцем через `get_queryset`.
@@ -172,9 +188,9 @@ Venue
 
 ---
 
-## 7. Итог
+## 8. Итог
 
-Все 7 требований варианта выполнены. Сайт позволяет:
+Все требования варианта выполнены. Сайт позволяет:
 
 - регистрироваться и входить;
 - просматривать конференции;

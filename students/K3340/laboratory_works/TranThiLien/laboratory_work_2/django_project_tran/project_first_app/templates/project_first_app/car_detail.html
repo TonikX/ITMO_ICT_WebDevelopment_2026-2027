@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ object }}{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">{{ object.brand }} {{ object.model }}</h1>
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Гос. номер</dt><dd class="col-sm-9">{{ object.license_plate }}</dd>
+      <dt class="col-sm-3">Цвет</dt><dd class="col-sm-9">{{ object.color|default:"—" }}</dd>
+    </dl>
+  </div>
+</div>
+
+<h2 class="h5">История владения</h2>
+<table class="table table-bordered bg-white">
+  <thead><tr><th>Владелец</th><th>Начало</th><th>Конец</th></tr></thead>
+  <tbody>
+  {% for own in object.ownerships.all %}
+    <tr>
+      <td><a href="{% url 'owner_detail' own.owner.id %}">{{ own.owner }}</a></td>
+      <td>{{ own.start_date|date:"d.m.Y" }}</td>
+      <td>{{ own.end_date|date:"d.m.Y"|default:"по настоящее время" }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="3" class="text-muted">Владельцев нет</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a class="btn btn-outline-secondary" href="{% url 'car_update' object.id %}">Редактировать</a>
+<a class="btn btn-outline-danger" href="{% url 'car_delete' object.id %}">Удалить</a>
+<a class="ms-2" href="{% url 'car_list' %}">← Ко всем автомобилям</a>
+{% endblock %}
