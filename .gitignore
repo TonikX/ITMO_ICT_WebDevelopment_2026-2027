@@ -166,7 +166,13 @@ venv.bak/
 
 # mkdocs documentation
 /site
-
+.venv/
+venv/
+__pycache__/
+*.pyc
+site/
+.idea/
+.vscode/
 # mypy
 .mypy_cache/
 .dmypy.json
