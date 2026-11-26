@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карточка автовладельца</title>
+    <style>
+        /* Базовые настройки страницы */
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f3f4f6; /* Светло-серый фон */
+            color: #1f2937;
+            display: flex;
+            justify-content: center;
+            padding: 3rem 1rem;
+            margin: 0;
+        }
+
+        /* Стиль основной карточки */
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+
+        /* Шапка карточки */
+        .card-header {
+            background: #2563eb; /* Синий цвет */
+            color: #ffffff;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Тело карточки */
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Блоки с личной информацией */
+        .info-group {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.75rem;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        /* Секция с машинами */
+        .cars-section h2 {
+            font-size: 1.25rem;
+            color: #374151;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .car-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .car-item {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .car-name {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .car-number {
+            background: #e5e7eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .empty-text {
+            color: #9ca3af;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <h1>Информация о водителе</h1>
+        </div>
+
+        <div class="card-body">
+            <div class="info-group">
+                <div class="info-label">Имя и Фамилия</div>
+                <div class="info-value">{{ driver.first_name }} {{ driver.last_name }}</div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">Дата рождения</div>
+                <div class="info-value">{{ driver.birth_date|date:"d.m.Y" }}</div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">Номер паспорта</div>
+                <div class="info-value">{{ driver.passport_number|default:"Не указан" }}</div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">Домашний адрес</div>
+                <div class="info-value">{{ driver.home_address|default:"Не указан" }}</div>
+            </div>
+
+            <div class="info-group">
+                <div class="info-label">Национальность</div>
+                <div class="info-value">{{ driver.nationality|default:"Не указана" }}</div>
+            </div>
+
+            <div class="cars-section">
+                <h2>Автомобили ({{ driver.cars.count }}):</h2>
+
+                <ul class="car-list">
+                    {% for car in driver.cars.all %}
+                        <li class="car-item">
+                            <span class="car-name">{{ car.brand }} {{ car.model }}</span>
+                            <span class="car-number">{{ car.number }}</span>
+                        </li>
+                    {% empty %}
+                        <li class="empty-text">Нет зарегистрированных автомобилей</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

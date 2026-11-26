@@ -1,5 +1,12 @@
-# Byte-compiled / optimized / DLL files
+# my
+site/
+.venv/
 __pycache__/
+.idea/
+.idea
+beta/
+
+# Byte-compiled / optimized / DLL files
 *.py[codz]
 *$py.class
 

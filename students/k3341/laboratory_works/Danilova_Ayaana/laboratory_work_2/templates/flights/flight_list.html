@@ -1,0 +1,209 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Расписание рейсов{% endblock %}
+
+{% block content %}
+<!-- Первый экран по рецепту: Announcement badge + двухголосый заголовок + дружелюбный маскот над пасторальной рабочей сценой -->
+<section class="text-center pt-3 pb-2">
+    <div class="announcement-badge">
+        <svg class="announcement-thumb" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+            <rect width="40" height="13" fill="#cfe0ee"/>
+            <circle cx="14" cy="7" r="4" fill="#f8f5ec"/>
+            <path d="M0 13 Q20 10 40 13 L40 20 L0 20 Z" fill="#7c8b5e"/>
+        </svg>
+        <span>Диспетчерская сводка · расписание обновляется в фоновом режиме</span>
+    </div>
+
+    <h1 class="hero-promise mb-3">
+        Табло для точных вылетов <span class="serif-clause">&amp; спокойного выбора мест</span>
+    </h1>
+
+    <p class="hero-support mb-4">
+        Находите нужный рейс по номеру, авиакомпании или гейту и оформляйте посадочные места для всей семьи без лишней суеты.
+    </p>
+</section>
+
+<!-- Сцена: Дружелюбный персонаж выглядывает слева над пасторальным окном приложения -->
+<div class="companion-wrapper mb-5">
+    <!-- Friendly character (монохромный персонаж с большими глазами) -->
+    <svg class="friendly-companion" viewBox="0 0 120 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Силуэт головы и плеч -->
+        <path d="M22 82 C22 36, 40 14, 62 14 C84 14, 100 36, 100 82 Z" fill="#221f1c"/>
+        <!-- Светлая область лица -->
+        <ellipse cx="62" cy="52" rx="26" ry="22" fill="#f5f5f5"/>
+        <!-- Два высоких пересекающихся овальных глаза -->
+        <ellipse cx="54" cy="48" rx="8" ry="12" fill="#ffffff" stroke="#221f1c" stroke-width="2.5"/>
+        <ellipse cx="69" cy="48" rx="8" ry="12" fill="#ffffff" stroke="#221f1c" stroke-width="2.5"/>
+        <!-- Зрачки -->
+        <circle cx="56" cy="49" r="3.5" fill="#221f1c"/>
+        <circle cx="71" cy="49" r="3.5" fill="#221f1c"/>
+        <!-- Короткая дружелюбная улыбка -->
+        <path d="M57 65 Q62 69 68 65" fill="none" stroke="#221f1c" stroke-width="2.2" stroke-linecap="round"/>
+        <!-- Лапки, опирающиеся на рамку окна -->
+        <ellipse cx="28" cy="82" rx="9" ry="6" fill="#221f1c" stroke="#f5f5f5" stroke-width="2"/>
+        <ellipse cx="94" cy="82" rx="9" ry="6" fill="#221f1c" stroke="#f5f5f5" stroke-width="2"/>
+    </svg>
+
+    <!-- Landscape stage · level 1 -->
+    <div class="landscape-stage">
+        <!-- Пасторальный фон (Painted horizon) -->
+        <svg class="landscape-backdrop" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" filter="url(#paper-grain)">
+            <defs>
+                <linearGradient id="stageSky" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#c9dced"/>
+                    <stop offset="65%" stop-color="#e7eff4"/>
+                    <stop offset="100%" stop-color="#f2eee4"/>
+                </linearGradient>
+            </defs>
+            <rect width="1200" height="675" fill="url(#stageSky)"/>
+            <path d="M60 110 C180 70, 320 80, 420 120 C510 90, 640 105, 710 140 L40 140 Z" fill="#f7f4ec" opacity="0.8"/>
+            <path d="M760 85 C860 55, 980 65, 1080 110 L730 110 Z" fill="#f7f4ec" opacity="0.7"/>
+            <path d="M0 470 Q300 420 620 465 T1200 450 L1200 675 L0 675 Z" fill="#94a8b8"/>
+            <ellipse cx="820" cy="525" rx="240" ry="14" fill="#cddce7"/>
+            <path d="M0 515 Q380 480 760 520 T1200 505 L1200 675 L0 675 Z" fill="#879467"/>
+            <path d="M0 560 Q480 530 920 565 T1200 550 L1200 675 L0 675 Z" fill="#6b784e"/>
+        </svg>
+
+        <!-- Inset working window (Рабочий интерфейс табло и фильтрации) -->
+        <div class="working-window">
+            <div class="window-chrome">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="window-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span>Онлайн-табло вылетов и прилётов</span>
+                </div>
+                <div class="d-flex align-items-center gap-2 mono-code">
+                    <span>Показано: {{ flights|length }}</span>
+                </div>
+            </div>
+
+            <div class="p-3 p-md-4">
+                <!-- Панель поиска и фильтрации -->
+                <div class="row align-items-center g-3 mb-4 pb-3 border-bottom" style="border-color: var(--color-edge-alpha) !important;">
+                    <div class="col-lg-4">
+                        <h2 class="h4 fw-bold mb-1">Расписание рейсов</h2>
+                        <p class="text-muted small mb-0">Фильтрация по номеру, перевозчику и направлению</p>
+                    </div>
+                    <div class="col-lg-8">
+                        <form method="get" class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" name="q" class="form-control" placeholder="Рейс, гейт или компания..." value="{{ current_q }}">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="airline" class="form-control" placeholder="Авиакомпания" value="{{ current_airline }}">
+                            </div>
+                            <div class="col-md-3">
+                                <select name="flight_type" class="form-select">
+                                    <option value="">Все типы рейсов</option>
+                                    {% for code, label in flight_types %}
+                                        <option value="{{ code }}" {% if current_type == code %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-grid">
+                                <button type="submit" class="btn btn-primary">Найти</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Список рейсов -->
+                <div class="list-group mb-3">
+                    {% for flight in flights %}
+                        <a href="{{ flight.get_absolute_url }}" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                    <span class="fs-5 fw-bold mono-code">{{ flight.flight_number }}</span>
+                                    <span class="fw-semibold">{{ flight.airline }}</span>
+                                    {% if flight.flight_type == 'DEP' %}
+                                        <span class="badge badge-flight-dep">🛫 {{ flight.get_flight_type_display }}</span>
+                                    {% else %}
+                                        <span class="badge badge-flight-arr">🛬 {{ flight.get_flight_type_display }}</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted mono-code">
+                                    Гейт: <strong>{{ flight.gate }}</strong> · Вместимость: {{ flight.capacity }} мест
+                                </small>
+                            </div>
+                            <div class="text-end mono-code d-flex align-items-center gap-2">
+                                <div class="badge-theme">{{ flight.departure|date:"d.m.Y H:i" }} → {{ flight.arrival|date:"H:i" }}</div>
+                                <i class="bi bi-chevron-right text-muted small"></i>
+                            </div>
+                        </a>
+                    {% empty %}
+                        <div class="card p-5 text-center border-0" style="background: var(--color-canvas);">
+                            <p class="mb-2 fw-medium">По вашему запросу рейсы не найдены.</p>
+                            <p class="small text-muted mb-0">Попробуйте сбросить параметры поиска или выбрать другой тип рейса.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Пагинация -->
+                {% if is_paginated %}
+                <nav aria-label="Навигация по страницам" class="pt-2">
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_q %}&q={{ current_q|urlencode }}{% endif %}{% if current_airline %}&airline={{ current_airline|urlencode }}{% endif %}{% if current_type %}&flight_type={{ current_type|urlencode }}{% endif %}">
+                                    ← Назад
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_q %}&q={{ current_q|urlencode }}{% endif %}{% if current_airline %}&airline={{ current_airline|urlencode }}{% endif %}{% if current_type %}&flight_type={{ current_type|urlencode }}{% endif %}">
+                                    Вперёд →
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Секция тактильных книжных объектов (Tactile book shelf) — упакованные возможности системы -->
+<section class="py-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-5">
+            <h2 class="section-heading-serif mb-3">Справочник спокойного полёта</h2>
+            <p class="body-lead mb-3">
+                Все возможности терминала собраны как понятные настольные руководства: добавьте паспорта близких один раз и оформляйте места на любой рейс в два нажатия.
+            </p>
+            <div class="d-flex gap-2 flex-wrap">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'flights:passenger_create' %}" class="btn btn-outline-secondary">Добавить пассажира</a>
+                {% else %}
+                    <a href="{% url 'flights:register' %}" class="btn btn-outline-secondary">Начать работу</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <div class="book-shelf" aria-hidden="true">
+                <div class="book-cover-lead">
+                    <div class="small mono-code opacity-75">АВИА · ТОМ I</div>
+                    <div>
+                        <div class="font-serif-display" style="font-size: 28px; line-height: 1.05;">Семейные перелёты без спешки</div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center small opacity-75">
+                        <span>Гейты и места</span>
+                        <i class="bi bi-compass"></i>
+                    </div>
+                </div>
+                <div class="book-spine" style="background: var(--color-ochre);">Паспортный стол</div>
+                <div class="book-spine" style="background: var(--color-lilac);">Схема салона</div>
+                <div class="book-spine" style="background: var(--color-rose);">Правила багажа</div>
+                <div class="book-spine" style="background: var(--color-blue);">Онлайн-табло</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

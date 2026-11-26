@@ -1,0 +1,42 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block content %}
+<div class="mx-auto my-4" style="max-width: 420px;">
+    <div class="card p-4 p-md-5">
+        <div class="text-center mb-4">
+            <span class="badge-theme mb-2">Личный кабинет</span>
+            <h2 class="section-heading-serif mb-0" style="font-size: 40px;">Вход в аккаунт</h2>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger py-2 small">
+                Неверное имя пользователя или пароль.
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{ field.label }}</label>
+                    <input
+                        type="{% if 'password' in field.name %}password{% else %}text{% endif %}"
+                        name="{{ field.name }}"
+                        id="{{ field.id_for_label }}"
+                        class="form-control"
+                        required
+                    >
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary w-100 mt-2">Войти</button>
+        </form>
+
+        <hr class="my-4" style="border-color: var(--color-edge-alpha);">
+        <p class="text-center small text-muted mb-0">
+            Нет аккаунта? <a href="{% url 'flights:register' %}" class="fw-medium">Зарегистрироваться</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

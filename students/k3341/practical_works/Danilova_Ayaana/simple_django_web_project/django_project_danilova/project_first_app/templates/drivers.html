@@ -1,0 +1,16 @@
+<ul>
+   {% for driver in drivers %}
+        <li>
+            <a href="{% url 'owner_detail' driver.pk %}">
+                {{ driver.get_full_name|default:driver.username }}
+            </a>
+            — паспорт: {{ driver.passport_number|default:"не указан" }},
+            адрес: {{ driver.home_address|default:"не указан" }},
+            национальность: {{ driver.nationality|default:"не указана" }}
+        </li>
+        <hr/>
+    {% empty %}
+    <li>No drivers yet.</li>
+    {% endfor %}
+
+</ul>
