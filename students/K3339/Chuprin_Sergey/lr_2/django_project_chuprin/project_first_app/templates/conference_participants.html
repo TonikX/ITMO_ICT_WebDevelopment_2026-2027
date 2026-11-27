@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block title %}Участники — {{ conference.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'conferences' %}">Конференции</a></li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'conference_detail' conference.id %}">{{ conference.name }}</a>
+        </li>
+        <li class="breadcrumb-item active">Участники</li>
+    </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div>
+        <h1 class="mb-1">Участники</h1>
+        <p class="text-muted mb-0">
+            {{ conference.name }} ·
+            {{ conference.start_date|date:"d.m.Y" }} — {{ conference.end_date|date:"d.m.Y" }} ·
+            {{ conference.place }}
+        </p>
+    </div>
+    <span class="badge text-bg-light border fs-6">
+        {% if user.is_staff %}Всего заявок{% else %}Докладов{% endif %}: {{ registrations|length }}
+    </span>
+</div>
+
+{% if registrations %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 3rem;">#</th>
+                <th>Участник</th>
+                <th>Доклад</th>
+                <th>Тематики</th>
+                <th>Выступление</th>
+                {% if user.is_staff %}<th>Заявка</th>{% endif %}
+                <th>Результат</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for registration in registrations %}
+            <tr {% if registration.user_id == user.id %}class="table-primary"{% endif %}>
+                <td class="text-muted">{{ forloop.counter }}</td>
+                <td>
+                    {{ registration.user.get_full_name|default:registration.user.username }}
+                    {% if registration.user_id == user.id %}
+                        <span class="badge text-bg-primary ms-1">Вы</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <strong>{{ registration.name }}</strong>
+                    <div class="small text-muted">{{ registration.description|truncatechars:100 }}</div>
+                </td>
+                <td>
+                    {% for topic in registration.topics.all %}
+                        <span class="badge bg-secondary">{{ topic.name }}</span>
+                    {% endfor %}
+                </td>
+                <td class="text-nowrap">
+                    {% if registration.performance_time %}
+                        {{ registration.performance_time|date:"d.m.Y H:i" }}
+                    {% else %}
+                        <span class="text-muted">не назначено</span>
+                    {% endif %}
+                </td>
+
+                {% if user.is_staff %}
+                <td style="min-width: 11rem;">
+                    <form method="post" action="{% url 'registration_update_status' registration.id %}" class="m-0">
+                        {% csrf_token %}
+                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="pending" {% if registration.status == 'pending' %}selected{% endif %}>На рассмотрении</option>
+                            <option value="approved" {% if registration.status == 'approved' %}selected{% endif %}>Принята</option>
+                            <option value="rejected" {% if registration.status == 'rejected' %}selected{% endif %}>Отклонена</option>
+                        </select>
+                    </form>
+                </td>
+                {% endif %}
+
+                <td style="min-width: 11rem;">
+                    {% if user.is_staff and registration.status == 'approved' %}
+                        <form method="post" action="{% url 'registration_update_status' registration.id %}" class="m-0">
+                            {% csrf_token %}
+                            <select name="result" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="" {% if registration.is_recommended is None %}selected{% endif %}>Не определён</option>
+                                <option value="true" {% if registration.is_recommended is True %}selected{% endif %}>Рекомендован</option>
+                                <option value="false" {% if registration.is_recommended is False %}selected{% endif %}>Не рекомендован</option>
+                            </select>
+                        </form>
+                    {% elif registration.status != 'approved' %}
+                        <span class="text-muted">—</span>
+                    {% elif registration.is_recommended is None %}
+                        <span class="badge text-bg-secondary">Не определён</span>
+                    {% elif registration.is_recommended %}
+                        <span class="badge text-bg-success">Рекомендован к публикации</span>
+                    {% else %}
+                        <span class="badge text-bg-danger">Не рекомендован</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+    <p class="mb-3">
+        {% if user.is_staff %}На эту конференцию пока нет заявок.{% else %}Список участников пока не сформирован.{% endif %}
+    </p>
+    {% if user.is_authenticated %}
+        <a href="{% url 'registration_create' conference.id %}" class="btn btn-primary">Подать заявку</a>
+    {% endif %}
+</div>
+{% endif %}
+
+<a href="{% url 'conference_detail' conference.id %}" class="btn btn-outline-secondary mt-3">&larr; К конференции</a>
+{% endblock %}

@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# mkdocs build output
+site/
+
+# macOS / IDE
+.DS_Store
+.idea/
