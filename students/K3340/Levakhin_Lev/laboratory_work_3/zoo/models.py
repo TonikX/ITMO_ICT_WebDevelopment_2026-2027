@@ -22,6 +22,7 @@ class HabitatZone(models.Model):
     description = models.TextField()
 
 
+# Общие данные об одном виде, например у нас по заданию Кряква это и Ива и Камыш
 class Species(models.Model):
     class AnimalClass(models.TextChoices):
         MAMMAL = "mammal", "Млекопитающие"
@@ -48,10 +49,12 @@ class Species(models.Model):
         ]
 
 
+# Отдел зоопарка, например отдел птиц
 class Department(models.Model):
     name = models.CharField(max_length=120, unique=True)
 
 
+# Здание внутри отдела
 class Building(models.Model):
     class Season(models.TextChoices):
         SUMMER = "summer", "Летний"
@@ -62,6 +65,7 @@ class Building(models.Model):
     season = models.CharField(max_length=6, choices=Season)
 
 
+# Вольер
 class Enclosure(models.Model):
     department = models.ForeignKey(Department, PROTECT, related_name="enclosures")
     building = models.ForeignKey(Building, PROTECT, related_name="enclosures", null=True, blank=True)
@@ -94,6 +98,7 @@ class Employee(models.Model):
     role = models.CharField(max_length=6, choices=Role)
 
 
+# Карточка животного
 class Animal(models.Model):
     class Sex(models.TextChoices):
         FEMALE = "female", "Самка"
@@ -167,6 +172,7 @@ class Diet(models.Model):
     contents = models.TextField()
 
 
+# Какой рацион назначили конкретному животному и на какой период
 class DietAssignment(models.Model):
     animal = models.ForeignKey(Animal, PROTECT, related_name="diet_assignments")
     diet = models.ForeignKey(Diet, PROTECT, related_name="assignments")
@@ -183,6 +189,7 @@ class DietAssignment(models.Model):
         ]
 
 
+# Одно закрепление сотрудника за животным, тут реализовал мени ту мени
 class CareAssignment(models.Model):
     animal = models.ForeignKey(Animal, models.CASCADE, related_name="care_assignments")
     employee = models.ForeignKey(Employee, models.CASCADE, related_name="care_assignments")

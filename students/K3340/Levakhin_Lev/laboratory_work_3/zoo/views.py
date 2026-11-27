@@ -11,6 +11,7 @@ from . import models
 from . import serializers as schema
 
 
+# Общтй класс для круд, но добавил транзакции, тчобы избежать ошибок, например если два сотрудника будут параллельно пополнять вольер
 class ZooViewSet(viewsets.ModelViewSet):
     def handle_exception(self, exc):
         if isinstance(exc, ProtectedError):
@@ -34,9 +35,11 @@ class ZooViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
+# Виды, вольеры и сотрудники следяющие за животными
 class AnimalViewSet(ZooViewSet):
     serializer_class = schema.AnimalSerializer
-    queryset = models.Animal.objects.select_related("species", "enclosure").prefetch_related("employees").order_by("id")
+    queryset = (models.Animal.objects.select_related("species", "enclosure") # заранее загружаем связанные записи, чтобы потом не обращаться отдельно к базе за каждым видом и вольером
+                .prefetch_related("employees").order_by("id")) # загружает сотрудников для всего списка
 
     @action(detail=True, url_path="building-neighbors")
     def building_neighbors(self, request, pk=None):
@@ -46,6 +49,7 @@ class AnimalViewSet(ZooViewSet):
         return Response(self.get_serializer(neighbors if building_id else [], many=True).data)
 
 
+# Аренда
 class LeaseViewSet(ZooViewSet):
     serializer_class = schema.LeaseSerializer
     queryset = models.Lease.objects.select_related("lessor", "lessee").order_by("id")
