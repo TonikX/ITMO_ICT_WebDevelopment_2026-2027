@@ -1,0 +1,16 @@
+site_name: Веб-программирование — Лютый Никита, K3340
+
+theme:
+  name: material
+  language: ru
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа №1: lr1/report.md
+  - Лабораторная работа №2: lr2/report.md
+  - Лабораторная работа №3: lr3/report.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
