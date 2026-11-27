@@ -1,0 +1,77 @@
+{% extends 'races/base.html' %}
+
+{% block title %}Мои заявки | Racing Board{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="fw-bold">Мои заявки</h1>
+    <p class="text-secondary">
+        Список гонок, на участие в которых ты подал заявку.
+        Можно редактировать и удалять заявки со статусом «На рассмотрении».
+    </p>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% for registration in registrations %}
+            <div class="border-bottom py-3">
+                <div class="d-flex flex-wrap justify-content-between gap-3">
+                    <div>
+                        <h5 class="fw-bold mb-1">
+                            <a href="{% url 'race_detail' registration.race.id %}" class="text-decoration-none">
+                                {{ registration.race.name }}
+                            </a>
+                        </h5>
+                        <p class="text-secondary mb-1">{{ registration.race.location }}</p>
+                        <p class="mb-0">
+                            Дата гонки: {{ registration.race.start_date|date:"d.m.Y H:i" }}
+                        </p>
+                        <small class="text-secondary">
+                            Заявка подана: {{ registration.registered_at|date:"d.m.Y H:i" }}
+                        </small>
+                        {% if registration.comment %}
+                            <p class="small mt-1 mb-0"><em>{{ registration.comment }}</em></p>
+                        {% endif %}
+                    </div>
+
+                    <div class="text-end">
+                        {% if registration.status == 'approved' %}
+                            <span class="badge text-bg-success">Подтверждена</span>
+                        {% elif registration.status == 'rejected' %}
+                            <span class="badge text-bg-danger">Отклонена</span>
+                        {% else %}
+                            <span class="badge text-bg-warning">На рассмотрении</span>
+                        {% endif %}
+
+                        <div class="mt-2 d-flex flex-wrap gap-2 justify-content-end">
+                            {% if registration.status == 'pending' %}
+                                <a href="{% url 'edit_registration' registration.id %}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Редактировать
+                                </a>
+                            {% endif %}
+
+                            {% if registration.status != 'approved' %}
+                                <form method="post"
+                                      action="{% url 'delete_registration' registration.id %}"
+                                      onsubmit="return confirm('Удалить заявку на «{{ registration.race.name }}»?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        Удалить
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="text-center py-4">
+                <h5>Заявок пока нет</h5>
+                <p class="text-secondary">Выбери гонку и подай заявку на участие.</p>
+                <a href="{% url 'race_list' %}" class="btn btn-primary">Перейти к гонкам</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

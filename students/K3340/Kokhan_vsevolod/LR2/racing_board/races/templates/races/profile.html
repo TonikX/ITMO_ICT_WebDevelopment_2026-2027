@@ -1,0 +1,56 @@
+{% extends 'races/base.html' %}
+
+{% block title %}Мой профиль | Racing Board{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h1 class="fw-bold mb-4">Профиль гонщика</h1>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Логин:</strong> {{ request.user.username }}</p>
+                        <p><strong>Имя:</strong> {{ request.user.first_name|default:"Не указано" }}</p>
+                        <p><strong>Фамилия:</strong> {{ request.user.last_name|default:"Не указана" }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Email:</strong> {{ request.user.email|default:"Не указан" }}</p>
+                        <p><strong>Телефон:</strong> {{ request.user.phone|default:"Не указан" }}</p>
+                    </div>
+                </div>
+
+                {% if user.is_staff %}
+                    <div class="alert alert-warning">
+                        Вы вошли как администратор. Вам доступны дополнительные функции управления.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 fw-bold mb-3">Данные участника</h2>
+                <p class="text-secondary small mb-4">
+                    Эти данные отображаются в табло участников гонок.
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary">Сохранить профиль</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

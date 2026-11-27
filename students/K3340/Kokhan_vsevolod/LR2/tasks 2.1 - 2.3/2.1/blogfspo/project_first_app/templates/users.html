@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+
+    <p>
+        <a href="{% url 'user_create' %}">Создать пользователя</a>
+    </p>
+
+    {% for user in users %}
+        <div>
+            <h2>{{ user.username }}</h2>
+            <p>Имя: {{ user.first_name }}</p>
+            <p>Фамилия: {{ user.last_name }}</p>
+            <p>Электронная почта: {{ user.email }}</p>
+            <p>Номер паспорта: {{ user.passport_number }}</p>
+            <p>Домашний адрес: {{ user.address }}</p>
+            <p>Национальность: {{ user.nationality }}</p>
+            <hr>
+        </div>
+    {% empty %}
+        <p>Пользователей пока нет.</p>
+    {% endfor %}
+</body>
+</html>
