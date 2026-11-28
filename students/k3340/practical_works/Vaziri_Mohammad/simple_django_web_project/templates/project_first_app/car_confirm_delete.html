@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Удаление автомобиля{% endblock %}
+{% block content %}
+<h1 class="h3">Удаление автомобиля</h1>
+<form method="post" class="card card-body bg-white" style="max-width: 520px">
+  {% csrf_token %}
+  <p>Удалить автомобиль «{{ object }}»? Вместе с ним удалится история владения.</p>
+  <div>
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a class="btn btn-link" href="{% url 'car_list' %}">Отмена</a>
+  </div>
+</form>
+{% endblock %}
