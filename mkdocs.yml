@@ -6,6 +6,7 @@ nav:
   - Главная: index.md
   - ЛР1 — Работа с сокетами: lr1/report.md
   - ЛР2 — Табло авиаперелётов: lr2/report.md
+  - ЛР3 — Аэропорт (DRF + PostgreSQL): lr3/report.md
 markdown_extensions:
   - tables
   - fenced_code

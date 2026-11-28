@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователи</title>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+    <p><a href="/users/create/">Создать пользователя</a></p>
+    <ul>
+        {% for user in users %}
+            <li>
+                <strong>{{ user.username }}</strong>
+                — паспорт: {{ user.passport_number }}
+                — адрес: {{ user.home_address }}
+                — национальность: {{ user.nationality }}
+            </li>
+        {% empty %}
+            <li>Пользователей нет</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
