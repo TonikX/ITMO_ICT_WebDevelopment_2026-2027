@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Отмена регистрации{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <h1 class="h3">Отмена регистрации</h1>
+    <form method="post" class="card card-body">
+      {% csrf_token %}
+      <p>Отменить регистрацию на гонку «{{ object.race.title }}» ({{ object.race.date|date:"d.m.Y" }}), стартовый номер #{{ object.car_number }}?</p>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Отменить регистрацию</button>
+        <a class="btn btn-link" href="{% url 'my_registrations' %}">Назад</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load race_extras %}
+{% block title %}{{ race.title }}{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+  <div>
+    <h1 class="h3 mb-1">{{ race.title }}</h1>
+    <p class="text-muted mb-1">{{ race.date|date:"d E Y" }}, {{ race.track }}</p>
+    {% if race.description %}<p class="mb-0">{{ race.description }}</p>{% endif %}
+  </div>
+  <div class="text-end">
+    {% if my_registration %}
+      <p class="mb-2">Вы зарегистрированы, стартовый номер <strong>#{{ my_registration.car_number }}</strong></p>
+      {% if my_registration.can_be_changed %}
+        <a class="btn btn-outline-dark btn-sm" href="{% url 'registration_update' my_registration.pk %}">Изменить</a>
+        <a class="btn btn-outline-danger btn-sm" href="{% url 'registration_delete' my_registration.pk %}">Отменить</a>
+      {% endif %}
+    {% elif race.registration_is_open %}
+      <a class="btn btn-warning" href="{% url 'registration_create' race.pk %}">Зарегистрироваться на гонку</a>
+    {% else %}
+      <span class="badge bg-secondary">Регистрация закрыта</span>
+    {% endif %}
+  </div>
+</div>
+
+<h2 class="h5 mt-4">Участники</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-hover bg-white align-middle">
+    <thead class="table-dark">
+      <tr><th>№</th><th>ФИО участника</th><th>Команда</th><th>Автомобиль</th><th>Описание участника</th><th>Опыт</th><th>Класс</th></tr>
+    </thead>
+    <tbody>
+    {% for reg in registrations %}
+      <tr>
+        <td>#{{ reg.car_number }}</td>
+        <td>{{ reg.racer.full_name }}</td>
+        <td>{{ reg.racer.team|default:"—" }}</td>
+        <td>{{ reg.car_description }}</td>
+        <td class="small">{{ reg.racer.description|default:"—"|truncatechars:90 }}</td>
+        <td>{{ reg.racer.experience_years }} г.</td>
+        <td>{{ reg.racer.get_racer_class_display }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="7" class="text-muted">Пока никто не зарегистрировался.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2 class="h5 mt-4">Заезды и результаты</h2>
+<div class="board p-3 table-responsive">
+  <table class="table table-sm align-middle">
+    <thead>
+      <tr><th>Заезд</th><th>Время заезда</th><th>Место</th><th>Участник</th><th>Команда</th><th>Автомобиль</th><th class="text-end">Время</th></tr>
+    </thead>
+    <tbody>
+    {% for heat in heats %}
+      {% for result in heat.results.all %}
+        <tr>
+          {% if forloop.first %}
+            <td rowspan="{{ heat.results.all|length }}" class="fw-semibold">{{ heat.number }}. {{ heat.name|default:"Заезд" }}<br><span class="small text-secondary">{{ heat.laps }} кругов</span></td>
+            <td rowspan="{{ heat.results.all|length }}">{{ heat.start_time|date:"d.m.Y H:i"|default:"не назначено" }}</td>
+          {% endif %}
+          <td>
+            {% if result.position %}<span class="badge {{ result.position|place_badge }}">{{ result.position }}</span>{% else %}<span class="badge bg-dark border">{{ result.get_status_display }}</span>{% endif %}
+          </td>
+          <td>#{{ result.registration.car_number }} {{ result.registration.racer.full_name }}</td>
+          <td>{{ result.registration.racer.team|default:"—" }}</td>
+          <td class="small">{{ result.registration.car_description }}</td>
+          <td class="time text-end">{% if result.status == "finished" %}{{ result.finish_time|laptime }}{% else %}{{ result.get_status_display }}{% endif %}</td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td class="fw-semibold">{{ heat.number }}. {{ heat.name|default:"Заезд" }}</td>
+          <td>{{ heat.start_time|date:"d.m.Y H:i"|default:"не назначено" }}</td>
+          <td colspan="5" class="text-secondary">Результатов пока нет</td>
+        </tr>
+      {% endfor %}
+    {% empty %}
+      <tr><td colspan="7" class="text-secondary">Заезды ещё не назначены.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-4" id="comments">
+  <h2 class="h5 mb-0">Отзывы и комментарии</h2>
+  {% if rating.count %}<span class="text-muted">Средний рейтинг {{ rating.avg|floatformat:1 }} из 10, отзывов: {{ rating.count }}</span>{% endif %}
+</div>
+<div class="row g-4 mt-1">
+  <div class="col-lg-7">
+    {% for comment in comments %}
+      <div class="card mb-2">
+        <div class="card-body py-2">
+          <div class="d-flex justify-content-between small text-muted">
+            <span>{{ comment.author.get_full_name|default:comment.author.username }}, заезд {{ comment.heat_date|date:"d.m.Y" }}</span>
+            <span>{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+          </div>
+          <div class="my-1">
+            <span class="badge bg-info text-dark">{{ comment.get_comment_type_display }}</span>
+            <span class="badge bg-dark">{{ comment.rating }}/10</span>
+          </div>
+          <p class="mb-0">{{ comment.text|linebreaksbr }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted">Комментариев пока нет.</p>
+    {% endfor %}
+  </div>
+  <div class="col-lg-5">
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'comment_create' race.pk %}" class="card card-body">
+        {% csrf_token %}
+        <h3 class="h6">Оставить отзыв</h3>
+        {% with form=comment_form %}{% include "includes/form_fields.html" %}{% endwith %}
+        <button type="submit" class="btn btn-dark">Отправить</button>
+      </form>
+    {% else %}
+      <div class="alert alert-secondary">Чтобы оставить отзыв, <a href="{% url 'login' %}?next={{ request.path }}">войдите</a> или <a href="{% url 'signup' %}">зарегистрируйтесь</a>.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

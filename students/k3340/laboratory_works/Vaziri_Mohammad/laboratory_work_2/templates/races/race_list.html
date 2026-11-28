@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Гонки{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Автогонки</h1>
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-6"><input type="search" name="q" value="{{ query }}" class="form-control" placeholder="Название гонки или трасса"></div>
+  <div class="col-md-3">
+    <select name="when" class="form-select">
+      <option value="" {% if not when %}selected{% endif %}>Все гонки</option>
+      <option value="upcoming" {% if when == "upcoming" %}selected{% endif %}>Предстоящие</option>
+      <option value="past" {% if when == "past" %}selected{% endif %}>Прошедшие</option>
+    </select>
+  </div>
+  <div class="col-md-3 d-grid"><button type="submit" class="btn btn-dark">Найти</button></div>
+</form>
+
+<div class="row g-3">
+  {% for race in page_obj %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card card-race h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="small text-muted">{{ race.date|date:"d.m.Y" }}</span>
+            {% if race.is_upcoming %}<span class="badge bg-success">Предстоит</span>{% else %}<span class="badge bg-secondary">Завершена</span>{% endif %}
+          </div>
+          <h2 class="h5"><a class="stretched-link text-decoration-none" href="{% url 'race_detail' race.pk %}">{{ race.title }}</a></h2>
+          <p class="mb-1 small">{{ race.track }}</p>
+          <p class="mb-0 small text-muted">Участников: {{ race.participants }}</p>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">По вашему запросу гонок не найдено.</p>
+  {% endfor %}
+</div>
+{% include "includes/pagination.html" %}
+{% endblock %}

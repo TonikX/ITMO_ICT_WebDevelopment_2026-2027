@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load race_extras %}
+{% block title %}Табло победителей{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end mb-4 gap-2">
+  <div>
+    <h1 class="h2 mb-1">Табло победителей</h1>
+    <p class="text-muted mb-0">Призёры последних гонок по итогам финального заезда.</p>
+  </div>
+  <a class="btn btn-dark" href="{% url 'race_list' %}?when=upcoming">Ближайшие гонки</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    {% for item in finished %}
+      <div class="board p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-baseline mb-2">
+          <a class="h5 text-white text-decoration-none mb-0" href="{% url 'race_detail' item.race.pk %}">{{ item.race.title }}</a>
+          <span class="small text-secondary">{{ item.race.date|date:"d.m.Y" }}, {{ item.race.track }}</span>
+        </div>
+        <div class="small text-secondary mb-2">{{ item.heat.name|default:"Финальный заезд" }}</div>
+        <table class="table table-sm align-middle">
+          <tbody>
+          {% for result in item.podium %}
+            <tr>
+              <td style="width: 3rem"><span class="badge {{ result.position|place_badge }}">{{ result.position }}</span></td>
+              <td>#{{ result.registration.car_number }} {{ result.registration.racer.full_name }}</td>
+              <td class="text-secondary">{{ result.registration.racer.team|default:"без команды" }}</td>
+              <td class="time text-end">{{ result.finish_time|laptime }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% empty %}
+      <div class="alert alert-secondary">Результатов пока нет. Администратор вносит их в админ-панели.</div>
+    {% endfor %}
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card mb-4">
+      <div class="card-header fw-semibold">Больше всего побед</div>
+      <ul class="list-group list-group-flush">
+        {% for racer in top_racers %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ racer.full_name }}<br><span class="small text-muted">{{ racer.team|default:"без команды" }}</span></span>
+            <span class="badge bg-warning text-dark align-self-center">{{ racer.wins }}</span>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">Пока нет победителей.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-header fw-semibold">Ближайшие гонки</div>
+      <ul class="list-group list-group-flush">
+        {% for race in upcoming %}
+          <li class="list-group-item">
+            <a href="{% url 'race_detail' race.pk %}">{{ race.title }}</a>
+            <div class="small text-muted">{{ race.date|date:"d.m.Y" }}, {{ race.track }}</div>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">Гонок пока не запланировано.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
