@@ -216,3 +216,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Django / Python (добавлено для ЛР2-ЛР3)
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+.env
+venv/
+tutorial-env/
+.venv/
+media/
+staticfiles/
+.DS_Store
+site/
+.idea/

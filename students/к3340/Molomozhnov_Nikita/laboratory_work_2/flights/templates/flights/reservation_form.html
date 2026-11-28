@@ -1,0 +1,13 @@
+{% extends 'flights/base.html' %}
+{% block content %}
+<h1>Резервирование</h1>
+{% if flight %}
+    <p>Рейс: <strong>{{ flight.number }}</strong> ({{ flight.departure_city }} → {{ flight.arrival_city }})</p>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-success">Подтвердить</button>
+    <a href="{% url 'flight_list' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
