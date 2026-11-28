@@ -1,0 +1,14 @@
+site_name: Web-программирование — Вазири Могим М. Х., K3340
+nav:
+  - Главная: index.md
+  - "ЛР1. Сокеты": lab1/index.md
+  - "Практики 2.1–2.3": practice2/index.md
+  - "ЛР2. Табло автогонок": lab2/index.md
+theme:
+  name: material
+  language: ru
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
