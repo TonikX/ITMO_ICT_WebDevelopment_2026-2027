@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Владельцы{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Автовладельцы</h1>
+  <a class="btn btn-primary btn-sm" href="{% url 'owner_create' %}">Добавить владельца</a>
+</div>
+<table class="table table-striped bg-white">
+  <thead><tr><th>#</th><th>Фамилия и имя</th><th>Дата рождения</th><th>Паспорт</th><th>Национальность</th><th>Автомобили</th></tr></thead>
+  <tbody>
+  {% for owner in owners %}
+    <tr>
+      <td>{{ owner.pk }}</td>
+      <td><a href="{% url 'owner_detail' owner.pk %}">{{ owner.last_name }} {{ owner.first_name }}</a></td>
+      <td>{{ owner.birth_date|date:"d.m.Y"|default:"—" }}</td>
+      <td>{{ owner.passport_number|default:"—" }}</td>
+      <td>{{ owner.nationality|default:"—" }}</td>
+      <td>{% for car in owner.cars.all %}{{ car.brand }} {{ car.model }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6">Владельцев пока нет.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
