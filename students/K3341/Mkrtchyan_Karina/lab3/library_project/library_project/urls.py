@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from library import models, serializers, views
 
@@ -40,6 +41,8 @@ for route, model, serializer, staff_only in (
     router.register(route, views.resource_viewset(model, serializer, staff_only))
 
 urlpatterns = [
+    path('api/schema/', SpectacularAPIView.as_view(), name='api-schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='api-schema'), name='api-swagger'),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('auth/', include('djoser.urls')),

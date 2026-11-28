@@ -8,6 +8,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import BasePermission, IsAdminUser, SAFE_METHODS
 from rest_framework.response import Response
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema, extend_schema_view
 
 from . import models, reporting, serializers
 
@@ -117,6 +118,11 @@ def resource_viewset(model, serializer, staff_only=False):
 
 
 
+@extend_schema_view(
+    monthly=extend_schema(parameters=[OpenApiParameter('month', str, required=True, description='Месяц в формате YYYY-MM')]),
+    copies_by_room=extend_schema(parameters=[OpenApiParameter('at', OpenApiTypes.DATETIME, description='Момент отчёта; по умолчанию текущее время')]),
+)
+@extend_schema(responses=OpenApiTypes.ANY)
 class ReportViewSet(viewsets.ViewSet):
     permission_classes = [IsAdminUser]
 
@@ -209,6 +215,7 @@ class ReportViewSet(viewsets.ViewSet):
 
     @action(detail=False, url_path='copies-by-room')
     def copies_by_room(self, request):
+        """ Возвращает число экземпляров в каждом зале на указанный или текущий момент """
         # берем дату и время из запроса,raw имеет вид 'ГГГГ-ММ-ДДTЧЧ:ММ:ССZ'
         raw = request.query_params.get('at')
         # если формат неверный или строка пустая, DRF вернет ошибку;
